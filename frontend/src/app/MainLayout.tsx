@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, type CSSProperties } from "react";
 import { Search, Menu, X } from "lucide-react";
+import { Link } from "react-router";
 import { BRAND } from "./brand";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -853,12 +854,21 @@ export default function MainLayout({
               <ul className="space-y-2">
                 {col.links.map((link) => (
                   <li key={link}>
-                    <a
-                      href="#"
-                      className="hover:text-white/90 transition-colors"
-                    >
-                      {link}
-                    </a>
+                    {link === "Portail étudiant" ? (
+                      <Link
+                        to="/portail-etudiant"
+                        className="hover:text-white/90 transition-colors"
+                      >
+                        {link}
+                      </Link>
+                    ) : (
+                      <a
+                        href="#"
+                        className="hover:text-white/90 transition-colors"
+                      >
+                        {link}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>

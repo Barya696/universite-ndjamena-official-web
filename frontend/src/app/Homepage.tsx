@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
+import { Link } from "react-router";
 import { BRAND } from "./brand";
 import imgCeremonial from "./Images/Ceremonial.jpeg";
 import imgLaboratory from "./Images/laboratory.jpg";
@@ -379,8 +380,8 @@ function HeroSlideshow() {
               {slide.cta}
               <ChevronRight className="w-4 h-4" />
             </a>
-            <a
-              href="#"
+            <Link
+              to="/portail-etudiant"
               className="inline-flex items-center gap-2 border text-white font-semibold px-6 py-3 rounded hover:bg-white/20 transition-colors text-sm"
               style={{
                 background: "rgba(255,255,255,0.1)",
@@ -388,7 +389,7 @@ function HeroSlideshow() {
               }}
             >
               Portail étudiant
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -560,6 +561,7 @@ export default function Homepage() {
                 title: "Portail étudiant",
                 body: "Accédez aux notes, relevés, emplois du temps et services financiers via le portail sécurisé.",
                 link: "Se connecter",
+                to: "/portail-etudiant",
               },
               {
                 icon: "📖",
@@ -595,13 +597,23 @@ export default function Homepage() {
                 <p className="text-sm text-[#646464] mb-2 leading-relaxed">
                   {w.body}
                 </p>
-                <a
-                  href="#"
-                  className="text-sm font-semibold hover:underline"
-                  style={{ color: NAVY }}
-                >
-                  {w.link}
-                </a>
+                {w.to ? (
+                  <Link
+                    to={w.to}
+                    className="text-sm font-semibold hover:underline"
+                    style={{ color: NAVY }}
+                  >
+                    {w.link}
+                  </Link>
+                ) : (
+                  <a
+                    href="#"
+                    className="text-sm font-semibold hover:underline"
+                    style={{ color: NAVY }}
+                  >
+                    {w.link}
+                  </a>
+                )}
               </div>
             ))}
           </div>

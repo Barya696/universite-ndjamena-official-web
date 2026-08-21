@@ -1,10 +1,20 @@
+import { Routes, Route } from "react-router";
 import MainLayout from "./MainLayout";
 import Homepage from "./Homepage";
+import StudentLogin from "./StudentLogin";
 
 export default function App() {
   return (
-    <MainLayout>
-      <Homepage />
-    </MainLayout>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <MainLayout>
+            <Homepage />
+          </MainLayout>
+        }
+      />
+      <Route path="/portail-etudiant" element={<StudentLogin />} />
+    </Routes>
   );
 }
