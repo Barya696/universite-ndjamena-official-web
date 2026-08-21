@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router";
 import { BRAND } from "./brand";
+import { HeroSubnav } from "./MainLayout";
 import imgCeremonial from "./Images/Ceremonial.jpeg";
 import imgLaboratory from "./Images/laboratory.jpg";
 import imgTechnology from "./Images/Technology.jpeg";
@@ -247,7 +248,7 @@ function HeroSlideshow() {
 
   return (
     <section
-      className="text-white relative overflow-hidden -mt-[var(--header-stack)] pt-[var(--header-stack)]"
+      className="text-white relative overflow-hidden"
       style={{ minHeight: 460 }}
     >
       {/* ── All background images stacked; only active one is visible ── */}
@@ -282,6 +283,11 @@ function HeroSlideshow() {
           zIndex: 3,
         }}
       />
+
+      {/* ── Blue gradient subnav floating on top of the hero image ── */}
+      <div style={{ zIndex: 10, position: "relative" }}>
+        <HeroSubnav />
+      </div>
 
       {/* ── Content ── */}
       <div
@@ -514,14 +520,16 @@ export default function Homepage() {
         style={{
           background: BRAND.strip.bg,
           color: BRAND.strip.text,
-          fontSize: "1.1em",
-          padding: "0.6em 1em",
+          fontSize: "16px",
+          padding: "8px 12px 6.4px",
           borderTop: `1px solid ${BRAND.strip.borderTop}`,
           borderBottom: `1px solid ${BRAND.strip.borderBottom}`,
+          lineHeight: "28px",
+          fontWeight: "400",
         }}
       >
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4 flex-wrap">
-          <p style={{ margin: 0, lineHeight: "1.4em" }}>
+          <p style={{ margin: 0, lineHeight: "28px" }}>
             L'Université de N'Djamena forme les cadres de la
             nation depuis 1971.{" "}
             <a
@@ -529,12 +537,14 @@ export default function Homepage() {
               style={{
                 color: LIGHT_GOLD,
                 textDecoration: "underline",
+                fontSize: "16px",
+                fontWeight: "400",
               }}
             >
               En savoir plus →
             </a>
           </p>
-          <span className="text-white/30 text-sm hidden md:block">
+          <span style={{ color: "rgba(255,255,255,0.3)", fontSize: "16px", fontWeight: "400", lineHeight: "28px" }} className="hidden md:block">
             Toukra · Farcha · Ardep-Djoumal
           </span>
         </div>
