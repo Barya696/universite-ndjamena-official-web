@@ -14,7 +14,14 @@ export default function App() {
           </MainLayout>
         }
       />
-      <Route path="/portail-etudiant" element={<StudentLogin />} />
+      <Route
+        path="/portail-etudiant"
+        element={
+          <MainLayout>
+            <StudentLogin />
+          </MainLayout>
+        }
+      />
     </Routes>
   );
 }

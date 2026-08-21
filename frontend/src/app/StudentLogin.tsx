@@ -7,12 +7,12 @@ import {
   LogIn,
   AlertCircle,
   HelpCircle,
-  ArrowLeft,
   UserPlus,
   User,
   GraduationCap,
   BookOpen,
   CheckCircle2,
+  ArrowLeft,
 } from "lucide-react";
 import { BRAND } from "./brand";
 import { Link } from "react-router";
@@ -45,7 +45,6 @@ type TabType = "login" | "signup";
 export default function StudentLogin() {
   const [activeTab, setActiveTab] = useState<TabType>("login");
 
-  // ── LOGIN STATE ───────────────────────────────────────────────
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -53,7 +52,6 @@ export default function StudentLogin() {
   const [loginError, setLoginError] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
 
-  // ── SIGNUP STATE ──────────────────────────────────────────────
   const [formSignup, setFormSignup] = useState({
     lastName: "",
     firstName: "",
@@ -71,7 +69,6 @@ export default function StudentLogin() {
   const [signupLoading, setSignupLoading] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
 
-  // ── LOGIN HANDLERS ──────────────────────────────────────
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
@@ -94,7 +91,6 @@ export default function StudentLogin() {
     }, 1200);
   };
 
-  // ── SIGNUP HANDLERS ───────────────────────────────────────
   const updateSignup = (field: keyof typeof formSignup, value: string) =>
     setFormSignup((prev) => ({ ...prev, [field]: value }));
 
