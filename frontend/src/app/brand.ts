@@ -1,38 +1,40 @@
-/** Shared UDN brand palette — navy + gold, tuned for hero-backed header */
+/** Brand palette aligned with python.org blues + yellow accent */
 export const BRAND = {
-  navy: "#1a3a5c",
-  navyMid: "#234a6e",
-  navyLight: "#2a5080",
-  navyDeep: "#0f1e2e",
-  gold: "#c8a84b",
-  goldLight: "#dbbe7a",
-  goldBright: "#e8c96a",
-  textMuted: "#c8d0d8",
+  navy: "#306998",
+  navyMid: "#3776ab",
+  navyLight: "#4b8bbe",
+  navyDeep: "#1e415e",
+  gold: "#FFD43B",
+  goldLight: "#ffe873",
+  goldBright: "#ffdf5d",
+  textMuted: "#646464",
 
   nav: {
-    bg: "linear-gradient(180deg, rgba(42, 80, 128, 0.96) 0%, rgba(26, 58, 92, 0.98) 100%)",
-    borderTop: "rgba(200, 168, 75, 0.45)",
-    link: "#e8ecf0",
-    linkActive: "#ffffff",
+    bg: "linear-gradient(180deg, #4b8bbe 0%, #3776ab 55%, #306998 100%)",
+    borderTop: "#6aadde",
+    border: "#306998",
+    link: "#ffffff",
+    linkHover: "#ffffff",
     linkActiveBg:
-      "linear-gradient(180deg, rgba(200, 168, 75, 0.2) 0%, rgba(30, 69, 112, 0.85) 100%)",
-    linkActiveBorderTop: "rgba(200, 168, 75, 0.35)",
-    linkActiveBorderBottom: "rgba(26, 58, 92, 0.9)",
-    divider: "rgba(255, 255, 255, 0.14)",
-    mobileBg: "linear-gradient(180deg, #234a6e 0%, #1a3a5c 100%)",
-    mobileBorder: "rgba(200, 168, 75, 0.25)",
+      "linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.12) 100%)",
+    dropdownBg: "linear-gradient(180deg, #fcfdfe 10%, #d6e5f2 90%)",
+    dropdownBorder: "#89b4d9",
+    dropdownLink: "rgba(51, 51, 51, 0.92)",
+    dropdownLinkHover: "#1a1a1a",
+    mobileBg: "linear-gradient(180deg, #3776ab 0%, #306998 100%)",
+    mobileBorder: "rgba(255, 255, 255, 0.25)",
   },
 
   hero: {
     overlay:
-      "linear-gradient(180deg, rgba(12, 28, 45, 0.88) 0%, rgba(20, 45, 74, 0.72) 50%, rgba(26, 58, 92, 0.8) 100%)",
-    headerShadow: "0 1px 4px rgba(0, 0, 0, 0.45)",
+      "linear-gradient(180deg, rgba(15, 30, 46, 0.72) 0%, rgba(48, 105, 152, 0.52) 50%, rgba(55, 118, 171, 0.45) 100%)",
+    headerShadow: "0 1px 4px rgba(0, 0, 0, 0.25)",
   },
 
   strip: {
-    bg: "linear-gradient(180deg, #234a6e 0%, #1a3a5c 100%)",
-    borderTop: "rgba(200, 168, 75, 0.35)",
-    borderBottom: "rgba(15, 30, 46, 0.8)",
-    text: "#d4dce4",
+    bg: "linear-gradient(180deg, #3776ab 0%, #306998 100%)",
+    borderTop: "#4b8bbe",
+    borderBottom: "#306998",
+    text: "#e8f0f8",
   },
 } as const;
