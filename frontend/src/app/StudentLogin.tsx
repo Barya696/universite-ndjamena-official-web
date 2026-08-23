@@ -177,41 +177,17 @@ export default function StudentLogin() {
       }}
     >
       {/* Centered card */}
-      <div className="flex-1 flex items-center justify-center px-4 py-10 md:py-16">
+      <div className="flex-1 flex items-center justify-center px-4 py-10 md:py-6">
         <div className="w-full max-w-lg">
           {/* Logo + title */}
-          <div className="text-center mb-7">
-            <svg
-              width="56"
-              height="56"
-              viewBox="0 0 100 100"
-              aria-label="UDN crest"
-              className="mx-auto mb-3"
-            >
-              <path
-                d="M50 8 L88 24 L88 56 C88 76 70 90 50 96 C30 90 12 76 12 56 L12 24 Z"
-                fill={NAVY}
-                stroke={GOLD}
-                strokeWidth="3"
-              />
-              <rect x="20" y="38" width="60" height="7" fill={GOLD} />
-              <path d="M34 50 L50 46 L50 72 L34 76 Z" fill="#fff" opacity="0.9" />
-              <path
-                d="M66 50 L50 46 L50 72 L66 76 Z"
-                fill="#e8e0d0"
-                opacity="0.9"
-              />
-              <line x1="50" y1="46" x2="50" y2="72" stroke={GOLD} strokeWidth="1.5" />
-              <rect x="47" y="18" width="6" height="16" rx="2" fill={GOLD} />
-              <ellipse cx="50" cy="16" rx="5" ry="7" fill="#f5c518" opacity="0.9" />
-            </svg>
+          <div className="text-center mb-3">
             <h1
               className="text-xl font-bold mb-1"
               style={{ color: NAVY, fontFamily: "Georgia, serif" }}
             >
-              Université de N'Djamena
+              Portail Étudiant
             </h1>
-            <p className="text-xs text-[#64748b]">Année académique 2024 – 2025</p>
+            <p className="text-sm text-[#64748b]">Année académique 2024 – 2025</p>
           </div>
 
           {/* Card with tabs */}
