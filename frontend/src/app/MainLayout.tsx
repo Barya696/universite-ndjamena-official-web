@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from "react";
-import { Search, Menu, X, ChevronDown } from "lucide-react";
-import { Link } from "react-router";
+import { Search, Menu, X, ChevronDown, ArrowLeft } from "lucide-react";
+import { Link, useLocation } from "react-router";
 import { BRAND } from "./brand";
 
 interface NavItem {
@@ -389,6 +389,8 @@ export function HeroSubnav() {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const HEADER_STACK_HEIGHT = "2.875rem";
+  const location = useLocation();
+  const isStudentPortal = location.pathname === "/portail-etudiant";
 
   return (
     <div
@@ -432,21 +434,40 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 </a>
               </div>
 
-              <Link
-                to="/portail-etudiant"
-                className="inline-flex items-center rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
-                style={{
-                  fontFamily: T1.fontFamily,
-                  padding: "0.35em 0.9em 0.3em",
-                  background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
-                  color: "#4d4d4d",
-                  borderColor: "#e6c200",
-                  boxShadow:
-                    "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.5)",
-                }}
-              >
-                Portail Étudiant
-              </Link>
+              {isStudentPortal ? (
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-1.5 rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
+                  style={{
+                    fontFamily: T1.fontFamily,
+                    padding: "0.35em 0.9em 0.3em",
+                    background: `linear-gradient(180deg, ${BRAND.navyLight} 10%, ${BRAND.navyMid} 90%)`,
+                    color: "#ffffff",
+                    borderColor: "#306998",
+                    boxShadow:
+                      "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.3)",
+                  }}
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  Retour à l'accueil
+                </Link>
+              ) : (
+                <Link
+                  to="/portail-etudiant"
+                  className="inline-flex items-center rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
+                  style={{
+                    fontFamily: T1.fontFamily,
+                    padding: "0.35em 0.9em 0.3em",
+                    background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
+                    color: "#4d4d4d",
+                    borderColor: "#e6c200",
+                    boxShadow:
+                      "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.5)",
+                  }}
+                >
+                  Portail Étudiant
+                </Link>
+              )}
             </div>
           </div>
         </header>

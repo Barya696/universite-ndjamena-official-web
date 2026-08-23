@@ -12,10 +12,8 @@ import {
   GraduationCap,
   BookOpen,
   CheckCircle2,
-  ArrowLeft,
 } from "lucide-react";
 import { BRAND } from "./brand";
-import { Link } from "react-router";
 
 const NAVY = BRAND.navy;
 const GOLD = BRAND.gold;
@@ -178,33 +176,8 @@ export default function StudentLogin() {
         fontFamily: "'Source Sans Pro', Arial, sans-serif",
       }}
     >
-      {/* Top bar */}
-      <div
-        className="w-full px-4 py-3 border-b"
-        style={{
-          background: "#f8fafc",
-          borderColor: "#e2e8f0",
-        }}
-      >
-        <div className="max-w-xl mx-auto flex items-center justify-between">
-          <Link
-            to="/"
-            className="flex items-center gap-2 text-[#475569] hover:text-[#1a3a5c] transition-colors text-sm font-medium"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Retour à l'accueil
-          </Link>
-          <div
-            className="text-xs tracking-widest uppercase font-semibold"
-            style={{ color: NAVY }}
-          >
-            Portail Étudiant
-          </div>
-        </div>
-      </div>
-
       {/* Centered card */}
-      <div className="flex-1 flex items-center justify-center px-4 py-10">
+      <div className="flex-1 flex items-center justify-center px-4 py-10 md:py-16">
         <div className="w-full max-w-lg">
           {/* Logo + title */}
           <div className="text-center mb-7">
