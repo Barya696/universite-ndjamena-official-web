@@ -285,6 +285,10 @@ function HeroSlideshow() {
       />
 
       {/* ── Blue gradient subnav floating on top of the hero image ── */}
+      <div
+        className="h-4 md:h-6"
+        style={{ zIndex: 10, position: "relative" }}
+      />
       <div style={{ zIndex: 10, position: "relative" }}>
         <HeroSubnav />
       </div>

@@ -283,25 +283,6 @@ export function HeroSubnav() {
               </button>
             )}
 
-            <Link
-              to="/portail-etudiant"
-              className="hidden sm:inline-flex items-center rounded-[6px] font-normal border transition-all duration-200 hover:brightness-105"
-              style={{
-                fontFamily: T1.fontFamily,
-                fontSize: T1.tier1Size,
-                lineHeight: T1.tier1LineHeight,
-                letterSpacing: T1.tier1LetterSpacing,
-                padding: "0.4em 1em 0.35em",
-                background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
-                color: "#4d4d4d",
-                borderColor: "#e6c200",
-                boxShadow:
-                  "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.5)",
-              }}
-            >
-              Portail
-            </Link>
-
             <button
               type="button"
               className="lg:hidden p-2 rounded-sm text-white/80 hover:text-white hover:bg-white/10 transition-colors"
@@ -398,24 +379,6 @@ export function HeroSubnav() {
                   )}
                 </div>
               ))}
-
-              <Link
-                to="/portail-etudiant"
-                className="mt-4 flex items-center justify-center w-full rounded-[6px] font-normal border"
-                style={{
-                  fontFamily: T1.fontFamily,
-                  fontSize: T1.tier1Size,
-                  lineHeight: T1.tier1LineHeight,
-                  letterSpacing: T1.tier1LetterSpacing,
-                  padding: "0.4em 1em 0.35em",
-                  background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
-                  color: "#4d4d4d",
-                  borderColor: "#e6c200",
-                }}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Portail étudiant
-              </Link>
             </div>
           </div>
         )}
@@ -441,36 +404,49 @@ export default function MainLayout({ children }: MainLayoutProps) {
         className="relative"
         style={{ "--header-stack": HEADER_STACK_HEIGHT } as CSSProperties}
       >
-        {/* Main navbar — stays pinned while scrolling (python.org network bar style) */}
+        {/* Top subnav — upper centered with 3 elements + Student Portal button */}
         <header className="sticky top-0 z-50">
           <div
-            className="text-center"
             style={{
               background: BRAND.nav.topBarBg,
               borderBottom: `1px solid ${BRAND.nav.topBarBorder}`,
             }}
           >
-            <div className="max-w-[75rem] mx-auto px-4 md:px-[50px] flex items-center justify-between gap-1 flex-wrap">
-              <div className="flex items-center justify-center gap-1 flex-wrap">
+            <div className="max-w-[75rem] mx-auto px-4 md:px-[50px] py-2 flex items-center justify-between gap-3">
+              <div className="hidden md:block" style={{
+                ...topBarLinkStyle(),
+                color: "rgba(255,255,255,0.5)",
+              }}>
+                ▲ République du Tchad
+              </div>
+
+              <div className="flex-1 flex items-center justify-center gap-1 md:gap-3 flex-wrap">
                 <a href="#" className="transition-colors duration-200 hover:text-white" style={topBarLinkStyle(true)}>
-                  Université
+                  L'Université
                 </a>
                 <a href="#" className="transition-colors duration-200 hover:text-white" style={topBarLinkStyle()}>
-                  Études
+                  Formations
                 </a>
                 <a href="#" className="transition-colors duration-200 hover:text-white" style={topBarLinkStyle()}>
                   Recherche
                 </a>
-                <a href="#" className="transition-colors duration-200 hover:text-white" style={topBarLinkStyle()}>
-                  Bibliothèques
-                </a>
-                <a href="#" className="transition-colors duration-200 hover:text-white" style={topBarLinkStyle()}>
-                  Campus
-                </a>
               </div>
-              <span className="hidden md:block" style={topBarLinkStyle()}>
-                ▲ République du Tchad · Ministère de l'Enseignement Supérieur
-              </span>
+
+              <Link
+                to="/portail-etudiant"
+                className="inline-flex items-center rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
+                style={{
+                  fontFamily: T1.fontFamily,
+                  padding: "0.35em 0.9em 0.3em",
+                  background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
+                  color: "#4d4d4d",
+                  borderColor: "#e6c200",
+                  boxShadow:
+                    "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.5)",
+                }}
+              >
+                Portail Étudiant
+              </Link>
             </div>
           </div>
         </header>
