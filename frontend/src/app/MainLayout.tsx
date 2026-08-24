@@ -65,7 +65,7 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
-function UDNCrest({ size = 36 }: { size?: number }) {
+export function UDNCrest({ size = 36 }: { size?: number }) {
   return (
     <svg
       width={size}
@@ -192,33 +192,17 @@ export function HeroSubnav() {
   const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
 
   return (
-    <div className="px-4 md:px-[50px] relative z-10">
+    <>
       <div
-        className="max-w-[75rem] mx-auto border-t"
+        className="border-t overflow-hidden flex-1"
         style={{
           background: BRAND.nav.bg,
           borderTopColor: BRAND.nav.borderTop,
           boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+          borderRadius: "10px",
         }}
       >
         <div className="flex items-center justify-between h-14 gap-2 px-1 lg:px-2">
-          {/* Brand */}
-          <a href="/" className="flex items-center gap-3 min-w-0 group shrink-0">
-            <UDNCrest />
-            <div className="min-w-0 hidden md:block">
-              <div
-                className="truncate transition-colors"
-                style={{
-                  ...tier1LinkStyle,
-                  padding: 0,
-                  color: BRAND.nav.linkActive,
-                }}
-              >
-                Université de N'Djamena
-              </div>
-            </div>
-          </a>
-
           {/* Desktop navigation — python.org tier-1 */}
           <nav className="hidden lg:flex items-stretch h-full flex-1 justify-center">
             {NAV_ITEMS.map((item) =>
@@ -383,7 +367,7 @@ export function HeroSubnav() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
 

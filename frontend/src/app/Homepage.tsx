@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router";
 import { BRAND } from "./brand";
-import { HeroSubnav } from "./MainLayout";
+import { HeroSubnav, UDNCrest } from "./MainLayout";
 import imgCeremonial from "./Images/Ceremonial.jpeg";
 import imgLaboratory from "./Images/laboratory.jpg";
 import imgTechnology from "./Images/Technology.jpeg";
@@ -289,8 +289,26 @@ function HeroSlideshow() {
         className="h-4 md:h-6"
         style={{ zIndex: 10, position: "relative" }}
       />
-      <div style={{ zIndex: 10, position: "relative" }}>
-        <HeroSubnav />
+      <div style={{ zIndex: 10, position: "relative" }} className="px-4 md:px-[50px]">
+        <div className="max-w-[75rem] mx-auto flex flex-col md:flex-row items-stretch md:items-center gap-3">
+          {/* Logo + University name in its own section */}
+          <a href="/" className="flex flex-col items-center gap-2 shrink-0 justify-center md:justify-start py-1">
+            <UDNCrest size={88} />
+            <div>
+              <div
+                className="font-bold text-sm md:text-base leading-tight whitespace-nowrap text-center"
+                style={{
+                  color: BRAND.goldLight,
+                  fontFamily: "Georgia, serif",
+                  textShadow: "0 1px 3px rgba(0,0,0,0.5)",
+                }}
+              >
+                Université de N'Djamena
+              </div>
+            </div>
+          </a>
+          <HeroSubnav />
+        </div>
       </div>
 
       {/* ── Content ── */}
