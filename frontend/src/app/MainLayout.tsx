@@ -155,13 +155,28 @@ function TopBarDropdown({
     <div className="relative group flex items-center">
       <a
         href={item.href}
-        className="block whitespace-nowrap transition-colors duration-200 hover:text-white"
-        style={topBarLinkStyle(active)}
+        className="block whitespace-nowrap rounded transition-all duration-200 hover:text-white"
+        style={{
+          ...topBarLinkStyle(active),
+          borderRadius: "6px",
+        }}
+        onMouseEnter={(e) => {
+          const el = e.currentTarget;
+          el.style.color = "#ffffff";
+          el.style.background = "rgba(255,255,255,0.08)";
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget;
+          el.style.color = active
+            ? BRAND.nav.topBarLinkActive
+            : BRAND.nav.topBarLink;
+          el.style.background = "transparent";
+        }}
       >
         {item.label}
       </a>
 
-      <div className="absolute left-0 top-full pt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 z-50">
+      <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 z-50">
         <div
           className="min-w-[14em] border-t rounded-b overflow-hidden"
           style={{
@@ -489,7 +504,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 ▲ République du Tchad
               </div>
 
-              <div className="flex-1 flex items-center justify-center gap-1 md:gap-3 flex-wrap">
+              <div className="flex-1 flex items-center justify-center gap-3 md:gap-6 flex-wrap">
                 {TOPBAR_NAV_ITEMS.map((item, i) => (
                   <TopBarDropdown key={item.label} item={item} active={i === 0} />
                 ))}

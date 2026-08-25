@@ -47,7 +47,7 @@ export const BRAND = {
     tier2Padding: "0.5em 1.5em 0.4em 1em",
     tier2LineHeight: "1.625",
     topBarSize: "1em",
-    topBarPadding: "0.5em 0.75em 0.4em",
+    topBarPadding: "0.6em 1.1em 0.55em",
   },
 
   hero: {
