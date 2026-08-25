@@ -11,29 +11,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   {
-    label: "L'Université",
-    href: "#",
-    links: [
-      { label: "Histoire & Mission" },
-      { label: "Mot du Recteur" },
-      { label: "Gouvernance" },
-      { label: "Chiffres clés" },
-      { label: "Partenariats" },
-    ],
-  },
-  {
-    label: "Admissions",
-    href: "#",
-    links: [
-      { label: "Conditions d'accès" },
-      { label: "Inscription en ligne" },
-      { label: "Frais de scolarité" },
-      { label: "Bourses & aides" },
-      { label: "Calendrier académique" },
-    ],
-  },
-  {
-    label: "Formations",
+    label: "Formation",
     href: "#",
     links: [
       { label: "Droit & Sciences Politiques" },
@@ -41,6 +19,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Sciences Exactes & Appliquées" },
       { label: "Sciences de la Santé" },
       { label: "Sciences Économiques & Gestion" },
+      { label: "Éducation & Formation" },
     ],
   },
   {
@@ -50,17 +29,28 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Laboratoires & centres" },
       { label: "Publications" },
       { label: "Appels à projets" },
-      { label: "Coopération internationale" },
+      { label: "Axes de recherche" },
     ],
   },
   {
-    label: "Campus",
+    label: "International",
     href: "#",
     links: [
-      { label: "Vie estudiantine" },
-      { label: "Bibliothèques" },
-      { label: "Résidences" },
-      { label: "Actualités" },
+      { label: "Partenariats internationaux" },
+      { label: "Programmes d'échange" },
+      { label: "Coopération & doubles diplômes" },
+      { label: "Étudiants internationaux" },
+    ],
+  },
+  {
+    label: "Candidature",
+    href: "#",
+    links: [
+      { label: "Conditions d'accès" },
+      { label: "Inscription en ligne" },
+      { label: "Frais de scolarité" },
+      { label: "Bourses & aides" },
+      { label: "Calendrier académique" },
     ],
   },
 ];
@@ -116,6 +106,99 @@ const topBarLinkStyle = (active = false): CSSProperties => ({
   padding: T1.topBarPadding,
   color: active ? BRAND.nav.topBarLinkActive : BRAND.nav.topBarLink,
 });
+
+const TOPBAR_NAV_ITEMS: NavItem[] = [
+  {
+    label: "L'Université",
+    href: "#",
+    links: [
+      { label: "Histoire & Mission" },
+      { label: "Mot du Recteur" },
+      { label: "Gouvernance" },
+      { label: "Chiffres clés" },
+      { label: "Partenariats" },
+    ],
+  },
+  {
+    label: "Formations",
+    href: "#",
+    links: [
+      { label: "Droit & Sciences Politiques" },
+      { label: "Lettres & Sciences Humaines" },
+      { label: "Sciences Exactes & Appliquées" },
+      { label: "Sciences de la Santé" },
+      { label: "Sciences Économiques & Gestion" },
+      { label: "Éducation & Formation" },
+    ],
+  },
+  {
+    label: "Recherche",
+    href: "#",
+    links: [
+      { label: "Laboratoires & centres" },
+      { label: "Publications" },
+      { label: "Appels à projets" },
+      { label: "Coopération internationale" },
+      { label: "Axes de recherche" },
+    ],
+  },
+];
+
+function TopBarDropdown({
+  item,
+  active,
+}: {
+  item: NavItem;
+  active?: boolean;
+}) {
+  return (
+    <div className="relative group flex items-center">
+      <a
+        href={item.href}
+        className="block whitespace-nowrap transition-colors duration-200 hover:text-white"
+        style={topBarLinkStyle(active)}
+      >
+        {item.label}
+      </a>
+
+      <div className="absolute left-0 top-full pt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 z-50">
+        <div
+          className="min-w-[14em] border-t rounded-b overflow-hidden"
+          style={{
+            background: BRAND.nav.dropdownBg,
+            borderTopColor: BRAND.nav.dropdownBorder,
+            boxShadow: "0 0.5em 0.5em rgba(0,0,0,0.25)",
+          }}
+        >
+          {item.links?.map((link, idx) => (
+            <a
+              key={link.label}
+              href={link.href ?? "#"}
+              className="block whitespace-nowrap transition-colors"
+              style={{
+                ...tier2LinkStyle,
+                borderTop:
+                  idx === 0
+                    ? "none"
+                    : `1px solid ${BRAND.nav.dropdownBorder}`,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.35)";
+                e.currentTarget.style.color = BRAND.nav.dropdownLinkActive;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.color = BRAND.nav.dropdownLink;
+              }}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function NavDropdown({ item }: { item: NavItem }) {
   return (
@@ -407,15 +490,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
               </div>
 
               <div className="flex-1 flex items-center justify-center gap-1 md:gap-3 flex-wrap">
-                <a href="#" className="transition-colors duration-200 hover:text-white" style={topBarLinkStyle(true)}>
-                  L'Université
-                </a>
-                <a href="#" className="transition-colors duration-200 hover:text-white" style={topBarLinkStyle()}>
-                  Formations
-                </a>
-                <a href="#" className="transition-colors duration-200 hover:text-white" style={topBarLinkStyle()}>
-                  Recherche
-                </a>
+                {TOPBAR_NAV_ITEMS.map((item, i) => (
+                  <TopBarDropdown key={item.label} item={item} active={i === 0} />
+                ))}
               </div>
 
               {isStudentPortal ? (
