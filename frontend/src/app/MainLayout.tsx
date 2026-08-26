@@ -157,13 +157,28 @@ function TopBarDropdown({
     <div className="relative group flex items-center">
       <a
         href={item.href}
-        className="block whitespace-nowrap transition-colors duration-200 hover:text-white"
-        style={topBarLinkStyle(active)}
+        className="block whitespace-nowrap rounded transition-all duration-200 hover:text-white"
+        style={{
+          ...topBarLinkStyle(active),
+          borderRadius: "6px",
+        }}
+        onMouseEnter={(e) => {
+          const el = e.currentTarget;
+          el.style.color = "#ffffff";
+          el.style.background = "rgba(255,255,255,0.08)";
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget;
+          el.style.color = active
+            ? BRAND.nav.topBarLinkActive
+            : BRAND.nav.topBarLink;
+          el.style.background = "transparent";
+        }}
       >
         {item.label}
       </a>
 
-      <div className="absolute left-0 top-full pt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 z-50">
+      <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 z-50">
         <div
           className="min-w-[14em] border-t rounded-b overflow-hidden"
           style={{
@@ -573,7 +588,62 @@ export default function MainLayout({ children }: MainLayoutProps) {
       >
         {/* Main navbar — sticky on every page */}
         <header className="sticky top-0 z-50">
-          <Subnav isStudentPortal={isStudentPortal} />
+          <div
+            style={{
+              background: BRAND.nav.topBarBg,
+              borderBottom: `1px solid ${BRAND.nav.topBarBorder}`,
+            }}
+          >
+            <div className="max-w-[75rem] mx-auto px-4 md:px-[50px] py-2 flex items-center justify-between gap-3">
+              <div className="hidden md:block" style={{
+                ...topBarLinkStyle(),
+                color: "rgba(255,255,255,0.5)",
+              }}>
+                ▲ République du Tchad
+              </div>
+
+              <div className="flex-1 flex items-center justify-center gap-1 md:gap-3 flex-wrap">
+                {TOPBAR_NAV_ITEMS.map((item, i) => (
+                  <TopBarDropdown key={item.label} item={item} active={i === 0} />
+                ))}
+              </div>
+
+              {isStudentPortal ? (
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-1.5 rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
+                  style={{
+                    fontFamily: T1.fontFamily,
+                    padding: "0.35em 0.9em 0.3em",
+                    background: `linear-gradient(180deg, ${BRAND.navyLight} 10%, ${BRAND.navyMid} 90%)`,
+                    color: "#ffffff",
+                    borderColor: "#306998",
+                    boxShadow:
+                      "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.3)",
+                  }}
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  Retour à l'accueil
+                </Link>
+              ) : (
+                <Link
+                  to="/portail-etudiant"
+                  className="inline-flex items-center rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
+                  style={{
+                    fontFamily: T1.fontFamily,
+                    padding: "0.35em 0.9em 0.3em",
+                    background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
+                    color: "#4d4d4d",
+                    borderColor: "#e6c200",
+                    boxShadow:
+                      "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.5)",
+                  }}
+                >
+                  Portail Étudiant
+                </Link>
+              )}
+            </div>
+          </div>
         </header>
 
         <main className="relative">{children}</main>
