@@ -3,6 +3,8 @@ import { Search, Menu, X, ChevronDown, ArrowLeft } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { BRAND } from "./brand";
 
+const GOLD = BRAND.gold;
+
 interface NavItem {
   label: string;
   href: string;
@@ -200,64 +202,138 @@ function TopBarDropdown({
   );
 }
 
+// ─── Subnav ───────────────────────────────────────────────────────────────
+// This is the site's MAIN navbar: sticky, rendered once from MainLayout's
+// <header>, so it appears identically on every page. Content/placement is
+// unchanged from before — it's just been pulled out into its own named
+// component instead of living as inline JSX inside MainLayout.
+function Subnav({ isStudentPortal }: { isStudentPortal: boolean }) {
+  return (
+    <div
+      style={{
+        background: BRAND.nav.topBarBg,
+        borderBottom: `1px solid ${BRAND.nav.topBarBorder}`,
+      }}
+    >
+      <div className="max-w-[75rem] mx-auto px-4 md:px-[50px] py-2 flex items-center justify-between gap-3">
+        <div
+          className="hidden md:block"
+          style={{
+            ...topBarLinkStyle(),
+            color: "rgba(255,255,255,0.5)",
+          }}
+        >
+          ▲ République du Tchad
+        </div>
+
+        <div className="flex-1 flex items-center justify-center gap-1 md:gap-3 flex-wrap">
+          {TOPBAR_NAV_ITEMS.map((item, i) => (
+            <TopBarDropdown key={item.label} item={item} active={i === 0} />
+          ))}
+        </div>
+
+        {isStudentPortal ? (
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
+            style={{
+              fontFamily: T1.fontFamily,
+              padding: "0.35em 0.9em 0.3em",
+              background: `linear-gradient(180deg, ${BRAND.navyLight} 10%, ${BRAND.navyMid} 90%)`,
+              color: "#ffffff",
+              borderColor: "#306998",
+              boxShadow:
+                "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.3)",
+            }}
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Retour à l'accueil
+          </Link>
+        ) : (
+          <Link
+            to="/portail-etudiant"
+            className="inline-flex items-center rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
+            style={{
+              fontFamily: T1.fontFamily,
+              padding: "0.35em 0.9em 0.3em",
+              background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
+              color: "#4d4d4d",
+              borderColor: "#e6c200",
+              boxShadow:
+                "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.5)",
+            }}
+          >
+            Portail Étudiant
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── NavDropdown ──────────────────────────────────────────────────────────
+// Tier-1 item used inside HeroSubnav. Restyled: hover now reveals a slim
+// gold underline instead of a solid background block, and the dropdown
+// panel gets a soft glass look with a gold top accent + slide-in fade.
 function NavDropdown({ item }: { item: NavItem }) {
   return (
     <div className="relative group h-full flex items-center">
       <a
         href={item.href}
-        className="block whitespace-nowrap transition-colors duration-200 group-hover:text-white"
-        style={tier1LinkStyle}
+        className="relative flex items-center h-full whitespace-nowrap transition-colors duration-200"
+        style={{ ...tier1LinkStyle, color: "rgba(255,255,255,0.85)" }}
         onMouseEnter={(e) => {
-          const el = e.currentTarget;
-          el.style.color = BRAND.nav.linkActive;
-          el.style.background = BRAND.nav.linkActiveBg;
-          el.style.borderTop = `1px solid ${BRAND.nav.linkActiveBorderTop}`;
-          el.style.borderBottom = `1px solid ${BRAND.nav.linkActiveBorderBottom}`;
+          e.currentTarget.style.color = "#ffffff";
         }}
         onMouseLeave={(e) => {
-          const el = e.currentTarget;
-          el.style.color = BRAND.nav.link;
-          el.style.background = "transparent";
-          el.style.borderTop = "1px solid transparent";
-          el.style.borderBottom = "1px solid transparent";
+          e.currentTarget.style.color = "rgba(255,255,255,0.85)";
         }}
       >
         {item.label}
+        {/* gold underline indicator */}
+        <span
+          className="absolute left-4 right-4 bottom-1.5 h-[2px] rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-center"
+          style={{ background: GOLD }}
+        />
       </a>
 
-      <div className="absolute left-0 top-full pt-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150">
+      <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 z-50">
         <div
-          className="min-w-[14em] border-t"
+          className="min-w-[15em] rounded-lg overflow-hidden"
           style={{
-            background: BRAND.nav.dropdownBg,
-            borderTopColor: BRAND.nav.dropdownBorder,
-            boxShadow: "0 0.5em 0.5em rgba(0,0,0,0.25)",
+            background: "rgba(20,36,56,0.97)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            boxShadow: "0 12px 28px rgba(0,0,0,0.35)",
           }}
         >
-          {item.links?.map((link, idx) => (
-            <a
-              key={link.label}
-              href={link.href ?? "#"}
-              className="block whitespace-nowrap transition-colors"
-              style={{
-                ...tier2LinkStyle,
-                borderTop:
-                  idx === 0
-                    ? "none"
-                    : `1px solid ${BRAND.nav.dropdownBorder}`,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.35)";
-                e.currentTarget.style.color = BRAND.nav.dropdownLinkActive;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = BRAND.nav.dropdownLink;
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
+          <div className="h-[3px]" style={{ background: `linear-gradient(90deg, ${GOLD}, rgba(200,168,75,0.3))` }} />
+          <div className="py-1.5">
+            {item.links?.map((link) => (
+              <a
+                key={link.label}
+                href={link.href ?? "#"}
+                className="flex items-center gap-2 whitespace-nowrap transition-all duration-150"
+                style={{
+                  ...tier2LinkStyle,
+                  color: "rgba(255,255,255,0.75)",
+                  borderLeft: "2px solid transparent",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                  e.currentTarget.style.color = "#ffffff";
+                  e.currentTarget.style.borderLeftColor = GOLD;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "rgba(255,255,255,0.75)";
+                  e.currentTarget.style.borderLeftColor = "transparent";
+                }}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -268,6 +344,11 @@ interface MainLayoutProps {
   children: React.ReactNode;
 }
 
+// ─── HeroSubnav ───────────────────────────────────────────────────────────
+// The Homepage-only subnav (Formation / Recherche / International /
+// Candidature), rendered next to the crest in the hero. Restyled as a
+// frosted glass pill with a gold hairline accent, cleaner hover states,
+// and a refined search + mobile menu to match.
 export function HeroSubnav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -275,182 +356,199 @@ export function HeroSubnav() {
   const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
 
   return (
-    <>
+    <div
+      className="relative overflow-visible flex-1"
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.05))",
+        backdropFilter: "blur(14px)",
+        WebkitBackdropFilter: "blur(14px)",
+        border: "1px solid rgba(255,255,255,0.22)",
+        borderRadius: "16px",
+        boxShadow:
+          "0 10px 30px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.18)",
+      }}
+    >
+      {/* thin gold hairline across the top edge */}
       <div
-        className="border-t overflow-hidden flex-1"
+        className="absolute top-0 left-6 right-6 h-px pointer-events-none"
         style={{
-          background: BRAND.nav.bg,
-          borderTopColor: BRAND.nav.borderTop,
-          boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
-          borderRadius: "10px",
+          background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`,
+          opacity: 0.7,
         }}
-      >
-        <div className="flex items-center justify-between h-14 gap-2 px-1 lg:px-2">
-          {/* Desktop navigation — python.org tier-1 */}
-          <nav className="hidden lg:flex items-stretch h-full flex-1 justify-center">
-            {NAV_ITEMS.map((item) =>
-              item.links ? (
-                <NavDropdown key={item.label} item={item} />
-              ) : (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="flex items-center whitespace-nowrap transition-colors duration-200 hover:text-white"
-                  style={tier1LinkStyle}
-                >
-                  {item.label}
-                </a>
-              ),
-            )}
-          </nav>
+      />
 
-          {/* Actions */}
-          <div className="flex items-center gap-2 shrink-0">
-            {searchOpen ? (
-              <div
-                className="hidden md:flex items-center rounded-sm border overflow-hidden w-52"
-                style={{
-                  background: "rgba(255,255,255,0.12)",
-                  borderColor: BRAND.nav.dropdownBorder,
-                }}
-              >
-                <input
-                  autoFocus
-                  value={searchVal}
-                  onChange={(e) => setSearchVal(e.target.value)}
-                  onBlur={() => !searchVal && setSearchOpen(false)}
-                  className="bg-transparent font-normal text-white placeholder:text-white/45 outline-none flex-1 min-w-0 pl-3.5 py-2"
-                  style={{
-                    fontFamily: T1.fontFamily,
-                    fontSize: T1.tier2Size,
-                    lineHeight: T1.tier2LineHeight,
-                  }}
-                  placeholder="Rechercher…"
-                />
-                <button
-                  type="button"
-                  className="px-3 py-2 text-white/60 hover:text-white transition-colors"
-                  onClick={() => {
-                    setSearchOpen(false);
-                    setSearchVal("");
-                  }}
-                  aria-label="Fermer la recherche"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
+      <div className="flex items-center justify-between h-14 gap-2 px-2 lg:px-3">
+        {/* Desktop navigation */}
+        <nav className="hidden lg:flex items-stretch h-full flex-1 justify-center gap-1">
+          {NAV_ITEMS.map((item) =>
+            item.links ? (
+              <NavDropdown key={item.label} item={item} />
             ) : (
+              <a
+                key={item.label}
+                href={item.href}
+                className="flex items-center whitespace-nowrap transition-colors duration-200"
+                style={{ ...tier1LinkStyle, color: "rgba(255,255,255,0.85)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "rgba(255,255,255,0.85)")
+                }
+              >
+                {item.label}
+              </a>
+            ),
+          )}
+        </nav>
+
+        {/* Actions */}
+        <div className="flex items-center gap-1.5 shrink-0 lg:pl-2 lg:border-l lg:border-white/15">
+          {searchOpen ? (
+            <div
+              className="hidden md:flex items-center rounded-full border overflow-hidden w-52 transition-all duration-200"
+              style={{
+                background: "rgba(255,255,255,0.14)",
+                borderColor: "rgba(255,255,255,0.28)",
+              }}
+            >
+              <Search className="w-3.5 h-3.5 ml-3 shrink-0" style={{ color: GOLD }} />
+              <input
+                autoFocus
+                value={searchVal}
+                onChange={(e) => setSearchVal(e.target.value)}
+                onBlur={() => !searchVal && setSearchOpen(false)}
+                className="bg-transparent font-normal text-white placeholder:text-white/45 outline-none flex-1 min-w-0 pl-2 py-2"
+                style={{
+                  fontFamily: T1.fontFamily,
+                  fontSize: T1.tier2Size,
+                  lineHeight: T1.tier2LineHeight,
+                }}
+                placeholder="Rechercher…"
+              />
               <button
                 type="button"
-                className="hidden md:flex p-2 rounded-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-                onClick={() => setSearchOpen(true)}
-                aria-label="Rechercher"
+                className="px-3 py-2 text-white/60 hover:text-white transition-colors"
+                onClick={() => {
+                  setSearchOpen(false);
+                  setSearchVal("");
+                }}
+                aria-label="Fermer la recherche"
               >
-                <Search className="w-4 h-4" />
+                <X className="w-4 h-4" />
               </button>
-            )}
-
+            </div>
+          ) : (
             <button
               type="button"
-              className="lg:hidden p-2 rounded-sm text-white/80 hover:text-white hover:bg-white/10 transition-colors"
-              onClick={() => setMobileMenuOpen((v) => !v)}
-              aria-label="Menu"
+              className="hidden md:flex p-2 rounded-full text-white/75 hover:text-white hover:bg-white/12 transition-colors"
+              onClick={() => setSearchOpen(true)}
+              aria-label="Rechercher"
             >
-              {mobileMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
+              <Search className="w-4 h-4" />
             </button>
-          </div>
-        </div>
+          )}
 
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div
-            className="lg:hidden border-t overflow-hidden"
-            style={{
-              borderColor: BRAND.nav.mobileBorder,
-              background: BRAND.nav.mobileBg,
-            }}
+          <button
+            type="button"
+            className="lg:hidden p-2 rounded-full text-white/85 hover:text-white hover:bg-white/12 transition-colors"
+            onClick={() => setMobileMenuOpen((v) => !v)}
+            aria-label="Menu"
           >
-            <div className="px-3 py-3">
-              <div
-                className="flex items-center gap-2 px-3.5 py-2.5 rounded-sm border mb-3"
-                style={{
-                  background: "rgba(255,255,255,0.12)",
-                  borderColor: BRAND.nav.dropdownBorder,
-                }}
-              >
-                <Search className="w-4 h-4 shrink-0" style={{ color: BRAND.gold }} />
-                <input
-                  value={searchVal}
-                  onChange={(e) => setSearchVal(e.target.value)}
-                  className="bg-transparent font-normal text-white placeholder:text-white/45 outline-none w-full"
-                  style={{
-                    fontFamily: T1.fontFamily,
-                    fontSize: T1.tier2Size,
-                    lineHeight: T1.tier2LineHeight,
-                  }}
-                  placeholder="Rechercher…"
-                />
-              </div>
+            {mobileMenuOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
+          </button>
+        </div>
+      </div>
 
-              {NAV_ITEMS.map((item) => (
-                <div key={item.label} className="border-b border-white/5 last:border-0">
-                  {item.links ? (
-                    <>
-                      <button
-                        type="button"
-                        className="flex w-full items-center justify-between text-left text-white/90"
-                        style={tier1LinkStyle}
-                        onClick={() =>
-                          setExpandedMobile((v) =>
-                            v === item.label ? null : item.label,
-                          )
-                        }
-                      >
-                        {item.label}
-                        <ChevronDown
-                          className={`w-4 h-4 text-white/50 transition-transform duration-200 ${
-                            expandedMobile === item.label ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                      {expandedMobile === item.label && (
-                        <div className="pb-3 pl-3 space-y-1">
-                          {item.links.map((link) => (
-                            <a
-                              key={link.label}
-                              href={link.href ?? "#"}
-                              className="block transition-colors"
-                              style={{
-                                ...tier2LinkStyle,
-                                color: "rgba(255,255,255,0.75)",
-                              }}
-                            >
-                              {link.label}
-                            </a>
-                          ))}
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <a
-                      href={item.href}
-                      className="block text-white/90"
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div
+          className="lg:hidden overflow-hidden rounded-b-[16px]"
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.14)",
+            background: "rgba(15,28,45,0.92)",
+            backdropFilter: "blur(14px)",
+          }}
+        >
+          <div className="px-3 py-3">
+            <div
+              className="flex items-center gap-2 px-3.5 py-2.5 rounded-full border mb-3"
+              style={{
+                background: "rgba(255,255,255,0.1)",
+                borderColor: "rgba(255,255,255,0.22)",
+              }}
+            >
+              <Search className="w-4 h-4 shrink-0" style={{ color: GOLD }} />
+              <input
+                value={searchVal}
+                onChange={(e) => setSearchVal(e.target.value)}
+                className="bg-transparent font-normal text-white placeholder:text-white/45 outline-none w-full"
+                style={{
+                  fontFamily: T1.fontFamily,
+                  fontSize: T1.tier2Size,
+                  lineHeight: T1.tier2LineHeight,
+                }}
+                placeholder="Rechercher…"
+              />
+            </div>
+
+            {NAV_ITEMS.map((item) => (
+              <div key={item.label} className="border-b border-white/8 last:border-0">
+                {item.links ? (
+                  <>
+                    <button
+                      type="button"
+                      className="flex w-full items-center justify-between text-left text-white/90"
                       style={tier1LinkStyle}
+                      onClick={() =>
+                        setExpandedMobile((v) =>
+                          v === item.label ? null : item.label,
+                        )
+                      }
                     >
                       {item.label}
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
+                      <ChevronDown
+                        className={`w-4 h-4 text-white/50 transition-transform duration-200 ${
+                          expandedMobile === item.label ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                    {expandedMobile === item.label && (
+                      <div className="pb-3 pl-3 space-y-1 border-l-2" style={{ borderColor: "rgba(200,168,75,0.4)" }}>
+                        {item.links.map((link) => (
+                          <a
+                            key={link.label}
+                            href={link.href ?? "#"}
+                            className="block pl-3 transition-colors"
+                            style={{
+                              ...tier2LinkStyle,
+                              color: "rgba(255,255,255,0.75)",
+                            }}
+                          >
+                            {link.label}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <a
+                    href={item.href}
+                    className="block text-white/90"
+                    style={tier1LinkStyle}
+                  >
+                    {item.label}
+                  </a>
+                )}
+              </div>
+            ))}
           </div>
-        )}
-      </div>
-    </>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -473,64 +571,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
         className="relative"
         style={{ "--header-stack": HEADER_STACK_HEIGHT } as CSSProperties}
       >
-        {/* Top subnav — upper centered with 3 elements + Student Portal button */}
+        {/* Main navbar — sticky on every page */}
         <header className="sticky top-0 z-50">
-          <div
-            style={{
-              background: BRAND.nav.topBarBg,
-              borderBottom: `1px solid ${BRAND.nav.topBarBorder}`,
-            }}
-          >
-            <div className="max-w-[75rem] mx-auto px-4 md:px-[50px] py-2 flex items-center justify-between gap-3">
-              <div className="hidden md:block" style={{
-                ...topBarLinkStyle(),
-                color: "rgba(255,255,255,0.5)",
-              }}>
-                ▲ République du Tchad
-              </div>
-
-              <div className="flex-1 flex items-center justify-center gap-1 md:gap-3 flex-wrap">
-                {TOPBAR_NAV_ITEMS.map((item, i) => (
-                  <TopBarDropdown key={item.label} item={item} active={i === 0} />
-                ))}
-              </div>
-
-              {isStudentPortal ? (
-                <Link
-                  to="/"
-                  className="inline-flex items-center gap-1.5 rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
-                  style={{
-                    fontFamily: T1.fontFamily,
-                    padding: "0.35em 0.9em 0.3em",
-                    background: `linear-gradient(180deg, ${BRAND.navyLight} 10%, ${BRAND.navyMid} 90%)`,
-                    color: "#ffffff",
-                    borderColor: "#306998",
-                    boxShadow:
-                      "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.3)",
-                  }}
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  Retour à l'accueil
-                </Link>
-              ) : (
-                <Link
-                  to="/portail-etudiant"
-                  className="inline-flex items-center rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
-                  style={{
-                    fontFamily: T1.fontFamily,
-                    padding: "0.35em 0.9em 0.3em",
-                    background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
-                    color: "#4d4d4d",
-                    borderColor: "#e6c200",
-                    boxShadow:
-                      "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.5)",
-                  }}
-                >
-                  Portail Étudiant
-                </Link>
-              )}
-            </div>
-          </div>
+          <Subnav isStudentPortal={isStudentPortal} />
         </header>
 
         <main className="relative">{children}</main>
