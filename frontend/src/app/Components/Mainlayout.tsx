@@ -13,7 +13,17 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   {
-    label: "Formation",
+    label: "A propos",
+    href: "/universite/a-propos",
+    links: [
+      { label: "Histoire & Mission", href: "/universite/a-propos" },
+      { label: "Mot du Recteur", href: "/universite/a-propos" },
+      { label: "Gouvernance", href: "/universite/a-propos" },
+      { label: "Chiffres clés", href: "/universite/a-propos" },
+    ],
+  },
+  {
+    label: "Formations",
     href: "/universite/formations",
     links: [
       { label: "Droit & Sciences Politiques", href: "/universite/formations" },
@@ -22,16 +32,6 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Sciences de la Santé", href: "/universite/formations" },
       { label: "Sciences Économiques & Gestion", href: "/universite/formations" },
       { label: "Éducation & Formation", href: "/universite/formations" },
-    ],
-  },
-  {
-    label: "Recherche",
-    href: "/universite/recherches",
-    links: [
-      { label: "Laboratoires & centres", href: "/universite/recherches" },
-      { label: "Publications", href: "/universite/recherches" },
-      { label: "Appels à projets", href: "/universite/recherches" },
-      { label: "Axes de recherche", href: "/universite/recherches" },
     ],
   },
   {
@@ -45,14 +45,23 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   {
-    label: "Candidature",
-    href: "/candidature",
+    label: "Actualités",
+    href: "/universite/nouvelles-evenements",
     links: [
-      { label: "Conditions d'accès", href: "/candidature" },
-      { label: "Inscription en ligne", href: "/inscription" },
-      { label: "Frais de scolarité", href: "/candidature" },
-      { label: "Bourses & aides", href: "/candidature" },
+      { label: "Nouvelles", href: "/universite/nouvelles-evenements" },
+      { label: "Événements", href: "/universite/nouvelles-evenements" },
       { label: "Calendrier académique", href: "/universite/nouvelles-evenements" },
+      { label: "Communiqués", href: "/universite/nouvelles-evenements" },
+    ],
+  },
+  {
+    label: "Recherches",
+    href: "/universite/recherches",
+    links: [
+      { label: "Laboratoires & centres", href: "/universite/recherches" },
+      { label: "Publications", href: "/universite/recherches" },
+      { label: "Appels à projets", href: "/universite/recherches" },
+      { label: "Axes de recherche", href: "/universite/recherches" },
     ],
   },
 ];
