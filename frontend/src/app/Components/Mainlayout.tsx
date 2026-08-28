@@ -1,7 +1,7 @@
 import { useState, type CSSProperties } from "react";
 import { Search, Menu, X, ChevronDown, ArrowLeft } from "lucide-react";
 import { Link, useLocation } from "react-router";
-import { BRAND } from "./brand";
+import { BRAND } from "./Utils/brand";
 
 const GOLD = BRAND.gold;
 
@@ -567,7 +567,7 @@ export function HeroSubnav() {
   );
 }
 
-export default function MainLayout({ children }: MainLayoutProps) {
+export default function Mainlayout({ children }: MainLayoutProps) {
   const HEADER_STACK_HEIGHT = "2.875rem";
   const location = useLocation();
   const isStudentPortal = location.pathname === "/portail-etudiant";

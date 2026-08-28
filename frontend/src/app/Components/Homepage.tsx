@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router";
-import { BRAND } from "./brand";
-import { HeroSubnav, UDNCrest } from "./MainLayout";
-import imgCeremonial from "./Images/Ceremonial.jpeg";
-import imgLaboratory from "./Images/laboratory.jpg";
-import imgTechnology from "./Images/Technology.jpeg";
+import { BRAND } from "./Utils/brand";
+import { HeroSubnav, UDNCrest } from "./Mainlayout";
+import imgCeremonial from "../Images/Ceremonial.jpeg";
+import imgLaboratory from "../Images/laboratory.jpg";
+import imgTechnology from "../Images/Technology.jpeg";
 
 const NAVY = BRAND.navy;
 const GOLD = BRAND.gold;

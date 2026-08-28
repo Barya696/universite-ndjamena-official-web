@@ -13,7 +13,7 @@ import {
   BookOpen,
   CheckCircle2,
 } from "lucide-react";
-import { BRAND } from "./brand";
+import { BRAND } from "../Utils/brand";
 
 const NAVY = BRAND.navy;
 const GOLD = BRAND.gold;

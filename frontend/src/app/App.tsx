@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router";
-import MainLayout from "./MainLayout";
-import Homepage from "./Homepage";
-import StudentLogin from "./StudentLogin";
+import Mainlayout from "./Components/Mainlayout";
+import Homepage from "./Components/Homepage";
+import StudentLogin from "./Components/Student/StudentLogin";
 
 export default function App() {
   return (
@@ -9,17 +9,17 @@ export default function App() {
       <Route
         path="/"
         element={
-          <MainLayout>
+          <Mainlayout>
             <Homepage />
-          </MainLayout>
+          </Mainlayout>
         }
       />
       <Route
         path="/portail-etudiant"
         element={
-          <MainLayout>
+          <Mainlayout>
             <StudentLogin />
-          </MainLayout>
+          </Mainlayout>
         }
       />
     </Routes>
