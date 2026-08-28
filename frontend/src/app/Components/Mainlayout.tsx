@@ -14,45 +14,45 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   {
     label: "Formation",
-    href: "#",
+    href: "/universite/formations",
     links: [
-      { label: "Droit & Sciences Politiques" },
-      { label: "Lettres & Sciences Humaines" },
-      { label: "Sciences Exactes & Appliquées" },
-      { label: "Sciences de la Santé" },
-      { label: "Sciences Économiques & Gestion" },
-      { label: "Éducation & Formation" },
+      { label: "Droit & Sciences Politiques", href: "/universite/formations" },
+      { label: "Lettres & Sciences Humaines", href: "/universite/formations" },
+      { label: "Sciences Exactes & Appliquées", href: "/universite/formations" },
+      { label: "Sciences de la Santé", href: "/universite/formations" },
+      { label: "Sciences Économiques & Gestion", href: "/universite/formations" },
+      { label: "Éducation & Formation", href: "/universite/formations" },
     ],
   },
   {
     label: "Recherche",
-    href: "#",
+    href: "/universite/recherches",
     links: [
-      { label: "Laboratoires & centres" },
-      { label: "Publications" },
-      { label: "Appels à projets" },
-      { label: "Axes de recherche" },
+      { label: "Laboratoires & centres", href: "/universite/recherches" },
+      { label: "Publications", href: "/universite/recherches" },
+      { label: "Appels à projets", href: "/universite/recherches" },
+      { label: "Axes de recherche", href: "/universite/recherches" },
     ],
   },
   {
     label: "International",
-    href: "#",
+    href: "/universite/international",
     links: [
-      { label: "Partenariats internationaux" },
-      { label: "Programmes d'échange" },
-      { label: "Coopération & doubles diplômes" },
-      { label: "Étudiants internationaux" },
+      { label: "Partenariats internationaux", href: "/universite/international" },
+      { label: "Programmes d'échange", href: "/universite/international" },
+      { label: "Coopération & doubles diplômes", href: "/universite/international" },
+      { label: "Étudiants internationaux", href: "/universite/international" },
     ],
   },
   {
     label: "Candidature",
-    href: "#",
+    href: "/candidature",
     links: [
-      { label: "Conditions d'accès" },
-      { label: "Inscription en ligne" },
-      { label: "Frais de scolarité" },
-      { label: "Bourses & aides" },
-      { label: "Calendrier académique" },
+      { label: "Conditions d'accès", href: "/candidature" },
+      { label: "Inscription en ligne", href: "/inscription" },
+      { label: "Frais de scolarité", href: "/candidature" },
+      { label: "Bourses & aides", href: "/candidature" },
+      { label: "Calendrier académique", href: "/universite/nouvelles-evenements" },
     ],
   },
 ];
@@ -112,36 +112,36 @@ const topBarLinkStyle = (active = false): CSSProperties => ({
 const TOPBAR_NAV_ITEMS: NavItem[] = [
   {
     label: "L'Université",
-    href: "#",
+    href: "/universite/a-propos",
     links: [
-      { label: "Histoire & Mission" },
-      { label: "Mot du Recteur" },
-      { label: "Gouvernance" },
-      { label: "Chiffres clés" },
-      { label: "Partenariats" },
+      { label: "Histoire & Mission", href: "/universite/a-propos" },
+      { label: "Mot du Recteur", href: "/universite/a-propos" },
+      { label: "Gouvernance", href: "/universite/a-propos" },
+      { label: "Chiffres clés", href: "/universite/a-propos" },
+      { label: "Partenariats", href: "/universite/international" },
     ],
   },
   {
     label: "Formations",
-    href: "#",
+    href: "/universite/formations",
     links: [
-      { label: "Droit & Sciences Politiques" },
-      { label: "Lettres & Sciences Humaines" },
-      { label: "Sciences Exactes & Appliquées" },
-      { label: "Sciences de la Santé" },
-      { label: "Sciences Économiques & Gestion" },
-      { label: "Éducation & Formation" },
+      { label: "Droit & Sciences Politiques", href: "/universite/formations" },
+      { label: "Lettres & Sciences Humaines", href: "/universite/formations" },
+      { label: "Sciences Exactes & Appliquées", href: "/universite/formations" },
+      { label: "Sciences de la Santé", href: "/universite/formations" },
+      { label: "Sciences Économiques & Gestion", href: "/universite/formations" },
+      { label: "Éducation & Formation", href: "/universite/formations" },
     ],
   },
   {
     label: "Recherche",
-    href: "#",
+    href: "/universite/recherches",
     links: [
-      { label: "Laboratoires & centres" },
-      { label: "Publications" },
-      { label: "Appels à projets" },
-      { label: "Coopération internationale" },
-      { label: "Axes de recherche" },
+      { label: "Laboratoires & centres", href: "/universite/recherches" },
+      { label: "Publications", href: "/universite/recherches" },
+      { label: "Appels à projets", href: "/universite/recherches" },
+      { label: "Coopération internationale", href: "/universite/international" },
+      { label: "Axes de recherche", href: "/universite/recherches" },
     ],
   },
 ];
@@ -155,8 +155,8 @@ function TopBarDropdown({
 }) {
   return (
     <div className="relative group flex items-center">
-      <a
-        href={item.href}
+      <Link
+        to={item.href}
         className="block whitespace-nowrap rounded transition-all duration-200 hover:text-white"
         style={{
           ...topBarLinkStyle(active),
@@ -176,7 +176,7 @@ function TopBarDropdown({
         }}
       >
         {item.label}
-      </a>
+      </Link>
 
       <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 z-50">
         <div
@@ -188,9 +188,9 @@ function TopBarDropdown({
           }}
         >
           {item.links?.map((link, idx) => (
-            <a
+            <Link
               key={link.label}
-              href={link.href ?? "#"}
+              to={link.href ?? "#"}
               className="block whitespace-nowrap transition-colors"
               style={{
                 ...tier2LinkStyle,
@@ -209,7 +209,7 @@ function TopBarDropdown({
               }}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
       </div>
@@ -293,8 +293,8 @@ function Subnav({ isStudentPortal }: { isStudentPortal: boolean }) {
 function NavDropdown({ item }: { item: NavItem }) {
   return (
     <div className="relative group h-full flex items-center">
-      <a
-        href={item.href}
+      <Link
+        to={item.href}
         className="relative flex items-center h-full whitespace-nowrap transition-colors duration-200"
         style={{ ...tier1LinkStyle, color: "rgba(255,255,255,0.85)" }}
         onMouseEnter={(e) => {
@@ -310,7 +310,7 @@ function NavDropdown({ item }: { item: NavItem }) {
           className="absolute left-4 right-4 bottom-1.5 h-[2px] rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-center"
           style={{ background: GOLD }}
         />
-      </a>
+      </Link>
 
       <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 z-50">
         <div
@@ -325,9 +325,9 @@ function NavDropdown({ item }: { item: NavItem }) {
           <div className="h-[3px]" style={{ background: `linear-gradient(90deg, ${GOLD}, rgba(200,168,75,0.3))` }} />
           <div className="py-1.5">
             {item.links?.map((link) => (
-              <a
+              <Link
                 key={link.label}
-                href={link.href ?? "#"}
+                to={link.href ?? "#"}
                 className="flex items-center gap-2 whitespace-nowrap transition-all duration-150"
                 style={{
                   ...tier2LinkStyle,
@@ -346,7 +346,7 @@ function NavDropdown({ item }: { item: NavItem }) {
                 }}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -400,9 +400,9 @@ export function HeroSubnav() {
             item.links ? (
               <NavDropdown key={item.label} item={item} />
             ) : (
-              <a
+              <Link
                 key={item.label}
-                href={item.href}
+                to={item.href}
                 className="flex items-center whitespace-nowrap transition-colors duration-200"
                 style={{ ...tier1LinkStyle, color: "rgba(255,255,255,0.85)" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
@@ -411,7 +411,7 @@ export function HeroSubnav() {
                 }
               >
                 {item.label}
-              </a>
+              </Link>
             ),
           )}
         </nav>
@@ -534,9 +534,9 @@ export function HeroSubnav() {
                     {expandedMobile === item.label && (
                       <div className="pb-3 pl-3 space-y-1 border-l-2" style={{ borderColor: "rgba(200,168,75,0.4)" }}>
                         {item.links.map((link) => (
-                          <a
+                          <Link
                             key={link.label}
-                            href={link.href ?? "#"}
+                            to={link.href ?? "#"}
                             className="block pl-3 transition-colors"
                             style={{
                               ...tier2LinkStyle,
@@ -544,19 +544,19 @@ export function HeroSubnav() {
                             }}
                           >
                             {link.label}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     )}
                   </>
                 ) : (
-                  <a
-                    href={item.href}
+                  <Link
+                    to={item.href}
                     className="block text-white/90"
                     style={tier1LinkStyle}
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 )}
               </div>
             ))}
@@ -658,43 +658,44 @@ export default function Mainlayout({ children }: MainLayoutProps) {
             {
               heading: "L'Université",
               links: [
-                "Histoire & Mission",
-                "Gouvernance",
-                "Plan Stratégique",
-                "Accréditations",
-                "Partenariats",
+                { label: "Histoire & Mission", href: "/universite/a-propos" },
+                { label: "Gouvernance", href: "/universite/a-propos" },
+                { label: "Plan Stratégique", href: "/universite/a-propos" },
+                { label: "Accréditations", href: "/universite/a-propos" },
+                { label: "Partenariats", href: "/universite/international" },
               ],
             },
             {
               heading: "Formations",
               links: [
-                "Droit & Sciences Politiques",
-                "Lettres & Sciences Humaines",
-                "Sciences Exactes",
-                "Sciences de la Santé",
-                "Sciences Économiques",
-                "Formation continue",
+                { label: "Droit & Sciences Politiques", href: "/universite/formations" },
+                { label: "Lettres & Sciences Humaines", href: "/universite/formations" },
+                { label: "Sciences Exactes", href: "/universite/formations" },
+                { label: "Sciences de la Santé", href: "/universite/formations" },
+                { label: "Sciences Économiques", href: "/universite/formations" },
+                { label: "Candidature 2024–2025", href: "/candidature" },
               ],
             },
             {
               heading: "Services",
               links: [
-                "Bibliothèques",
-                "Résidences",
-                "Service de santé",
-                "Orientation & Emploi",
-                "Alumni",
-                "Portail étudiant",
+                { label: "Bibliothèques", href: "/bibliotheque" },
+                { label: "Résidences", href: "#" },
+                { label: "Service de santé", href: "#" },
+                { label: "Orientation & Emploi", href: "#" },
+                { label: "Alumni", href: "#" },
+                { label: "Portail étudiant", href: "/portail-etudiant" },
               ],
             },
             {
-              heading: "Contact",
+              heading: "Contact & Médias",
               links: [
-                "Campus Toukra",
-                "Campus Farcha",
-                "Campus Ardep-Djoumal",
-                "Presse & Médias",
-                "Plan d'accès",
+                { label: "Campus Toukra", href: "/universite/a-propos" },
+                { label: "Campus Farcha", href: "/universite/a-propos" },
+                { label: "Campus Ardep-Djoumal", href: "/universite/a-propos" },
+                { label: "Presse & Médias", href: "/media" },
+                { label: "Actualités", href: "/universite/nouvelles-evenements" },
+                { label: "Inscription en ligne", href: "/inscription" },
               ],
             },
           ].map((col) => (
@@ -707,20 +708,14 @@ export default function Mainlayout({ children }: MainLayoutProps) {
               </div>
               <ul className="space-y-2">
                 {col.links.map((link) => (
-                  <li key={link}>
-                    {link === "Portail étudiant" ? (
-                      <Link
-                        to="/portail-etudiant"
-                        className="hover:text-white/90 transition-colors"
-                        style={{ fontSize: "16px", fontWeight: "400", lineHeight: "26px" }}
-                      >
-                        {link}
-                      </Link>
-                    ) : (
-                      <a href="#" className="hover:text-white/90 transition-colors" style={{ fontSize: "16px", fontWeight: "400", lineHeight: "26px" }}>
-                        {link}
-                      </a>
-                    )}
+                  <li key={link.label}>
+                    <Link
+                      to={link.href}
+                      className="hover:text-white/90 transition-colors"
+                      style={{ fontSize: "16px", fontWeight: "400", lineHeight: "26px" }}
+                    >
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
