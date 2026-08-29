@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from "react";
-import { Search, Menu, X, ChevronDown, ArrowLeft } from "lucide-react";
+import { Search, Menu, X, ChevronDown, ArrowLeft, GraduationCap, UserCircle, BookOpen, FileCheck } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { BRAND } from "./Utils/brand";
 
@@ -8,6 +8,7 @@ const GOLD = BRAND.gold;
 interface NavItem {
   label: string;
   href: string;
+  icon?: React.ReactNode;
   links?: { label: string; href?: string }[];
 }
 
@@ -120,8 +121,9 @@ const topBarLinkStyle = (active = false): CSSProperties => ({
 
 const TOPBAR_NAV_ITEMS: NavItem[] = [
   {
-    label: "Universites",
+    label: "Université",
     href: "/universite/a-propos",
+    icon: <GraduationCap className="w-4 h-4 shrink-0" />,
     links: [
       { label: "À propos", href: "/universite/a-propos" },
       { label: "Formations", href: "/universite/formations" },
@@ -133,6 +135,7 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
   {
     label: "Portail_Etudiant",
     href: "/portail-etudiant",
+    icon: <UserCircle className="w-4 h-4 shrink-0" />,
     links: [
       { label: "Connexion étudiant", href: "/portail-etudiant" },
       { label: "Inscription en ligne", href: "/inscription" },
@@ -143,6 +146,7 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
   {
     label: "Bibliothèque",
     href: "/bibliotheque",
+    icon: <BookOpen className="w-4 h-4 shrink-0" />,
     links: [
       { label: "Catalogue en ligne", href: "/bibliotheque" },
       { label: "Emprunts & réservations", href: "/bibliotheque" },
@@ -154,6 +158,7 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
   {
     label: "Candidature",
     href: "/candidature",
+    icon: <FileCheck className="w-4 h-4 shrink-0" />,
     links: [
       { label: "Licence", href: "/candidature" },
       { label: "Master", href: "/candidature" },
@@ -175,7 +180,7 @@ function TopBarDropdown({
     <div className="relative group flex items-center">
       <Link
         to={item.href}
-        className="block whitespace-nowrap rounded transition-all duration-200 hover:text-white"
+        className="flex items-center gap-1.5 whitespace-nowrap rounded transition-all duration-200 hover:text-white"
         style={{
           ...topBarLinkStyle(active),
           borderRadius: "6px",
@@ -193,6 +198,7 @@ function TopBarDropdown({
           el.style.background = "transparent";
         }}
       >
+        {item.icon}
         {item.label}
       </Link>
 
