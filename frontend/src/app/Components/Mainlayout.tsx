@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from "react";
-import { Search, Menu, X, ChevronDown, ArrowLeft, GraduationCap, UserCircle, BookOpen, FileCheck } from "lucide-react";
+import { Search, Menu, X, ChevronDown, ArrowLeft, GraduationCap, UserCircle, BookOpen, FileCheck, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { BRAND } from "./Utils/brand";
 
@@ -443,6 +443,46 @@ export function HeroSubnav() {
             ),
           )}
         </nav>
+
+        {/* Social media icons (HeroSubnav only, desktop) */}
+        <div className="hidden lg:flex items-center gap-1 pl-2 ml-1 border-l border-white/15">
+          <a
+            href="https://facebook.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            className="flex items-center justify-center p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
+          >
+            <Facebook className="w-4 h-4" />
+          </a>
+          <a
+            href="https://instagram.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="flex items-center justify-center p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
+          >
+            <Instagram className="w-4 h-4" />
+          </a>
+          <a
+            href="https://x.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="X (Twitter)"
+            className="flex items-center justify-center p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
+          >
+            <Twitter className="w-4 h-4" />
+          </a>
+          <a
+            href="https://linkedin.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            className="flex items-center justify-center p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
+          >
+            <Linkedin className="w-4 h-4" />
+          </a>
+        </div>
 
         {/* Actions */}
         <div className="flex items-center gap-1.5 shrink-0 lg:pl-2 lg:border-l lg:border-white/15">
