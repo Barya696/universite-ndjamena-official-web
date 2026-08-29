@@ -14,7 +14,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   {
-    label: "A propos",
+    label: "À propos",
     href: "/universite/a-propos",
     links: [
       { label: "Histoire & Mission", href: "/universite/a-propos" },
@@ -144,7 +144,7 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
     ],
   },
   {
-    label: "Bibliothèque",
+    label: "Bibliothèque Numérique",
     href: "/bibliotheque",
     icon: <BookOpen className="w-4 h-4 shrink-0" />,
     links: [
@@ -172,10 +172,13 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
 function TopBarDropdown({
   item,
   active,
+  compact = false,
 }: {
   item: NavItem;
   active?: boolean;
+  compact?: boolean;
 }) {
+  const compactPadding = compact ? { padding: "0.25em 0.7em 0.22em" } : {};
   return (
     <div className="relative group flex items-center">
       <Link
@@ -183,6 +186,7 @@ function TopBarDropdown({
         className="flex items-center gap-1.5 whitespace-nowrap rounded transition-all duration-200 hover:text-white"
         style={{
           ...topBarLinkStyle(active),
+          ...compactPadding,
           borderRadius: "6px",
         }}
         onMouseEnter={(e) => {
@@ -254,7 +258,7 @@ function Subnav({ isStudentPortal }: { isStudentPortal: boolean }) {
         borderBottom: `1px solid ${BRAND.nav.topBarBorder}`,
       }}
     >
-      <div className="max-w-[75rem] mx-auto px-4 md:px-[50px] py-2 flex items-center justify-between gap-3">
+      <div className="max-w-[75rem] mx-auto px-4 md:px-[50px] py-1 flex items-center justify-between gap-3">
         <div
           className="hidden md:block"
           style={{
@@ -267,7 +271,7 @@ function Subnav({ isStudentPortal }: { isStudentPortal: boolean }) {
 
         <div className="flex-1 flex items-center justify-center gap-1 md:gap-3 flex-wrap">
           {TOPBAR_NAV_ITEMS.map((item, i) => (
-            <TopBarDropdown key={item.label} item={item} active={i === 0} />
+            <TopBarDropdown key={item.label} item={item} active={i === 0} compact />
           ))}
         </div>
 
@@ -277,7 +281,7 @@ function Subnav({ isStudentPortal }: { isStudentPortal: boolean }) {
             className="inline-flex items-center gap-1.5 rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
             style={{
               fontFamily: T1.fontFamily,
-              padding: "0.35em 0.9em 0.3em",
+              padding: "0.22em 0.75em 0.2em",
               background: `linear-gradient(180deg, ${BRAND.navyLight} 10%, ${BRAND.navyMid} 90%)`,
               color: "#ffffff",
               borderColor: "#306998",
@@ -294,7 +298,7 @@ function Subnav({ isStudentPortal }: { isStudentPortal: boolean }) {
             className="inline-flex items-center rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
             style={{
               fontFamily: T1.fontFamily,
-              padding: "0.35em 0.9em 0.3em",
+              padding: "0.22em 0.75em 0.2em",
               background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
               color: "#4d4d4d",
               borderColor: "#e6c200",
@@ -592,7 +596,7 @@ export function HeroSubnav() {
 }
 
 export default function Mainlayout({ children }: MainLayoutProps) {
-  const HEADER_STACK_HEIGHT = "2.875rem";
+  const HEADER_STACK_HEIGHT = "2.25rem";
   const location = useLocation();
   const isStudentPortal = location.pathname === "/portail-etudiant";
 
@@ -618,7 +622,7 @@ export default function Mainlayout({ children }: MainLayoutProps) {
               borderBottom: `1px solid ${BRAND.nav.topBarBorder}`,
             }}
           >
-            <div className="max-w-[75rem] mx-auto px-4 md:px-[50px] py-2 flex items-center justify-between gap-3">
+            <div className="max-w-[75rem] mx-auto px-4 md:px-[50px] py-1 flex items-center justify-between gap-3">
               <div className="hidden md:block" style={{
                 ...topBarLinkStyle(),
                 color: "rgba(255,255,255,0.5)",
@@ -628,7 +632,7 @@ export default function Mainlayout({ children }: MainLayoutProps) {
 
               <div className="flex-1 flex items-center justify-center gap-1 md:gap-3 flex-wrap">
                 {TOPBAR_NAV_ITEMS.map((item, i) => (
-                  <TopBarDropdown key={item.label} item={item} active={i === 0} />
+                  <TopBarDropdown key={item.label} item={item} active={i === 0} compact />
                 ))}
               </div>
 
@@ -638,7 +642,7 @@ export default function Mainlayout({ children }: MainLayoutProps) {
                   className="inline-flex items-center gap-1.5 rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
                   style={{
                     fontFamily: T1.fontFamily,
-                    padding: "0.35em 0.9em 0.3em",
+                    padding: "0.22em 0.75em 0.2em",
                     background: `linear-gradient(180deg, ${BRAND.navyLight} 10%, ${BRAND.navyMid} 90%)`,
                     color: "#ffffff",
                     borderColor: "#306998",
@@ -655,7 +659,7 @@ export default function Mainlayout({ children }: MainLayoutProps) {
                   className="inline-flex items-center rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
                   style={{
                     fontFamily: T1.fontFamily,
-                    padding: "0.35em 0.9em 0.3em",
+                    padding: "0.22em 0.75em 0.2em",
                     background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
                     color: "#4d4d4d",
                     borderColor: "#e6c200",
