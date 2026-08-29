@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from "react";
-import { Search, Menu, X, ChevronDown, ArrowLeft, GraduationCap, UserCircle, BookOpen, FileCheck, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import { Search, Menu, X, ChevronDown, ArrowLeft, GraduationCap, UserCircle, BookOpen, FileCheck, Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { BRAND } from "./Utils/brand";
 
@@ -136,36 +136,16 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
     label: "Portail_Etudiant",
     href: "/portail-etudiant",
     icon: <UserCircle className="w-4 h-4 shrink-0" />,
-    links: [
-      { label: "Connexion étudiant", href: "/portail-etudiant" },
-      { label: "Inscription en ligne", href: "/inscription" },
-      { label: "Candidature", href: "/candidature" },
-      { label: "Bibliothèque", href: "/bibliotheque" },
-    ],
   },
   {
     label: "Bibliothèque Numérique",
     href: "/bibliotheque",
     icon: <BookOpen className="w-4 h-4 shrink-0" />,
-    links: [
-      { label: "Catalogue en ligne", href: "/bibliotheque" },
-      { label: "Emprunts & réservations", href: "/bibliotheque" },
-      { label: "Ressources numériques", href: "/bibliotheque" },
-      { label: "Horaires & accès", href: "/bibliotheque" },
-      { label: "Espaces de travail", href: "/bibliotheque" },
-    ],
   },
   {
     label: "Candidature",
     href: "/candidature",
     icon: <FileCheck className="w-4 h-4 shrink-0" />,
-    links: [
-      { label: "Licence", href: "/candidature" },
-      { label: "Master", href: "/candidature" },
-      { label: "Doctorat", href: "/candidature" },
-      { label: "Droits d'inscription", href: "/candidature" },
-      { label: "Calendrier académique", href: "/universite/nouvelles-evenements" },
-    ],
   },
 ];
 
@@ -179,8 +159,9 @@ function TopBarDropdown({
   compact?: boolean;
 }) {
   const compactPadding = compact ? { padding: "0.25em 0.7em 0.22em" } : {};
+  const hasDropdown = item.links && item.links.length > 0;
   return (
-    <div className="relative group flex items-center">
+    <div className={`${hasDropdown ? "relative group " : ""}flex items-center`}>
       <Link
         to={item.href}
         className="flex items-center gap-1.5 whitespace-nowrap rounded transition-all duration-200 hover:text-white"
@@ -206,41 +187,43 @@ function TopBarDropdown({
         {item.label}
       </Link>
 
-      <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 z-50">
-        <div
-          className="min-w-[14em] border-t rounded-b overflow-hidden"
-          style={{
-            background: BRAND.nav.dropdownBg,
-            borderTopColor: BRAND.nav.dropdownBorder,
-            boxShadow: "0 0.5em 0.5em rgba(0,0,0,0.25)",
-          }}
-        >
-          {item.links?.map((link, idx) => (
-            <Link
-              key={link.label}
-              to={link.href ?? "#"}
-              className="block whitespace-nowrap transition-colors"
-              style={{
-                ...tier2LinkStyle,
-                borderTop:
-                  idx === 0
-                    ? "none"
-                    : `1px solid ${BRAND.nav.dropdownBorder}`,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.35)";
-                e.currentTarget.style.color = BRAND.nav.dropdownLinkActive;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = BRAND.nav.dropdownLink;
-              }}
-            >
-              {link.label}
-            </Link>
-          ))}
+      {hasDropdown && (
+        <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 z-50">
+          <div
+            className="min-w-[14em] border-t rounded-b overflow-hidden"
+            style={{
+              background: BRAND.nav.dropdownBg,
+              borderTopColor: BRAND.nav.dropdownBorder,
+              boxShadow: "0 0.5em 0.5em rgba(0,0,0,0.25)",
+            }}
+          >
+            {item.links?.map((link, idx) => (
+              <Link
+                key={link.label}
+                to={link.href ?? "#"}
+                className="block whitespace-nowrap transition-colors"
+                style={{
+                  ...tier2LinkStyle,
+                  borderTop:
+                    idx === 0
+                      ? "none"
+                      : `1px solid ${BRAND.nav.dropdownBorder}`,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.35)";
+                  e.currentTarget.style.color = BRAND.nav.dropdownLinkActive;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = BRAND.nav.dropdownLink;
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -444,48 +427,47 @@ export function HeroSubnav() {
           )}
         </nav>
 
-        {/* Social media icons (HeroSubnav only, desktop) */}
-        <div className="hidden lg:flex items-center gap-1 pl-2 ml-1 border-l border-white/15">
+        <div className="hidden lg:flex items-center gap-1.5 pr-2 mr-1" style={{ borderRight: `1px solid rgba(200,168,75,0.35)` }}>
           <a
-            href="https://facebook.com/"
+            href="https://facebook.com"
             target="_blank"
             rel="noopener noreferrer"
+            className="p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
             aria-label="Facebook"
-            className="flex items-center justify-center p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
           >
             <Facebook className="w-4 h-4" />
           </a>
           <a
-            href="https://instagram.com/"
+            href="https://instagram.com"
             target="_blank"
             rel="noopener noreferrer"
+            className="p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
             aria-label="Instagram"
-            className="flex items-center justify-center p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
           >
             <Instagram className="w-4 h-4" />
           </a>
           <a
-            href="https://x.com/"
+            href="https://twitter.com"
             target="_blank"
             rel="noopener noreferrer"
+            className="p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
             aria-label="X (Twitter)"
-            className="flex items-center justify-center p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
           >
             <Twitter className="w-4 h-4" />
           </a>
           <a
-            href="https://linkedin.com/"
+            href="https://linkedin.com"
             target="_blank"
             rel="noopener noreferrer"
+            className="p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
             aria-label="LinkedIn"
-            className="flex items-center justify-center p-1.5 rounded-full text-white/70 hover:text-white hover:bg-white/12 transition-colors"
           >
             <Linkedin className="w-4 h-4" />
           </a>
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-1.5 shrink-0 lg:pl-2 lg:border-l lg:border-white/15">
+        <div className="flex items-center gap-1.5 shrink-0 lg:pl-2 lg:border-l" style={{ borderColor: `rgba(200,168,75,0.35)` }}>
           {searchOpen ? (
             <div
               className="hidden md:flex items-center rounded-full border overflow-hidden w-52 transition-all duration-200"

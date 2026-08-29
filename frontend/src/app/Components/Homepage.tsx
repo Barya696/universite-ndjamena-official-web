@@ -292,7 +292,7 @@ function HeroSlideshow() {
       <div style={{ zIndex: 10, position: "relative" }} className="px-4 md:px-[50px]">
         <div className="max-w-[75rem] mx-auto flex flex-col md:flex-row items-stretch md:items-center gap-3">
           {/* Logo + University name in its own section */}
-          <Link to="/" className="flex flex-col items-center gap-2 shrink-0 justify-center md:justify-start py-1">
+          <a href="/" className="flex flex-col items-center gap-2 shrink-0 justify-center md:justify-start py-1">
             <UDNCrest size={88} />
             <div>
               <div
@@ -306,7 +306,7 @@ function HeroSlideshow() {
                 Université de N'Djamena
               </div>
             </div>
-          </Link>
+          </a>
           <HeroSubnav />
         </div>
       </div>
