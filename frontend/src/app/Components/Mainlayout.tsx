@@ -122,7 +122,7 @@ const topBarLinkStyle = (active = false): CSSProperties => ({
 const TOPBAR_NAV_ITEMS: NavItem[] = [
   {
     label: "Université",
-    href: "/universite/a-propos",
+    href: "/",
     icon: <GraduationCap className="w-4 h-4 shrink-0" />,
     links: [
       { label: "À propos", href: "/universite/a-propos" },
