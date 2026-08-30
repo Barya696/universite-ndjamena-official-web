@@ -244,12 +244,14 @@ function TopBarDropdown({
                   </Link>
 
                   {hasSub && (
-                    <div className="absolute left-full top-[-1px] ml-0 pl-2 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-opacity duration-150 z-50">
+                    <div className="absolute left-full top-[-1px] opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-opacity duration-150 z-50">
                       <div
-                        className="min-w-[15em] rounded overflow-hidden shadow-xl"
+                        className="min-w-[15em] overflow-hidden shadow-xl"
                         style={{
                           background: BRAND.nav.dropdownBg,
+                          filter: "brightness(1.30)",
                           border: `1px solid ${BRAND.nav.dropdownBorder}`,
+                          borderLeft: `1px solid ${BRAND.nav.dropdownBorder}`,
                           boxShadow: "0 0.5em 0.5em rgba(0,0,0,0.25)",
                         }}
                       >
