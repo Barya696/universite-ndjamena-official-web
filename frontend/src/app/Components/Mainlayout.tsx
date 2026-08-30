@@ -1,15 +1,21 @@
 import { useState, type CSSProperties } from "react";
-import { Search, Menu, X, ChevronDown, ArrowLeft, GraduationCap, UserCircle, BookOpen, FileCheck, Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
+import { Search, Menu, X, ChevronDown, ChevronRight, ArrowLeft, GraduationCap, UserCircle, BookOpen, FileCheck, Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { BRAND } from "./Utils/brand";
 
 const GOLD = BRAND.gold;
 
+interface NavLink {
+  label: string;
+  href?: string;
+  links?: NavLink[];
+}
+
 interface NavItem {
   label: string;
   href: string;
   icon?: React.ReactNode;
-  links?: { label: string; href?: string }[];
+  links?: NavLink[];
 }
 
 const NAV_ITEMS: NavItem[] = [
@@ -127,9 +133,18 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
     href: "/",
     icon: <GraduationCap className="w-4 h-4 shrink-0" />,
     links: [
-      { label: "À propos", href: "/universite/a-propos" },
-      { label: "Nos Politiques", href: "/universite/a-propos" },
-      { label: "Personels", href: "/universite/a-propos" },
+      {
+        label: "À propos",
+        href: "/universite/a-propos",
+        links: [
+          { label: "Histoire & Mission", href: "/universite/a-propos" },
+          { label: "Mot du Recteur", href: "/universite/a-propos" },
+          { label: "Gouvernance", href: "/universite/a-propos" },
+          { label: "Chiffres clés", href: "/universite/a-propos" },
+          { label: "Nos Politiques", href: "/universite/a-propos" },
+          { label: "Personels", href: "/universite/a-propos" },
+        ],
+      },
       { label: "Formations", href: "/universite/formations" },
       { label: "Recherches", href: "/universite/recherches" },
       { label: "International", href: "/universite/international" },
@@ -194,37 +209,81 @@ function TopBarDropdown({
       {hasDropdown && (
         <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-150 z-50">
           <div
-            className="min-w-[14em] border-t rounded-b overflow-hidden"
+            className="min-w-[14em] border-t rounded-b"
             style={{
               background: BRAND.nav.dropdownBg,
               borderTopColor: BRAND.nav.dropdownBorder,
               boxShadow: "0 0.5em 0.5em rgba(0,0,0,0.25)",
             }}
           >
-            {item.links?.map((link, idx) => (
-              <Link
-                key={link.label}
-                to={link.href ?? "#"}
-                className="block whitespace-nowrap transition-colors"
-                style={{
-                  ...tier2LinkStyle,
-                  borderTop:
-                    idx === 0
-                      ? "none"
-                      : `1px solid ${BRAND.nav.dropdownBorder}`,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(255,255,255,0.35)";
-                  e.currentTarget.style.color = BRAND.nav.dropdownLinkActive;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.color = BRAND.nav.dropdownLink;
-                }}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {item.links?.map((link, idx) => {
+              const hasSub = link.links && link.links.length > 0;
+              return (
+                <div key={link.label} className={`${hasSub ? "relative group/sub " : ""}block`}>
+                  <Link
+                    to={link.href ?? "#"}
+                    className="flex items-center justify-between whitespace-nowrap transition-colors"
+                    style={{
+                      ...tier2LinkStyle,
+                      borderTop:
+                        idx === 0
+                          ? "none"
+                          : `1px solid ${BRAND.nav.dropdownBorder}`,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "rgba(255,255,255,0.35)";
+                      e.currentTarget.style.color = BRAND.nav.dropdownLinkActive;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent";
+                      e.currentTarget.style.color = BRAND.nav.dropdownLink;
+                    }}
+                  >
+                    <span>{link.label}</span>
+                    {hasSub && <ChevronRight className="w-3.5 h-3.5 ml-2 shrink-0 opacity-70" />}
+                  </Link>
+
+                  {hasSub && (
+                    <div className="absolute left-full top-[-1px] ml-0 pl-2 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-opacity duration-150 z-50">
+                      <div
+                        className="min-w-[15em] rounded overflow-hidden shadow-xl"
+                        style={{
+                          background: BRAND.nav.dropdownBg,
+                          border: `1px solid ${BRAND.nav.dropdownBorder}`,
+                          boxShadow: "0 0.5em 0.5em rgba(0,0,0,0.25)",
+                        }}
+                      >
+                        {link.links?.map((sublink, subidx) => (
+                          <Link
+                            key={sublink.label}
+                            to={sublink.href ?? "#"}
+                            className="block whitespace-nowrap transition-colors"
+                            style={{
+                              ...tier2LinkStyle,
+                              paddingLeft: "1.2em",
+                              borderTop:
+                                subidx === 0
+                                  ? "none"
+                                  : `1px solid ${BRAND.nav.dropdownBorder}`,
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = "rgba(255,255,255,0.35)";
+                              e.currentTarget.style.color = BRAND.nav.dropdownLinkActive;
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = "transparent";
+                              e.currentTarget.style.color = BRAND.nav.dropdownLink;
+                            }}
+                          >
+                            {sublink.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
