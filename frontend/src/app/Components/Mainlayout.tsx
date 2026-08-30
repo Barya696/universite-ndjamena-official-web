@@ -21,6 +21,8 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Mot du Recteur", href: "/universite/a-propos" },
       { label: "Gouvernance", href: "/universite/a-propos" },
       { label: "Chiffres clés", href: "/universite/a-propos" },
+      { label: "Nos Politiques", href: "/universite/a-propos" },
+      { label: "Personels", href: "/universite/a-propos" },
     ],
   },
   {
@@ -126,6 +128,8 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
     icon: <GraduationCap className="w-4 h-4 shrink-0" />,
     links: [
       { label: "À propos", href: "/universite/a-propos" },
+      { label: "Nos Politiques", href: "/universite/a-propos" },
+      { label: "Personels", href: "/universite/a-propos" },
       { label: "Formations", href: "/universite/formations" },
       { label: "Recherches", href: "/universite/recherches" },
       { label: "International", href: "/universite/international" },
