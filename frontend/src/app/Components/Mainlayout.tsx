@@ -283,7 +283,7 @@ function TopBarDropdown({
                         className="min-w-[15em] overflow-hidden shadow-xl"
                         style={{
                           background: BRAND.nav.dropdownBg,
-                          filter: "brightness(1.30)",
+                          filter: "brightness(1.05)",
                           border: `1px solid ${BRAND.nav.dropdownBorder}`,
                           borderLeft: `1px solid ${BRAND.nav.dropdownBorder}`,
                           boxShadow: "0 0.5em 0.5em rgba(0,0,0,0.25)",
@@ -303,7 +303,7 @@ function TopBarDropdown({
                                   : `1px solid ${BRAND.nav.dropdownBorder}`,
                             }}
                             onMouseEnter={(e) => {
-                              e.currentTarget.style.background = "rgba(255,255,255,0.35)";
+                              e.currentTarget.style.background = "rgba(26,58,92,0.70)";
                               e.currentTarget.style.color = BRAND.nav.dropdownLinkActive;
                             }}
                             onMouseLeave={(e) => {
