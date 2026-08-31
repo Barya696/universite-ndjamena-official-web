@@ -145,7 +145,16 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
           { label: "Personels", href: "/universite/a-propos" },
         ],
       },
-      { label: "Formations", href: "/universite/formations" },
+      {
+        label: "Formations",
+        href: "/universite/formations",
+        links: [
+          { label: "Resources academique", href: "/universite/formations" },
+          { label: "License", href: "/universite/formations" },
+          { label: "Master", href: "/universite/formations" },
+          { label: "Doctorat", href: "/universite/formations" },
+        ],
+      },
       { label: "Recherches", href: "/universite/recherches" },
       { label: "International", href: "/universite/international" },
       { label: "Nouvelles & Événements", href: "/universite/nouvelles-evenements" },
