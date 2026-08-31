@@ -35,12 +35,10 @@ const NAV_ITEMS: NavItem[] = [
     label: "Formations",
     href: "/universite/formations",
     links: [
-      { label: "Droit & Sciences Politiques", href: "/universite/formations" },
-      { label: "Lettres & Sciences Humaines", href: "/universite/formations" },
-      { label: "Sciences Exactes & Appliquées", href: "/universite/formations" },
-      { label: "Sciences de la Santé", href: "/universite/formations" },
-      { label: "Sciences Économiques & Gestion", href: "/universite/formations" },
-      { label: "Éducation & Formation", href: "/universite/formations" },
+      { label: "Resources academique", href: "/universite/formations" },
+      { label: "License", href: "/universite/formations" },
+      { label: "Master", href: "/universite/formations" },
+      { label: "Doctorat", href: "/universite/formations" },
     ],
   },
   {
@@ -399,7 +397,7 @@ function NavDropdown({ item }: { item: NavItem }) {
 
       <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 z-50">
         <div
-          className="min-w-[15em] rounded-lg overflow-hidden"
+          className="min-w-[15em] rounded-lg"
           style={{
             background: "rgba(20,36,56,0.97)",
             backdropFilter: "blur(10px)",
@@ -409,30 +407,79 @@ function NavDropdown({ item }: { item: NavItem }) {
         >
           <div className="h-[3px]" style={{ background: `linear-gradient(90deg, ${GOLD}, rgba(200,168,75,0.3))` }} />
           <div className="py-1.5">
-            {item.links?.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href ?? "#"}
-                className="flex items-center gap-2 whitespace-nowrap transition-all duration-150"
-                style={{
-                  ...tier2LinkStyle,
-                  color: "rgba(255,255,255,0.75)",
-                  borderLeft: "2px solid transparent",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(255,255,255,0.06)";
-                  e.currentTarget.style.color = "#ffffff";
-                  e.currentTarget.style.borderLeftColor = GOLD;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.color = "rgba(255,255,255,0.75)";
-                  e.currentTarget.style.borderLeftColor = "transparent";
-                }}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {item.links?.map((link) => {
+              const hasSub = link.links && link.links.length > 0;
+              return (
+                <div key={link.label} className={`${hasSub ? "relative group/sub " : ""}block`}>
+                  <Link
+                    to={link.href ?? "#"}
+                    className="flex items-center justify-between whitespace-nowrap transition-all duration-150"
+                    style={{
+                      ...tier2LinkStyle,
+                      color: "rgba(255,255,255,0.75)",
+                      borderLeft: "2px solid transparent",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                      e.currentTarget.style.color = "#ffffff";
+                      e.currentTarget.style.borderLeftColor = GOLD;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent";
+                      e.currentTarget.style.color = "rgba(255,255,255,0.75)";
+                      e.currentTarget.style.borderLeftColor = "transparent";
+                    }}
+                  >
+                    <span className="flex items-center gap-2">{link.label}</span>
+                    {hasSub && <ChevronRight className="w-3.5 h-3.5 ml-2 shrink-0 opacity-60" />}
+                  </Link>
+
+                  {hasSub && (
+                    <div className="absolute left-full top-[-1px] opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-opacity duration-150 z-50">
+                      <div
+                        className="min-w-[15em] rounded-r rounded-b overflow-hidden shadow-xl"
+                        style={{
+                          background: "rgba(20,36,56,0.97)",
+                          backdropFilter: "blur(10px)",
+                          filter: "brightness(1.12)",
+                          border: "1px solid rgba(255,255,255,0.1)",
+                          boxShadow: "0 12px 28px rgba(0,0,0,0.35)",
+                        }}
+                      >
+                        <div className="h-[2px]" style={{ background: `linear-gradient(90deg, ${GOLD}, rgba(200,168,75,0.3))` }} />
+                        <div className="py-1.5">
+                          {link.links?.map((sublink) => (
+                            <Link
+                              key={sublink.label}
+                              to={sublink.href ?? "#"}
+                              className="flex items-center gap-2 whitespace-nowrap transition-all duration-150"
+                              style={{
+                                ...tier2LinkStyle,
+                                paddingLeft: "1.4em",
+                                color: "rgba(255,255,255,0.75)",
+                                borderLeft: "2px solid transparent",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                                e.currentTarget.style.color = "#ffffff";
+                                e.currentTarget.style.borderLeftColor = GOLD;
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = "transparent";
+                                e.currentTarget.style.color = "rgba(255,255,255,0.75)";
+                                e.currentTarget.style.borderLeftColor = "transparent";
+                              }}
+                            >
+                              {sublink.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
