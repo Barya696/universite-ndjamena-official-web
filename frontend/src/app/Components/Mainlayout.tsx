@@ -154,7 +154,16 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
         ],
       },
       { label: "Recherches", href: "/universite/recherches" },
-      { label: "International", href: "/universite/international" },
+      {
+        label: "International",
+        href: "/universite/international",
+        links: [
+          { label: "Partenariats internationaux", href: "/universite/international" },
+          { label: "Programmes d'échange", href: "/universite/international" },
+          { label: "Coopération & doubles diplômes", href: "/universite/international" },
+          { label: "Étudiants internationaux", href: "/universite/international" },
+        ],
+      },
       { label: "Nouvelles & Événements", href: "/universite/nouvelles-evenements" },
     ],
   },
