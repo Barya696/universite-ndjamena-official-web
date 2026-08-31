@@ -153,7 +153,16 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
           { label: "Doctorat", href: "/universite/formations" },
         ],
       },
-      { label: "Recherches", href: "/universite/recherches" },
+      {
+        label: "Recherches",
+        href: "/universite/recherches",
+        links: [
+          { label: "Laboratoires & centres", href: "/universite/recherches" },
+          { label: "Publications", href: "/universite/recherches" },
+          { label: "Appels à projets", href: "/universite/recherches" },
+          { label: "Axes de recherche", href: "/universite/recherches" },
+        ],
+      },
       {
         label: "International",
         href: "/universite/international",
