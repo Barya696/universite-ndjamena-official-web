@@ -164,7 +164,16 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
           { label: "Étudiants internationaux", href: "/universite/international" },
         ],
       },
-      { label: "Nouvelles & Événements", href: "/universite/nouvelles-evenements" },
+      {
+        label: "Nouvelles & Événements",
+        href: "/universite/nouvelles-evenements",
+        links: [
+          { label: "Nouvelles", href: "/universite/nouvelles-evenements" },
+          { label: "Événements", href: "/universite/nouvelles-evenements" },
+          { label: "Calendrier académique", href: "/universite/nouvelles-evenements" },
+          { label: "Communiqués", href: "/universite/nouvelles-evenements" },
+        ],
+      },
     ],
   },
   {
