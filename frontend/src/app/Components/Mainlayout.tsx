@@ -844,7 +844,7 @@ export default function Mainlayout({ children }: MainLayoutProps) {
                     letterSpacing: "0.01em",
                   }}
                 >
-                  Apply Now
+                  Postuler
                 </Link>
               )}
             </div>
