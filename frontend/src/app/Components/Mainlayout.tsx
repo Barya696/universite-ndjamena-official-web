@@ -124,6 +124,11 @@ const topBarLinkStyle = (active = false): CSSProperties => ({
   padding: T1.topBarPadding,
   color: active ? BRAND.nav.topBarLinkActive : BRAND.nav.topBarLink,
 });
+const isTopBarActiveForPath = (pathname: string, item: NavItem) => {
+  if (!item.href) return false;
+  if (item.href === "/") return pathname === "/";
+  return pathname.startsWith(item.href);
+};
 
 const TOPBAR_NAV_ITEMS: NavItem[] = [
   {
@@ -333,6 +338,7 @@ function TopBarDropdown({
 // unchanged from before — it's just been pulled out into its own named
 // component instead of living as inline JSX inside MainLayout.
 function Subnav({ isStudentPortal }: { isStudentPortal: boolean }) {
+  const location = useLocation();
   return (
     <div
       style={{
@@ -352,8 +358,8 @@ function Subnav({ isStudentPortal }: { isStudentPortal: boolean }) {
         </div>
 
         <div className="flex-1 flex items-center justify-center gap-1 md:gap-3 flex-wrap">
-          {TOPBAR_NAV_ITEMS.map((item, i) => (
-            <TopBarDropdown key={item.label} item={item} active={i === 0} compact />
+          {TOPBAR_NAV_ITEMS.map((item) => (
+            <TopBarDropdown key={item.label} item={item} active={isTopBarActiveForPath(location.pathname, item)} compact />
           ))}
         </div>
 
@@ -524,6 +530,7 @@ interface MainLayoutProps {
 // frosted glass pill with a gold hairline accent, cleaner hover states,
 // and a refined search + mobile menu to match.
 export function HeroSubnav() {
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
@@ -801,8 +808,8 @@ export default function Mainlayout({ children }: MainLayoutProps) {
               </div>
 
               <div className="flex-1 flex items-center justify-center gap-1 md:gap-3 flex-wrap">
-                {TOPBAR_NAV_ITEMS.map((item, i) => (
-                  <TopBarDropdown key={item.label} item={item} active={i === 0} compact />
+                {TOPBAR_NAV_ITEMS.map((item) => (
+                  <TopBarDropdown key={item.label} item={item} active={isTopBarActiveForPath(location.pathname, item)} compact />
                 ))}
               </div>
 
