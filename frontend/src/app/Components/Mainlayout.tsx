@@ -45,10 +45,10 @@ const NAV_ITEMS: NavItem[] = [
     label: "International",
     href: "/universite/international",
     links: [
-      { label: "Partenariats internationaux", href: "/universite/international" },
-      { label: "Programmes d'échange", href: "/universite/international" },
-      { label: "Coopération & doubles diplômes", href: "/universite/international" },
-      { label: "Étudiants internationaux", href: "/universite/international" },
+      { label: "Étudiants internationaux", href: "/universite/international/etudiants-internationaux" },
+      { label: "Programmes d'échange", href: "/universite/international/programmes-echange" },
+      { label: "Coopération & doubles diplômes", href: "/universite/international/cooperation-doubles-diplomes" },
+      { label: "Partenariats", href: "/universite/international/partenariats" },
     ],
   },
   {
@@ -172,10 +172,10 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
         label: "International",
         href: "/universite/international",
         links: [
-          { label: "Partenariats internationaux", href: "/universite/international" },
-          { label: "Programmes d'échange", href: "/universite/international" },
-          { label: "Coopération & doubles diplômes", href: "/universite/international" },
-          { label: "Étudiants internationaux", href: "/universite/international" },
+          { label: "Étudiants internationaux", href: "/universite/international/etudiants-internationaux" },
+          { label: "Programmes d'échange", href: "/universite/international/programmes-echange" },
+          { label: "Coopération & doubles diplômes", href: "/universite/international/cooperation-doubles-diplomes" },
+          { label: "Partenariats", href: "/universite/international/partenariats" },
         ],
       },
       {

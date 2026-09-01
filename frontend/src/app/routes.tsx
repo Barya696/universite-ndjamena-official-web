@@ -15,6 +15,10 @@ import Master from "./Components/Universites/Formations/Master";
 import Doctorat from "./Components/Universites/Formations/Doctorat";
 import ResourcesAcademique from "./Components/Universites/Formations/ResourcesAcademique";
 import International from "./Components/Universites/International/International";
+import EtudiantsInternationaux from "./Components/Universites/International/EtudiantsInternationaux";
+import ProgrammesEchange from "./Components/Universites/International/ProgrammesEchange";
+import CooperationDoublesDiplomes from "./Components/Universites/International/CooperationDoublesDiplomes";
+import Partenariats from "./Components/Universites/International/Partenariats";
 import Nouvelles_Evenements from "./Components/Universites/Nouvelles_&_Evenements/Nouvelles_&_Evenements";
 import Recherches from "./Components/Universites/Recherches/Recherches";
 import Inscription from "./Components/Inscription/Inscription";
@@ -134,6 +138,38 @@ export default function AppRoutes() {
         element={
           <Mainlayout>
             <International />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/international/etudiants-internationaux"
+        element={
+          <Mainlayout>
+            <EtudiantsInternationaux />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/international/programmes-echange"
+        element={
+          <Mainlayout>
+            <ProgrammesEchange />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/international/cooperation-doubles-diplomes"
+        element={
+          <Mainlayout>
+            <CooperationDoublesDiplomes />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/international/partenariats"
+        element={
+          <Mainlayout>
+            <Partenariats />
           </Mainlayout>
         }
       />
