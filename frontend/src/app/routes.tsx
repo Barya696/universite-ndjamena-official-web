@@ -3,6 +3,12 @@ import Mainlayout from "./Components/Mainlayout";
 import Homepage from "./Components/Homepage";
 import Media from "./Components/Media/Media";
 import A_propos from "./Components/Universites/A_propos/A_propos";
+import HistoireMission from "./Components/Universites/A_propos/HistoireMission";
+import MotRecteur from "./Components/Universites/A_propos/MotRecteur";
+import Gouvernance from "./Components/Universites/A_propos/Gouvernance";
+import ChiffresCles from "./Components/Universites/A_propos/ChiffresCles";
+import NosPolitiques from "./Components/Universites/A_propos/NosPolitiques";
+import Personels from "./Components/Universites/A_propos/Personels";
 import Formations from "./Components/Universites/Formations/Formations";
 import International from "./Components/Universites/International/International";
 import Nouvelles_Evenements from "./Components/Universites/Nouvelles_&_Evenements/Nouvelles_&_Evenements";
@@ -28,6 +34,54 @@ export default function AppRoutes() {
         element={
           <Mainlayout>
             <A_propos />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/a-propos/histoire-mission"
+        element={
+          <Mainlayout>
+            <HistoireMission />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/a-propos/mot-recteur"
+        element={
+          <Mainlayout>
+            <MotRecteur />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/a-propos/gouvernance"
+        element={
+          <Mainlayout>
+            <Gouvernance />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/a-propos/chiffres-cles"
+        element={
+          <Mainlayout>
+            <ChiffresCles />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/a-propos/nos-politiques"
+        element={
+          <Mainlayout>
+            <NosPolitiques />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/a-propos/personels"
+        element={
+          <Mainlayout>
+            <Personels />
           </Mainlayout>
         }
       />
