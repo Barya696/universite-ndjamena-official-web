@@ -35,10 +35,10 @@ const NAV_ITEMS: NavItem[] = [
     label: "Formations",
     href: "/universite/formations",
     links: [
-      { label: "Resources academique", href: "/universite/formations" },
-      { label: "License", href: "/universite/formations" },
-      { label: "Master", href: "/universite/formations" },
-      { label: "Doctorat", href: "/universite/formations" },
+      { label: "Resources academique", href: "/universite/formations/resources-academique" },
+      { label: "License", href: "/universite/formations/license" },
+      { label: "Master", href: "/universite/formations/master" },
+      { label: "Doctorat", href: "/universite/formations/doctorat" },
     ],
   },
   {
@@ -152,10 +152,10 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
         label: "Formations",
         href: "/universite/formations",
         links: [
-          { label: "Resources academique", href: "/universite/formations" },
-          { label: "License", href: "/universite/formations" },
-          { label: "Master", href: "/universite/formations" },
-          { label: "Doctorat", href: "/universite/formations" },
+          { label: "Resources academique", href: "/universite/formations/resources-academique" },
+          { label: "License", href: "/universite/formations/license" },
+          { label: "Master", href: "/universite/formations/master" },
+          { label: "Doctorat", href: "/universite/formations/doctorat" },
         ],
       },
       {

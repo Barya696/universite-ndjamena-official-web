@@ -10,6 +10,10 @@ import ChiffresCles from "./Components/Universites/A_propos/ChiffresCles";
 import NosPolitiques from "./Components/Universites/A_propos/NosPolitiques";
 import Personels from "./Components/Universites/A_propos/Personels";
 import Formations from "./Components/Universites/Formations/Formations";
+import License from "./Components/Universites/Formations/License";
+import Master from "./Components/Universites/Formations/Master";
+import Doctorat from "./Components/Universites/Formations/Doctorat";
+import ResourcesAcademique from "./Components/Universites/Formations/ResourcesAcademique";
 import International from "./Components/Universites/International/International";
 import Nouvelles_Evenements from "./Components/Universites/Nouvelles_&_Evenements/Nouvelles_&_Evenements";
 import Recherches from "./Components/Universites/Recherches/Recherches";
@@ -90,6 +94,38 @@ export default function AppRoutes() {
         element={
           <Mainlayout>
             <Formations />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/formations/license"
+        element={
+          <Mainlayout>
+            <License />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/formations/master"
+        element={
+          <Mainlayout>
+            <Master />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/formations/doctorat"
+        element={
+          <Mainlayout>
+            <Doctorat />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/formations/resources-academique"
+        element={
+          <Mainlayout>
+            <ResourcesAcademique />
           </Mainlayout>
         }
       />
