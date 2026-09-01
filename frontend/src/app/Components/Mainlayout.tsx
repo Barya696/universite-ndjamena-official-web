@@ -383,18 +383,18 @@ function Subnav({ isStudentPortal }: { isStudentPortal: boolean }) {
         ) : (
           <Link
             to="/portail-etudiant"
-            className="inline-flex items-center rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
+            className="inline-flex items-center justify-center rounded-xl font-semibold transition-all duration-200 hover:brightness-105 text-sm sm:text-base"
             style={{
-              fontFamily: T1.fontFamily,
-              padding: "0.22em 0.75em 0.2em",
-              background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
-              color: "#4d4d4d",
-              borderColor: "#e6c200",
-              boxShadow:
-                "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.5)",
+              fontFamily: "Georgia, 'Times New Roman', serif",
+              padding: "0.32em 1.05em",
+              background: "#4a86c8",
+              color: "#ffffff",
+              border: "none",
+              boxShadow: "0 4px 12px rgba(74,134,200,0.28)",
+              letterSpacing: "0.01em",
             }}
           >
-            Portail Étudiant
+            Apply Now
           </Link>
         )}
       </div>
@@ -833,18 +833,18 @@ export default function Mainlayout({ children }: MainLayoutProps) {
               ) : (
                 <Link
                   to="/portail-etudiant"
-                  className="inline-flex items-center rounded-[6px] font-semibold border transition-all duration-200 hover:brightness-105 text-xs sm:text-sm"
+                  className="inline-flex items-center justify-center rounded-xl font-semibold transition-all duration-200 hover:brightness-105 text-sm sm:text-base"
                   style={{
-                    fontFamily: T1.fontFamily,
-                    padding: "0.22em 0.75em 0.2em",
-                    background: `linear-gradient(180deg, ${BRAND.goldLight} 10%, ${BRAND.gold} 90%)`,
-                    color: "#4d4d4d",
-                    borderColor: "#e6c200",
-                    boxShadow:
-                      "1px 1px 1px rgba(0,0,0,0.05), inset 0 0 5px rgba(255,255,255,0.5)",
+                    fontFamily: "Georgia, 'Times New Roman', serif",
+                    padding: "0.32em 1.05em",
+                    background: "#4a86c8",
+                    color: "#ffffff",
+                    border: "none",
+                    boxShadow: "0 4px 12px rgba(74,134,200,0.28)",
+                    letterSpacing: "0.01em",
                   }}
                 >
-                  Portail Étudiant
+                  Apply Now
                 </Link>
               )}
             </div>
