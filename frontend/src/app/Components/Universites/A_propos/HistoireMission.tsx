@@ -3,13 +3,29 @@ import { BRAND } from "../../Utils/brand";
 const NAVY = BRAND.navy;
 const NAVY_DEEP = BRAND.navyDeep;
 const GOLD = BRAND.gold;
-const PARCHMENT = "#FAF6EC";
-const PARCHMENT_ALT = "#F1E8D4";
-const SHADOW_SM = "0 6px 16px -6px rgba(12,26,51,0.28)";
-const SHADOW_LG = "0 20px 45px -18px rgba(12,26,51,0.4)";
+const PARCHMENT = "#FAF8F3";
+const PARCHMENT_ALT = "#F3EEE1";
+const LINE = "#DDD6C4";
+const INK = "#2B2B2B";
+const INK_SOFT = "#565553";
+const SHADOW = "0 4px 18px -8px rgba(20,30,55,0.18)";
 
-const NOISE_SVG =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E";
+// Fine engraved guilloche-style line pattern, the kind found on official
+// diplomas/certificates — used sparingly as the header's one bold accent.
+const GUILLOCHE = encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220">
+  <defs>
+    <pattern id="g" width="55" height="55" patternUnits="userSpaceOnUse">
+      <circle cx="27.5" cy="27.5" r="24" fill="none" stroke="${GOLD}" stroke-width="0.6"/>
+      <circle cx="27.5" cy="27.5" r="15" fill="none" stroke="${GOLD}" stroke-width="0.5"/>
+      <circle cx="0" cy="0" r="24" fill="none" stroke="${GOLD}" stroke-width="0.6"/>
+      <circle cx="55" cy="0" r="24" fill="none" stroke="${GOLD}" stroke-width="0.6"/>
+      <circle cx="0" cy="55" r="24" fill="none" stroke="${GOLD}" stroke-width="0.6"/>
+      <circle cx="55" cy="55" r="24" fill="none" stroke="${GOLD}" stroke-width="0.6"/>
+    </pattern>
+  </defs>
+  <rect width="220" height="220" fill="url(#g)"/>
+</svg>`);
 
 const JALONS = [
   { annee: "1971", titre: "Fondation", texte: "Création de l'Université de N'Djamena (alors Université du Tchad), première université publique du pays, par décret n°015/PR/MESRS." },
@@ -24,93 +40,100 @@ const JALONS = [
 ];
 
 const MISSION = [
-  { t: "Former", d: "Former des citoyens éclairés, des cadres compétents et des professionnels capables de relever les défis du Tchad et du continent africain.", dark: false },
-  { t: "Produire", d: "Produire des connaissances de qualité adaptées aux réalités sahéliennes et contribuer à la communauté scientifique internationale.", dark: true },
-  { t: "Servir", d: "Mettre l'expertise de l'université au service du développement local, de la souveraineté nationale et de l'épanouissement des populations.", dark: false },
+  { num: "01", t: "Former", d: "Former des citoyens éclairés, des cadres compétents et des professionnels capables de relever les défis du Tchad et du continent africain." },
+  { num: "02", t: "Produire", d: "Produire des connaissances de qualité adaptées aux réalités sahéliennes et contribuer à la communauté scientifique internationale." },
+  { num: "03", t: "Servir", d: "Mettre l'expertise de l'université au service du développement local, de la souveraineté nationale et de l'épanouissement des populations." },
 ];
 
 const VALEURS = [
-  { v: "Excellence académique", big: true },
-  { v: "Rigueur scientifique", big: false },
-  { v: "Intégrité", big: true },
-  { v: "Ouverture internationale", big: false },
-  { v: "Engagement sociétal", big: false },
-  { v: "Diversité & inclusion", big: true },
-  { v: "Promotion des cultures nationales", big: false },
-  { v: "Innovation & créativité", big: false },
+  "Excellence académique",
+  "Rigueur scientifique",
+  "Intégrité",
+  "Ouverture internationale",
+  "Engagement sociétal",
+  "Diversité & inclusion",
+  "Promotion des cultures nationales",
+  "Innovation & créativité",
 ];
 
 export default function HistoireMission() {
   return (
     <div style={{ background: PARCHMENT }} className="min-h-screen">
-      {/* HERO */}
-      <section
-        className="relative overflow-hidden py-20 md:py-28 px-4 md:px-[50px]"
-        style={{
-          backgroundImage: `url("${NOISE_SVG}"), radial-gradient(ellipse 900px 520px at 82% -8%, rgba(198,161,91,0.22), transparent 60%), linear-gradient(175deg, ${NAVY_DEEP} 0%, ${NAVY} 100%)`,
-          clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 94%)",
-        }}
+      {/* EN-TÊTE OFFICIEL */}
+      <header
+        className="relative overflow-hidden px-4 md:px-[50px] pt-10 pb-9"
+        style={{ background: NAVY_DEEP, borderBottom: `3px solid ${GOLD}` }}
       >
         <div
           aria-hidden
-          className="absolute right-0 top-0 pointer-events-none select-none hidden md:block"
+          className="absolute -right-6 -top-10 w-[220px] h-[220px] pointer-events-none select-none"
           style={{
-            fontFamily: "Georgia, serif",
-            fontSize: "260px",
-            fontWeight: 700,
-            color: GOLD,
-            opacity: 0.09,
-            lineHeight: 1,
-            transform: "translate(8%, -12%)",
+            backgroundImage: `url("data:image/svg+xml,${GUILLOCHE}")`,
+            opacity: 0.5,
           }}
-        >
-          1971
-        </div>
-
-        <div className="max-w-6xl mx-auto relative">
-          <p className="uppercase tracking-[0.2em] text-xs mb-3" style={{ color: GOLD }}>
-            À propos
-          </p>
+        />
+        <div className="max-w-5xl mx-auto relative">
+          <div className="flex items-center gap-3 mb-6">
+            <div
+              className="w-11 h-11 rounded-full flex items-center justify-center shrink-0"
+              style={{ border: `1.5px solid ${GOLD}`, boxShadow: `inset 0 0 0 3px ${NAVY_DEEP}, 0 0 0 1px rgba(198,161,91,0.35)` }}
+            >
+              <span style={{ color: GOLD, fontFamily: "Georgia, serif", fontSize: "13px" }}>UN</span>
+            </div>
+            <p className="text-xs tracking-wide" style={{ color: "rgba(255,255,255,0.65)" }}>
+              Université de N'Djamena · Direction de la Communication
+            </p>
+          </div>
           <h1
-            className="text-4xl md:text-5xl font-bold mb-3"
-            style={{ color: GOLD, fontFamily: "Georgia, serif", textShadow: "0 2px 12px rgba(0,0,0,0.25)" }}
+            className="text-3xl md:text-[42px] font-bold leading-tight mb-2"
+            style={{ color: "#fff", fontFamily: "Georgia, serif" }}
           >
-            Histoire & Mission
+            Histoire et mission de l'établissement
           </h1>
-          <p className="text-lg text-white/80 max-w-3xl leading-relaxed">
-            Depuis 1971, l'Université de N'Djamena construit son héritage de formation,
-            de recherche et de service à la nation tchadienne.
+          <p className="text-[15px] max-w-2xl leading-relaxed" style={{ color: "rgba(255,255,255,0.72)" }}>
+            Fiche institutionnelle retraçant la création, les missions statutaires
+            et les principaux jalons de l'université depuis 1971.
           </p>
         </div>
-      </section>
+      </header>
 
       {/* MISSION */}
-      <section className="max-w-6xl mx-auto px-4 pt-16 pb-12">
-        <h2
-          className="text-2xl font-bold mb-8 pb-2"
-          style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `3px solid ${GOLD}` }}
-        >
-          Notre Mission
-        </h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {MISSION.map((b, i) => (
+      <section className="max-w-5xl mx-auto px-4 pt-14 pb-4">
+        <SectionHeading roman="I." title="Missions statutaires" />
+        <div className="grid md:grid-cols-3 gap-5">
+          {MISSION.map((b) => (
             <div
               key={b.t}
-              className={`p-7 rounded-lg ${i === 1 ? "md:-translate-y-4" : i === 2 ? "md:translate-y-3" : ""}`}
+              className="relative overflow-hidden p-7 bg-white"
               style={{
-                background: b.dark ? `linear-gradient(160deg, ${NAVY_DEEP}, ${NAVY})` : "#fff",
-                boxShadow: b.dark ? SHADOW_LG : SHADOW_SM,
-                border: b.dark ? "none" : `1px solid ${PARCHMENT_ALT}`,
-                borderTop: `4px solid ${GOLD}`,
+                boxShadow: SHADOW,
+                borderTop: `3px solid ${GOLD}`,
               }}
             >
-              <h3
-                className="text-xl font-bold mb-3"
-                style={{ color: b.dark ? GOLD : NAVY, fontFamily: "Georgia, serif" }}
+              <span
+                aria-hidden
+                className="absolute -right-2 -top-5 select-none pointer-events-none"
+                style={{
+                  fontFamily: "Georgia, serif",
+                  fontSize: "88px",
+                  fontWeight: 700,
+                  color: NAVY,
+                  opacity: 0.06,
+                  lineHeight: 1,
+                }}
               >
+                {b.num}
+              </span>
+              <p
+                className="text-xs mb-3 relative"
+                style={{ color: GOLD, fontFamily: "Georgia, serif", letterSpacing: "0.04em" }}
+              >
+                {b.num}
+              </p>
+              <h3 className="text-lg font-bold mb-2 relative" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
                 {b.t}
               </h3>
-              <p className="leading-relaxed text-sm" style={{ color: b.dark ? "rgba(255,255,255,0.82)" : "#444" }}>
+              <p className="leading-relaxed text-sm relative" style={{ color: INK_SOFT }}>
                 {b.d}
               </p>
             </div>
@@ -119,26 +142,32 @@ export default function HistoireMission() {
       </section>
 
       {/* VALEURS */}
-      <section className="py-14 px-4" style={{ background: PARCHMENT_ALT }}>
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold mb-8" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
-            Nos valeurs
-          </h2>
-          <div className="flex flex-wrap gap-4 justify-center">
-            {VALEURS.map((item, i) => (
+      <section className="py-14" style={{ background: PARCHMENT_ALT }}>
+        <div className="max-w-5xl mx-auto px-4">
+          <SectionHeading roman="II." title="Valeurs de référence" />
+          <div
+            className="grid sm:grid-cols-2 bg-white"
+            style={{ boxShadow: SHADOW, border: `1px solid ${LINE}` }}
+          >
+            {VALEURS.map((v, i) => (
               <div
-                key={item.v}
-                className={`rounded-full font-semibold text-center ${item.big ? "px-7 py-4 text-base" : "px-5 py-3 text-sm"}`}
+                key={v}
+                className="flex items-center gap-3 py-4 px-5"
                 style={{
-                  color: i % 3 === 0 ? "#fff" : NAVY,
-                  background: i % 3 === 0 ? `linear-gradient(135deg, ${NAVY_DEEP}, ${NAVY})` : "#fff",
-                  border: `2px solid ${GOLD}`,
-                  boxShadow: SHADOW_SM,
-                  fontFamily: "Georgia, serif",
-                  transform: `rotate(${i % 2 === 0 ? "-1.2deg" : "1.2deg"})`,
+                  borderBottom: `1px solid ${LINE}`,
+                  background: i % 2 === 0 ? "transparent" : "rgba(198,161,91,0.045)",
                 }}
               >
-                {item.v}
+                <span
+                  className="shrink-0"
+                  style={{ color: GOLD, fontFamily: "Georgia, serif", fontSize: "15px" }}
+                  aria-hidden
+                >
+                  ✦
+                </span>
+                <span className="text-[15px]" style={{ color: INK, fontFamily: "Georgia, serif" }}>
+                  {v}
+                </span>
               </div>
             ))}
           </div>
@@ -146,52 +175,55 @@ export default function HistoireMission() {
       </section>
 
       {/* JALONS */}
-      <section className="max-w-6xl mx-auto px-4 py-16">
-        <h2
-          className="text-2xl font-bold mb-10 pb-2"
-          style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `3px solid ${GOLD}` }}
-        >
-          Jalons historiques
-        </h2>
-        <div className="relative">
-          {/* spine */}
-          <div
-            className="absolute left-[15px] md:left-1/2 top-0 bottom-0 w-[2px] md:-translate-x-1/2"
-            style={{ background: `linear-gradient(180deg, ${PARCHMENT_ALT}, ${GOLD})` }}
-          />
-          <div className="space-y-8">
-            {JALONS.map((h, i) => {
-              const weight = Math.round(2 + (i / (JALONS.length - 1)) * 4);
-              const onRight = i % 2 === 1;
-              return (
-                <div key={h.annee} className={`relative md:flex ${onRight ? "md:justify-end" : "md:justify-start"}`}>
-                  <div
-                    className="absolute left-[9px] md:left-1/2 top-6 w-3 h-3 rounded-full md:-translate-x-1/2 z-10"
-                    style={{ background: GOLD, boxShadow: `0 0 0 4px ${PARCHMENT}` }}
-                  />
-                  <div
-                    className={`ml-10 md:ml-0 md:w-[46%] p-5 rounded-lg`}
-                    style={{
-                      background: "#fff",
-                      borderLeft: `${weight}px solid ${GOLD}`,
-                      boxShadow: SHADOW_SM,
-                    }}
-                  >
-                    <div
-                      className="inline-block text-sm font-bold px-3 py-1 rounded mb-2"
-                      style={{ color: "#fff", background: NAVY, fontFamily: "Georgia, serif" }}
-                    >
-                      {h.annee}
-                    </div>
-                    <h4 className="font-bold mb-1" style={{ color: NAVY }}>{h.titre}</h4>
-                    <p className="text-[#444] leading-relaxed text-sm">{h.texte}</p>
-                  </div>
+      <section className="max-w-5xl mx-auto px-4 py-16">
+        <SectionHeading roman="III." title="Jalons historiques" />
+        <div className="bg-white" style={{ boxShadow: SHADOW, border: `1px solid ${LINE}` }}>
+          {JALONS.map((h, i) => (
+            <div
+              key={h.annee}
+              className="grid md:grid-cols-[140px_1fr] gap-2 md:gap-8 py-7 px-6 md:px-8"
+              style={{ borderBottom: i !== JALONS.length - 1 ? `1px solid ${LINE}` : "none" }}
+            >
+              <div className="flex md:block items-baseline gap-3">
+                <div
+                  className="font-bold tabular-nums"
+                  style={{ color: NAVY, fontFamily: "Georgia, serif", fontSize: "30px", lineHeight: 1 }}
+                >
+                  {h.annee}
                 </div>
-              );
-            })}
-          </div>
+                <div className="hidden md:block w-8 h-[2px] mt-3" style={{ background: GOLD }} />
+              </div>
+              <div>
+                <h4 className="font-bold mb-1.5 text-[15px]" style={{ color: NAVY }}>
+                  {h.titre}
+                </h4>
+                <p className="leading-relaxed text-sm" style={{ color: INK_SOFT }}>
+                  {h.texte}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
+    </div>
+  );
+}
+
+function SectionHeading({ roman, title }: { roman: string; title: string }) {
+  return (
+    <div className="flex items-baseline gap-3 mb-8">
+      <span
+        className="text-sm"
+        style={{ color: GOLD, fontFamily: "Georgia, serif" }}
+      >
+        {roman}
+      </span>
+      <h2
+        className="text-2xl font-bold pb-2 flex-1"
+        style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `2px solid ${NAVY}` }}
+      >
+        {title}
+      </h2>
     </div>
   );
 }
