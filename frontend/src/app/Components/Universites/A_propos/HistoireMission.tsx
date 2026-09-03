@@ -40,9 +40,9 @@ const JALONS = [
 ];
 
 const MISSION = [
-  { num: "01", t: "Former", d: "Former des citoyens éclairés, des cadres compétents et des professionnels capables de relever les défis du Tchad et du continent africain." },
-  { num: "02", t: "Produire", d: "Produire des connaissances de qualité adaptées aux réalités sahéliennes et contribuer à la communauté scientifique internationale." },
-  { num: "03", t: "Servir", d: "Mettre l'expertise de l'université au service du développement local, de la souveraineté nationale et de l'épanouissement des populations." },
+  { num: "I", icon: "former" as const, t: "Former", d: "Former des citoyens éclairés, des cadres compétents et des professionnels capables de relever les défis du Tchad et du continent africain." },
+  { num: "II", icon: "produire" as const, t: "Produire", d: "Produire des connaissances de qualité adaptées aux réalités sahéliennes et contribuer à la communauté scientifique internationale." },
+  { num: "III", icon: "servir" as const, t: "Servir", d: "Mettre l'expertise de l'université au service du développement local, de la souveraineté nationale et de l'épanouissement des populations." },
 ];
 
 const VALEURS = [
@@ -82,6 +82,44 @@ function Seal({ size = 76 }: { size?: number }) {
         1971
       </text>
     </svg>
+  );
+}
+
+// Small line-art emblem for each mission, set in the same navy-fill /
+// gold-stroke medallion language as the header seal.
+function MissionIcon({ kind }: { kind: "former" | "produire" | "servir" }) {
+  return (
+    <span
+      className="inline-flex items-center justify-center shrink-0"
+      style={{ width: 52, height: 52, borderRadius: "9999px", background: NAVY_DEEP, border: `1px solid ${GOLD}` }}
+    >
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        {kind === "former" && (
+          <>
+            <path d="M12 4 3 9l9 5 9-5-9-5Z" />
+            <path d="M7 11.2V16c0 1.4 2.5 2.6 5.5 2.6S18 17.4 18 16v-4.8" />
+            <path d="M20.5 9v5.5" />
+          </>
+        )}
+        {kind === "produire" && (
+          <>
+            <path d="M4 6c2.2-1.1 5.3-1.1 7.5 0v13c-2.2-1.1-5.3-1.1-7.5 0Z" />
+            <path d="M19.5 6c-2.2-1.1-5.3-1.1-7.5 0v13c2.2-1.1 5.3-1.1 7.5 0Z" />
+          </>
+        )}
+        {kind === "servir" && (
+          <>
+            <path d="M12 19V8" />
+            <path d="M12 8c-1.8.9-4 .1-5-1.7" />
+            <path d="M12 11.3c-1.8.9-4 .1-5-1.7" />
+            <path d="M12 14.6c-1.8.9-4 .1-5-1.7" />
+            <path d="M12 8c1.8.9 4 .1 5-1.7" />
+            <path d="M12 11.3c1.8.9 4 .1 5-1.7" />
+            <path d="M12 14.6c1.8.9 4 .1 5-1.7" />
+          </>
+        )}
+      </svg>
+    </span>
   );
 }
 
@@ -146,23 +184,26 @@ export default function HistoireMission() {
           {MISSION.map((b) => (
             <div
               key={b.t}
-              className="relative overflow-hidden p-7 bg-white"
-              style={{ boxShadow: SHADOW, borderTop: `3px solid ${GOLD}` }}
+              className="relative p-8 bg-white"
+              style={{ boxShadow: SHADOW, border: `1px solid ${LINE}`, borderTop: `3px solid ${GOLD}` }}
             >
-              <span
-                aria-hidden
-                className="absolute -right-2 -top-5 select-none pointer-events-none"
-                style={{ fontFamily: FONT, fontSize: "88px", fontWeight: 700, color: NAVY, opacity: 0.06, lineHeight: 1 }}
-              >
-                {b.num}
-              </span>
-              <p className="text-xs mb-3 relative" style={{ color: GOLD, fontFamily: FONT, letterSpacing: "0.04em" }}>
-                {b.num}
-              </p>
-              <h3 className="text-lg font-bold mb-2 relative" style={{ color: NAVY, fontFamily: FONT }}>
+              <div className="flex items-center gap-4 mb-6">
+                <MissionIcon kind={b.icon} />
+                <span
+                  className="text-sm"
+                  style={{ color: GOLD, fontFamily: FONT, letterSpacing: "0.1em", fontWeight: 600 }}
+                >
+                  {b.num}
+                </span>
+              </div>
+              <h3 className="text-lg font-bold mb-3" style={{ color: NAVY, fontFamily: FONT }}>
                 {b.t}
               </h3>
-              <p className="leading-relaxed text-sm relative" style={{ color: INK_SOFT }}>
+              <div className="flex items-center gap-2 mb-4" style={{ maxWidth: 96 }}>
+                <div style={{ width: 24, height: 2, background: GOLD }} />
+                <div style={{ flex: 1, height: 1, background: LINE }} />
+              </div>
+              <p className="leading-relaxed text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
                 {b.d}
               </p>
             </div>
