@@ -91,7 +91,14 @@ function MissionIcon({ kind }: { kind: "former" | "produire" | "servir" }) {
   return (
     <span
       className="inline-flex items-center justify-center shrink-0"
-      style={{ width: 52, height: 52, borderRadius: "9999px", background: NAVY_DEEP, border: `1px solid ${GOLD}` }}
+      style={{
+        width: 56,
+        height: 56,
+        borderRadius: "9999px",
+        background: `radial-gradient(circle at 32% 28%, ${NAVY} 0%, ${NAVY_DEEP} 75%)`,
+        border: `1px solid ${GOLD}`,
+        boxShadow: `0 10px 20px -8px rgba(10,20,40,0.55), inset 0 1px 1px rgba(255,255,255,0.18), 0 0 0 4px #ffffff`,
+      }}
     >
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
         {kind === "former" && (
@@ -180,32 +187,52 @@ export default function HistoireMission() {
       {/* MISSION */}
       <section className="max-w-5xl mx-auto px-4 pt-14 pb-4">
         <SectionHeading roman="I." title="Missions statutaires" />
-        <div className="grid md:grid-cols-3 gap-5">
-          {MISSION.map((b) => (
-            <div
-              key={b.t}
-              className="relative p-8 bg-white"
-              style={{ boxShadow: SHADOW, border: `1px solid ${LINE}`, borderTop: `3px solid ${GOLD}` }}
-            >
-              <div className="flex items-center gap-4 mb-6">
-                <MissionIcon kind={b.icon} />
+        <div className="grid md:grid-cols-3 gap-8 pt-2">
+          {MISSION.map((b, i) => (
+            <div key={b.t} className="relative">
+              {/* second sheet peeking out behind — the depth cue */}
+              <div
+                aria-hidden
+                className="absolute"
+                style={{
+                  top: 14,
+                  left: 10,
+                  right: -10,
+                  bottom: -10,
+                  background: NAVY,
+                  transform: i % 2 === 0 ? "rotate(-1.3deg)" : "rotate(1.1deg)",
+                  boxShadow: "0 18px 34px -20px rgba(10,20,40,0.55)",
+                }}
+              />
+              <div
+                className="relative bg-white p-8 pt-12"
+                style={{
+                  boxShadow: "0 24px 46px -22px rgba(20,30,55,0.4), 0 8px 16px -10px rgba(20,30,55,0.22)",
+                  border: `1px solid ${LINE}`,
+                  borderTop: `3px solid ${GOLD}`,
+                  backgroundImage: `linear-gradient(160deg, #ffffff 0%, ${PARCHMENT} 100%)`,
+                }}
+              >
+                <div className="absolute -top-6 left-8">
+                  <MissionIcon kind={b.icon} />
+                </div>
                 <span
-                  className="text-sm"
+                  className="block text-sm mb-3"
                   style={{ color: GOLD, fontFamily: FONT, letterSpacing: "0.1em", fontWeight: 600 }}
                 >
                   {b.num}
                 </span>
+                <h3 className="text-lg font-bold mb-3" style={{ color: NAVY, fontFamily: FONT }}>
+                  {b.t}
+                </h3>
+                <div className="flex items-center gap-2 mb-4" style={{ maxWidth: 96 }}>
+                  <div style={{ width: 24, height: 2, background: GOLD }} />
+                  <div style={{ flex: 1, height: 1, background: LINE }} />
+                </div>
+                <p className="leading-relaxed text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                  {b.d}
+                </p>
               </div>
-              <h3 className="text-lg font-bold mb-3" style={{ color: NAVY, fontFamily: FONT }}>
-                {b.t}
-              </h3>
-              <div className="flex items-center gap-2 mb-4" style={{ maxWidth: 96 }}>
-                <div style={{ width: 24, height: 2, background: GOLD }} />
-                <div style={{ flex: 1, height: 1, background: LINE }} />
-              </div>
-              <p className="leading-relaxed text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
-                {b.d}
-              </p>
             </div>
           ))}
         </div>
