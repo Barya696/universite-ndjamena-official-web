@@ -9,6 +9,10 @@ const LINE = "#DDD6C4";
 const INK = "#2B2B2B";
 const INK_SOFT = "#565553";
 const SHADOW = "0 4px 18px -8px rgba(20,30,55,0.18)";
+// Matches the sans-serif used in the site footer. If this isn't loaded
+// globally yet, add it once (e.g. via next/font or a Google Fonts <link>)
+// and it'll apply everywhere this constant is used.
+const FONT = "'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
 // Thin engraved chain-link border strip, run full width along the header's
 // lower edge — the "ribbon" you'd find bordering a diploma or certificate.
@@ -70,11 +74,11 @@ function Seal({ size = 76 }: { size?: number }) {
       })}
       <circle cx="50" cy="50" r="38" fill="none" stroke={GOLD} strokeWidth="1.25" />
       <circle cx="50" cy="50" r="31" fill={NAVY_DEEP} stroke={GOLD} strokeWidth="0.75" />
-      <text x="50" y="46" textAnchor="middle" fontFamily="Georgia, serif" fontSize="20" fontWeight="700" fill={GOLD}>
+      <text x="50" y="46" textAnchor="middle" fontFamily={FONT} fontSize="20" fontWeight="700" fill={GOLD}>
         UN
       </text>
       <line x1="38" y1="54" x2="62" y2="54" stroke={GOLD} strokeWidth="0.6" opacity="0.6" />
-      <text x="50" y="63" textAnchor="middle" fontFamily="Georgia, serif" fontSize="7" letterSpacing="1" fill="rgba(255,255,255,0.75)">
+      <text x="50" y="63" textAnchor="middle" fontFamily={FONT} fontSize="7" letterSpacing="1" fill="rgba(255,255,255,0.75)">
         1971
       </text>
     </svg>
@@ -96,7 +100,7 @@ export default function HistoireMission() {
           <div className="flex items-center gap-4 mb-8">
             <Seal />
             <div className="min-w-0">
-              <p className="text-[15px] leading-tight" style={{ color: GOLD, fontFamily: "Georgia, serif" }}>
+              <p className="text-[15px] leading-tight" style={{ color: GOLD, fontFamily: FONT }}>
                 Université de N'Djamena
               </p>
               <p className="text-[12px] mt-0.5" style={{ color: "rgba(255,255,255,0.55)" }}>
@@ -107,7 +111,7 @@ export default function HistoireMission() {
 
           <h1
             className="text-3xl md:text-[42px] font-bold leading-tight mb-4"
-            style={{ color: "#fff", fontFamily: "Georgia, serif" }}
+            style={{ color: "#fff", fontFamily: FONT }}
           >
             Histoire et mission de l'établissement
           </h1>
@@ -148,14 +152,14 @@ export default function HistoireMission() {
               <span
                 aria-hidden
                 className="absolute -right-2 -top-5 select-none pointer-events-none"
-                style={{ fontFamily: "Georgia, serif", fontSize: "88px", fontWeight: 700, color: NAVY, opacity: 0.06, lineHeight: 1 }}
+                style={{ fontFamily: FONT, fontSize: "88px", fontWeight: 700, color: NAVY, opacity: 0.06, lineHeight: 1 }}
               >
                 {b.num}
               </span>
-              <p className="text-xs mb-3 relative" style={{ color: GOLD, fontFamily: "Georgia, serif", letterSpacing: "0.04em" }}>
+              <p className="text-xs mb-3 relative" style={{ color: GOLD, fontFamily: FONT, letterSpacing: "0.04em" }}>
                 {b.num}
               </p>
-              <h3 className="text-lg font-bold mb-2 relative" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
+              <h3 className="text-lg font-bold mb-2 relative" style={{ color: NAVY, fontFamily: FONT }}>
                 {b.t}
               </h3>
               <p className="leading-relaxed text-sm relative" style={{ color: INK_SOFT }}>
@@ -177,10 +181,10 @@ export default function HistoireMission() {
                 className="flex items-center gap-3 py-4 px-5"
                 style={{ borderBottom: `1px solid ${LINE}`, background: i % 2 === 0 ? "transparent" : "rgba(198,161,91,0.045)" }}
               >
-                <span className="shrink-0" style={{ color: GOLD, fontFamily: "Georgia, serif", fontSize: "15px" }} aria-hidden>
+                <span className="shrink-0" style={{ color: GOLD, fontFamily: FONT, fontSize: "15px" }} aria-hidden>
                   ✦
                 </span>
-                <span className="text-[15px]" style={{ color: INK, fontFamily: "Georgia, serif" }}>
+                <span className="text-[15px]" style={{ color: INK, fontFamily: FONT }}>
                   {v}
                 </span>
               </div>
@@ -200,7 +204,7 @@ export default function HistoireMission() {
               style={{ borderBottom: i !== JALONS.length - 1 ? `1px solid ${LINE}` : "none" }}
             >
               <div className="flex md:block items-baseline gap-3">
-                <div className="font-bold tabular-nums" style={{ color: NAVY, fontFamily: "Georgia, serif", fontSize: "30px", lineHeight: 1 }}>
+                <div className="font-bold tabular-nums" style={{ color: NAVY, fontFamily: FONT, fontSize: "30px", lineHeight: 1 }}>
                   {h.annee}
                 </div>
                 <div className="hidden md:block w-8 h-[2px] mt-3" style={{ background: GOLD }} />
@@ -224,10 +228,10 @@ export default function HistoireMission() {
 function SectionHeading({ roman, title }: { roman: string; title: string }) {
   return (
     <div className="flex items-baseline gap-3 mb-8">
-      <span className="text-sm" style={{ color: GOLD, fontFamily: "Georgia, serif" }}>
+      <span className="text-sm" style={{ color: GOLD, fontFamily: FONT }}>
         {roman}
       </span>
-      <h2 className="text-2xl font-bold pb-2 flex-1" style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `2px solid ${NAVY}` }}>
+      <h2 className="text-2xl font-bold pb-2 flex-1" style={{ color: NAVY, fontFamily: FONT, borderBottom: `2px solid ${NAVY}` }}>
         {title}
       </h2>
     </div>
