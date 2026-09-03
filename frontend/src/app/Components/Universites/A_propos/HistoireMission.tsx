@@ -14,19 +14,6 @@ const SHADOW = "0 4px 18px -8px rgba(20,30,55,0.18)";
 // and it'll apply everywhere this constant is used.
 const FONT = "'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
-// Thin engraved chain-link border strip, run full width along the header's
-// lower edge — the "ribbon" you'd find bordering a diploma or certificate.
-const BORDER_STRIP = encodeURIComponent(`
-<svg xmlns="http://www.w3.org/2000/svg" width="40" height="14">
-  <defs>
-    <pattern id="b" width="40" height="14" patternUnits="userSpaceOnUse">
-      <circle cx="10" cy="7" r="6" fill="none" stroke="${GOLD}" stroke-width="0.6"/>
-      <circle cx="30" cy="7" r="6" fill="none" stroke="${GOLD}" stroke-width="0.6"/>
-    </pattern>
-  </defs>
-  <rect width="40" height="14" fill="url(#b)"/>
-</svg>`);
-
 const JALONS = [
   { annee: "1971", titre: "Fondation", texte: "Création de l'Université de N'Djamena (alors Université du Tchad), première université publique du pays, par décret n°015/PR/MESRS." },
   { annee: "1972", titre: "Premières promotions", texte: "Ouverture des trois premières facultés : Lettres, Droit, et Sciences Économiques. 600 étudiants inscrits à la rentrée." },
@@ -172,16 +159,7 @@ export default function HistoireMission() {
           </p>
         </div>
 
-        {/* engraved edge: solid rule, then a repeating chain-link ribbon */}
         <div style={{ height: 2, background: GOLD }} />
-        <div
-          style={{
-            height: 14,
-            backgroundImage: `url("data:image/svg+xml,${BORDER_STRIP}")`,
-            backgroundRepeat: "repeat-x",
-            opacity: 0.55,
-          }}
-        />
       </header>
 
       {/* MISSION */}
