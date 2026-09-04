@@ -43,37 +43,8 @@ const VALEURS = [
   "Innovation & créativité",
 ];
 
-// Ceremonial seal: engraved double rim, radial tick marks (like a coin edge),
-// and the founding year set into the medallion — every mark here carries
-// real content instead of being pure ornament.
-function Seal({ size = 76 }: { size?: number }) {
-  const ticks = Array.from({ length: 40 });
-  return (
-    <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden="true" className="shrink-0">
-      <circle cx="50" cy="50" r="47" fill="none" stroke={GOLD} strokeWidth="1" opacity="0.5" />
-      {ticks.map((_, i) => {
-        const angle = (i / ticks.length) * Math.PI * 2;
-        const x1 = 50 + 43.5 * Math.cos(angle);
-        const y1 = 50 + 43.5 * Math.sin(angle);
-        const x2 = 50 + 46.5 * Math.cos(angle);
-        const y2 = 50 + 46.5 * Math.sin(angle);
-        return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={GOLD} strokeWidth="0.9" opacity="0.55" />;
-      })}
-      <circle cx="50" cy="50" r="38" fill="none" stroke={GOLD} strokeWidth="1.25" />
-      <circle cx="50" cy="50" r="31" fill={NAVY_DEEP} stroke={GOLD} strokeWidth="0.75" />
-      <text x="50" y="46" textAnchor="middle" fontFamily={FONT} fontSize="20" fontWeight="700" fill={GOLD}>
-        UN
-      </text>
-      <line x1="38" y1="54" x2="62" y2="54" stroke={GOLD} strokeWidth="0.6" opacity="0.6" />
-      <text x="50" y="63" textAnchor="middle" fontFamily={FONT} fontSize="7" letterSpacing="1" fill="rgba(255,255,255,0.75)">
-        1971
-      </text>
-    </svg>
-  );
-}
-
 // Small line-art emblem for each mission, set in the same navy-fill /
-// gold-stroke medallion language as the header seal.
+// gold-stroke medallion language as the rest of the page.
 function MissionIcon({ kind }: { kind: "former" | "produire" | "servir" }) {
   return (
     <span
@@ -120,47 +91,29 @@ function MissionIcon({ kind }: { kind: "former" | "produire" | "servir" }) {
 export default function HistoireMission() {
   return (
     <div style={{ background: PARCHMENT }} className="min-h-screen">
-      {/* EN-TÊTE OFFICIEL */}
-      <header
-        className="relative overflow-hidden"
+      {/* EN-TÊTE — restyled to match MotRecteur's hero */}
+      <section
+        className="py-16 px-4 md:px-[50px]"
         style={{
-          background: `radial-gradient(circle at 22% -20%, ${NAVY} 0%, ${NAVY_DEEP} 65%)`,
-          borderTop: `1px solid rgba(198,161,91,0.35)`,
+          background: `linear-gradient(180deg, ${NAVY_DEEP} 0%, ${NAVY} 100%)`,
         }}
       >
-        <div className="max-w-5xl mx-auto relative px-4 md:px-[50px] pt-11 pb-10">
-          <div className="flex items-center gap-4 mb-8">
-            <Seal />
-            <div className="min-w-0">
-              <p className="text-[15px] leading-tight" style={{ color: GOLD, fontFamily: FONT }}>
-                Université de N'Djamena
-              </p>
-              <p className="text-[12px] mt-0.5" style={{ color: "rgba(255,255,255,0.55)" }}>
-                Direction de la Communication
-              </p>
-            </div>
-          </div>
-
+        <div className="max-w-6xl mx-auto">
+          <p className="uppercase tracking-[0.2em] text-xs mb-3" style={{ color: GOLD }}>
+            Historique
+          </p>
           <h1
-            className="text-3xl md:text-[42px] font-bold leading-tight mb-4"
-            style={{ color: "#fff", fontFamily: FONT }}
+            className="text-4xl md:text-5xl font-bold mb-3"
+            style={{ color: GOLD, fontFamily: "Georgia, serif" }}
           >
             Histoire et mission de l'établissement
           </h1>
-
-          <div className="flex items-center gap-3 mb-5 max-w-md">
-            <div style={{ width: 48, height: 3, background: GOLD }} />
-            <div style={{ flex: 1, height: 1, background: "rgba(198,161,91,0.35)" }} />
-          </div>
-
-          <p className="text-[15px] max-w-2xl leading-relaxed" style={{ color: "rgba(255,255,255,0.72)" }}>
+          <p className="text-lg text-white/80 max-w-3xl leading-relaxed">
             Fiche institutionnelle retraçant la création, les missions statutaires
             et les principaux jalons de l'université depuis 1971.
           </p>
         </div>
-
-        <div style={{ height: 2, background: GOLD }} />
-      </header>
+      </section>
 
       {/* MISSION */}
       <section className="max-w-5xl mx-auto px-4 pt-14 pb-4">
