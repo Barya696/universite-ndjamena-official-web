@@ -1,7 +1,15 @@
 import { BRAND } from "../../Utils/brand";
 
 const NAVY = BRAND.navy;
+const NAVY_DEEP = BRAND.navyDeep;
 const GOLD = BRAND.gold;
+const PARCHMENT = "#FAF8F3";
+const PARCHMENT_ALT = "#F3EEE1";
+const LINE = "#DDD6C4";
+const INK_SOFT = "#565553";
+const SHADOW = "0 4px 18px -8px rgba(20,30,55,0.18)";
+// Matches the sans-serif used in the site footer / HistoireMission page.
+const FONT = "'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
 const CHIFFRES_HAUT = [
   { valeur: "30 000+", libelle: "Étudiants inscrits", sous: "tous niveaux confondus" },
@@ -53,17 +61,31 @@ const DETAILS = [
   },
 ];
 
+function SectionHeading({ roman, title }: { roman: string; title: string }) {
+  return (
+    <div className="flex items-baseline gap-3 mb-8">
+      <span className="text-sm" style={{ color: GOLD, fontFamily: FONT }}>
+        {roman}
+      </span>
+      <h2 className="text-2xl font-bold pb-2 flex-1" style={{ color: NAVY, fontFamily: FONT, borderBottom: `2px solid ${NAVY}` }}>
+        {title}
+      </h2>
+    </div>
+  );
+}
+
 export default function ChiffresCles() {
   return (
-    <div className="bg-white min-h-screen">
+    <div style={{ background: PARCHMENT }} className="min-h-screen">
+      {/* EN-TÊTE — matches the other "À propos" pages */}
       <section
         className="py-16 px-4 md:px-[50px]"
         style={{
-          background: `linear-gradient(180deg, ${BRAND.navyDeep} 0%, ${NAVY} 100%)`,
+          background: `linear-gradient(180deg, ${NAVY_DEEP} 0%, ${NAVY} 100%)`,
         }}
       >
         <div className="max-w-6xl mx-auto">
-          <p className="uppercase tracking-[0.2em] text-xs mb-3" style={{ color: GOLD }}>
+          <p className="uppercase tracking-[0.2em] text-xs mb-3" style={{ color: GOLD, fontFamily: FONT }}>
             À propos
           </p>
           <h1
@@ -72,60 +94,71 @@ export default function ChiffresCles() {
           >
             Chiffres clés
           </h1>
-          <p className="text-lg text-white/80 max-w-3xl leading-relaxed">
+          <p className="text-lg text-white/80 max-w-3xl leading-relaxed" style={{ fontFamily: FONT }}>
             Quelques données pour mesurer l'ampleur et l'impact de l'Université de N'Djamena
             dans le paysage de l'enseignement supérieur tchadien et africain.
           </p>
         </div>
       </section>
 
-      <section style={{ background: "#f6f6f6" }} className="py-14 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {CHIFFRES_HAUT.map((c) => (
+      {/* EN BREF */}
+      <section className="max-w-6xl mx-auto px-4 pt-14 pb-4">
+        <SectionHeading roman="I." title="En bref" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 pt-2">
+          {CHIFFRES_HAUT.map((c) => (
+            <div
+              key={c.libelle}
+              className="text-center bg-white p-6"
+              style={{
+                boxShadow: SHADOW,
+                border: `1px solid ${LINE}`,
+                borderTop: `3px solid ${GOLD}`,
+                backgroundImage: `linear-gradient(160deg, #ffffff 0%, ${PARCHMENT} 100%)`,
+              }}
+            >
               <div
-                key={c.libelle}
-                className="text-center bg-white rounded-lg p-6 border"
-                style={{ borderTop: `4px solid ${GOLD}`, borderColor: "#e2e8f0" }}
+                className="text-4xl font-bold mb-2"
+                style={{ color: NAVY, fontFamily: "Georgia, serif" }}
               >
-                <div
-                  className="text-4xl font-bold mb-2"
-                  style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-                >
-                  {c.valeur}
-                </div>
-                <div className="font-semibold" style={{ color: NAVY }}>
-                  {c.libelle}
-                </div>
-                <div className="text-sm text-[#646464] mt-1">{c.sous}</div>
+                {c.valeur}
               </div>
-            ))}
-          </div>
+              <div className="font-semibold" style={{ color: NAVY, fontFamily: FONT }}>
+                {c.libelle}
+              </div>
+              <div className="text-sm mt-1" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                {c.sous}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-2 gap-6">
-          {DETAILS.map((sec) => (
-            <div
-              key={sec.titre}
-              className="rounded-lg border overflow-hidden"
-              style={{ borderColor: "#e2e8f0" }}
-            >
-              <div className="px-5 py-3" style={{ background: NAVY }}>
-                <h3 className="font-bold text-white" style={{ fontFamily: "Georgia, serif" }}>
-                  {sec.titre}
-                </h3>
-              </div>
-              <div className="bg-white">
+      {/* DÉTAILS PAR DOMAINE */}
+      <section className="py-14 mt-6" style={{ background: PARCHMENT_ALT }}>
+        <div className="max-w-6xl mx-auto px-4">
+          <SectionHeading roman="II." title="Détails par domaine" />
+          <div className="grid md:grid-cols-2 gap-6 pt-2">
+            {DETAILS.map((sec) => (
+              <div
+                key={sec.titre}
+                className="bg-white overflow-hidden"
+                style={{ boxShadow: SHADOW, border: `1px solid ${LINE}` }}
+              >
+                <div
+                  className="px-5 py-3"
+                  style={{ background: `linear-gradient(135deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)`, borderBottom: `2px solid ${GOLD}` }}
+                >
+                  <h3 className="font-bold" style={{ color: GOLD, fontFamily: FONT }}>
+                    {sec.titre}
+                  </h3>
+                </div>
                 <table className="w-full text-sm">
                   <tbody>
                     {sec.items.map((it, i) => (
-                      <tr
-                        key={it.k}
-                        style={{ borderTop: i === 0 ? "none" : "1px solid #e2e8f0" }}
-                      >
-                        <td className="py-3 px-5 text-[#444]">{it.k}</td>
+                      <tr key={it.k} style={{ borderTop: i === 0 ? "none" : `1px solid ${LINE}` }}>
+                        <td className="py-3 px-5" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                          {it.k}
+                        </td>
                         <td
                           className="py-3 px-5 text-right font-semibold"
                           style={{ color: NAVY, fontFamily: "Georgia, serif" }}
@@ -137,8 +170,8 @@ export default function ChiffresCles() {
                   </tbody>
                 </table>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
     </div>
