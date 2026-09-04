@@ -1,7 +1,15 @@
 import { BRAND } from "../../Utils/brand";
 
 const NAVY = BRAND.navy;
+const NAVY_DEEP = BRAND.navyDeep;
 const GOLD = BRAND.gold;
+const PARCHMENT = "#FAF8F3";
+const PARCHMENT_ALT = "#F3EEE1";
+const LINE = "#DDD6C4";
+const INK = "#2B2B2B";
+const INK_SOFT = "#565553";
+const SHADOW = "0 4px 18px -8px rgba(20,30,55,0.18)";
+const FONT = "'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
 const POLITIQUES = [
   {
@@ -32,7 +40,7 @@ const POLITIQUES = [
     titre: "Politique de vie étudiante & inclusion",
     icone: "♥",
     intro:
-      "Offrir à chaque·étudiant·e des conditions dignes d'étude et une insertion professionnelle réussie.",
+      "Offrir à chaque étudiant·e des conditions dignes d'étude et une insertion professionnelle réussie.",
     points: [
       "Politique de bourses et d'aide sociale renforcée (critères sociaux)",
       "Plan d'accessibilité pour les personnes en situation de handicap",
@@ -80,11 +88,12 @@ const POLITIQUES = [
 
 export default function NosPolitiques() {
   return (
-    <div className="bg-white min-h-screen">
+    <div style={{ background: PARCHMENT }} className="min-h-screen">
+      {/* EN-TÊTE */}
       <section
         className="py-16 px-4 md:px-[50px]"
         style={{
-          background: `linear-gradient(180deg, ${BRAND.navyDeep} 0%, ${NAVY} 100%)`,
+          background: `linear-gradient(180deg, ${NAVY_DEEP} 0%, ${NAVY} 100%)`,
         }}
       >
         <div className="max-w-6xl mx-auto">
@@ -104,40 +113,73 @@ export default function NosPolitiques() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-6">
-        {POLITIQUES.map((p) => (
-          <article
-            key={p.titre}
-            className="rounded-lg border overflow-hidden"
-            style={{ borderColor: "#e2e8f0" }}
-          >
-            <div className="px-6 py-5" style={{ background: NAVY }}>
-              <div className="flex items-center gap-3">
+      {/* POLITIQUES */}
+      <section className="max-w-5xl mx-auto px-4 py-14">
+        <SectionHeading roman="I." title="Politiques transversales" />
+        <div className="bg-white" style={{ boxShadow: SHADOW, border: `1px solid ${LINE}` }}>
+          {POLITIQUES.map((p, i) => (
+            <div
+              key={p.titre}
+              className="grid md:grid-cols-[64px_1fr] gap-4 md:gap-8 py-8 px-6 md:px-8"
+              style={{ borderBottom: i !== POLITIQUES.length - 1 ? `1px solid ${LINE}` : "none" }}
+            >
+              <div className="flex md:block">
                 <span
-                  className="inline-flex items-center justify-center w-10 h-10 rounded-full text-xl"
-                  style={{ background: "rgba(200,168,75,0.15)", color: GOLD }}
+                  className="inline-flex items-center justify-center w-12 h-12 rounded-full text-lg shrink-0"
+                  style={{
+                    background: `radial-gradient(circle at 32% 28%, ${NAVY} 0%, ${NAVY_DEEP} 75%)`,
+                    color: GOLD,
+                    border: `1px solid ${GOLD}`,
+                    boxShadow: "0 8px 16px -8px rgba(10,20,40,0.5)",
+                  }}
+                  aria-hidden
                 >
                   {p.icone}
                 </span>
-                <h3 className="text-xl font-bold text-white" style={{ fontFamily: "Georgia, serif" }}>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold mb-1.5" style={{ color: NAVY, fontFamily: FONT }}>
                   {p.titre}
                 </h3>
+                <div className="flex items-center gap-2 mb-3" style={{ maxWidth: 96 }}>
+                  <div style={{ width: 20, height: 2, background: GOLD }} />
+                </div>
+                <p className="leading-relaxed mb-4 text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                  {p.intro}
+                </p>
+                <ul className="space-y-2.5">
+                  {p.points.map((pt) => (
+                    <li key={pt} className="flex gap-2.5">
+                      <span className="shrink-0" style={{ color: GOLD, fontFamily: FONT }} aria-hidden>
+                        ✦
+                      </span>
+                      <span className="leading-relaxed text-sm" style={{ color: INK, fontFamily: FONT }}>
+                        {pt}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-            <div className="p-6 bg-white">
-              <p className="text-[#444] leading-relaxed mb-4">{p.intro}</p>
-              <ul className="space-y-2 text-sm text-[#444]">
-                {p.points.map((pt) => (
-                  <li key={pt} className="flex gap-2">
-                    <span style={{ color: GOLD }}>✦</span>
-                    <span className="leading-relaxed">{pt}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </article>
-        ))}
+          ))}
+        </div>
       </section>
+    </div>
+  );
+}
+
+function SectionHeading({ roman, title }: { roman: string; title: string }) {
+  return (
+    <div className="flex items-baseline gap-3 mb-8">
+      <span className="text-sm" style={{ color: GOLD, fontFamily: FONT }}>
+        {roman}
+      </span>
+      <h2
+        className="text-2xl font-bold pb-2 flex-1"
+        style={{ color: NAVY, fontFamily: FONT, borderBottom: `2px solid ${NAVY}` }}
+      >
+        {title}
+      </h2>
     </div>
   );
 }
