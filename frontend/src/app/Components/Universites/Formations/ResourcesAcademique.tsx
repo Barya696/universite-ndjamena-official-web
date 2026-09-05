@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { CSSProperties } from "react";
 import { BRAND } from "../../Utils/brand";
 
 const NAVY = BRAND.navy;
@@ -20,6 +21,8 @@ const RESSOURCES = [
     icone: "📚",
     image: "/images/ressources/bibliotheque.jpg",
     alt: "Salle de lecture de la bibliothèque centrale de l'UDN, campus de Toukra",
+    imageAccent: "/images/ressources/bibliotheque-detail.jpg",
+    altAccent: "Rayonnages de la bibliothèque centrale",
     description:
       "Bibliothèque centrale (campus Toukra), bibliothèques de chaque faculté, bibliothèque médicale de Farcha et portail documentaire SUDOC-UDN.",
     detail: [
@@ -34,6 +37,8 @@ const RESSOURCES = [
     icone: "🏛️",
     image: "/images/ressources/campus.jpg",
     alt: "Vue du campus de Toukra, Université de N'Djamena",
+    imageAccent: "/images/ressources/campus-detail.jpg",
+    altAccent: "Amphithéâtre du campus de Toukra",
     description:
       "Trois campus à N'Djamena (Toukra, Farcha, Ardep-Djoumal) et un centre universitaire régional à Doba.",
     detail: [
@@ -48,6 +53,8 @@ const RESSOURCES = [
     icone: "💻",
     image: "/images/ressources/numerique.jpg",
     alt: "Étudiants dans une salle informatique de l'UDN",
+    imageAccent: "/images/ressources/numerique-detail.jpg",
+    altAccent: "Étudiant consultant l'ENT sur un ordinateur portable",
     description:
       "Un portail unique étudiant pour s'inscrire, suivre les cours, accéder aux notes, télécharger les syllabus et dialoguer avec les enseignants.",
     detail: [
@@ -62,6 +69,8 @@ const RESSOURCES = [
     icone: "🔬",
     image: "/images/ressources/laboratoire.jpg",
     alt: "Chercheur au travail dans un laboratoire accrédité de l'UDN",
+    imageAccent: "/images/ressources/laboratoire-detail.jpg",
+    altAccent: "Manipulation au microscope en laboratoire",
     description:
       "28 laboratoires accrédités et plateformes mutualisées pour la recherche et les travaux pratiques.",
     detail: [
@@ -76,6 +85,8 @@ const RESSOURCES = [
     icone: "🎓",
     image: "/images/ressources/vie-etudiante.jpg",
     alt: "Étudiants au restaurant universitaire du campus de Farcha",
+    imageAccent: "/images/ressources/vie-etudiante-detail.jpg",
+    altAccent: "Résidence universitaire du campus de Toukra",
     description:
       "Le Service des Œuvres Universitaires (SOU) accompagne au quotidien les 30 000 étudiants de l'UDN.",
     detail: [
@@ -90,6 +101,8 @@ const RESSOURCES = [
     icone: "⚽",
     image: "/images/ressources/sport-culture.jpg",
     alt: "Match inter-facultés au stade universitaire de Toukra",
+    imageAccent: "/images/ressources/sport-culture-detail.jpg",
+    altAccent: "Festival culturel annuel de l'UDN",
     description:
       "Activités sportives et culturelles encadrées toute l'année universitaire.",
     detail: [
@@ -140,42 +153,15 @@ function RessourceIcon({ glyph }: { glyph: string }) {
   );
 }
 
-// Small chevron that rotates open/closed — kept minimal so it reads as a
-// UI affordance rather than another decorative glyph.
-function Chevron({ open }: { open: boolean }) {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke={GOLD}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      style={{
-        transform: open ? "rotate(180deg)" : "rotate(0deg)",
-        transition: "transform 0.2s ease",
-        flexShrink: 0,
-      }}
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
 // Image with a graceful fallback: until the real photo is dropped at `src`,
 // this renders a styled placeholder (instead of a broken-image icon) so the
 // layout looks intentional and the missing asset is obvious to whoever is
 // wiring up the photos.
-function ImageSlot({ src, alt }: { src: string; alt: string }) {
+function ImageSlot({ src, alt, className = "h-44 md:h-56" }: { src: string; alt: string; className?: string }) {
   const [failed, setFailed] = useState(false);
 
   return (
-    <div
-      className="relative w-full h-44 md:h-56 overflow-hidden shrink-0"
-      style={{ border: `1px solid ${LINE}`, borderTop: `3px solid ${GOLD}` }}
-    >
+    <div className={`relative w-full overflow-hidden ${className}`}>
       {!failed ? (
         <img
           src={src}
@@ -185,18 +171,16 @@ function ImageSlot({ src, alt }: { src: string; alt: string }) {
         />
       ) : (
         <div
-          className="w-full h-full flex flex-col items-center justify-center gap-2 text-center px-3"
+          className="w-full h-full flex flex-col items-center justify-center gap-1.5 text-center px-2"
           style={{ background: `linear-gradient(160deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)` }}
         >
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="6" width="18" height="13" rx="2" />
             <path d="M8 6l1.5-2h5L16 6" />
             <circle cx="12" cy="12.5" r="3.2" />
           </svg>
-          <span style={{ color: "rgba(255,255,255,0.55)", fontFamily: FONT, fontSize: "0.7rem", lineHeight: 1.4 }}>
+          <span style={{ color: "rgba(255,255,255,0.5)", fontFamily: FONT, fontSize: "0.62rem", lineHeight: 1.4 }}>
             Photo à venir
-            <br />
-            <span style={{ color: "rgba(255,255,255,0.35)" }}>{src}</span>
           </span>
         </div>
       )}
@@ -204,12 +188,105 @@ function ImageSlot({ src, alt }: { src: string; alt: string }) {
   );
 }
 
+// Small dot-grid accent — an echo of the site's gold ✦ marks, used here as a
+// loose decorative texture near an image cluster rather than a bullet.
+function DotGrid({ style }: { style?: CSSProperties }) {
+  return (
+    <div
+      aria-hidden
+      className="hidden md:block absolute"
+      style={{
+        width: 64,
+        height: 64,
+        backgroundImage: `radial-gradient(${GOLD} 1.6px, transparent 1.6px)`,
+        backgroundSize: "11px 11px",
+        opacity: 0.4,
+        zIndex: 0,
+        ...style,
+      }}
+    />
+  );
+}
+
+const CORNER_STYLE: Record<"tl" | "tr" | "bl" | "br", CSSProperties> = {
+  tl: { top: -18, left: -18 },
+  tr: { top: -18, right: -18 },
+  bl: { bottom: -18, left: -18 },
+  br: { bottom: -18, right: -18 },
+};
+
+// Six hand-picked compositions — one per resource — so the image/text side,
+// the accent-photo corner, the dot accent, the crop shape (landscape,
+// portrait, square) and the accent size/shape never repeat: every entry
+// gets its own distinct framing instead of a single cropped mould reused
+// six times.
+const LAYOUTS: {
+  textSide: "left" | "right";
+  accentCorner: "tl" | "tr" | "bl" | "br";
+  dotCorner: "tl" | "tr" | "bl" | "br";
+  rotate: number;
+  mainClass: string;
+  accentClass: string;
+  accentRound: string;
+}[] = [
+  { textSide: "right", accentCorner: "br", dotCorner: "tl", rotate: -1.6, mainClass: "w-full md:w-72 h-48 md:h-44", accentClass: "w-20 h-20 md:w-24 md:h-24", accentRound: "" },
+  { textSide: "left", accentCorner: "tl", dotCorner: "br", rotate: 1.4, mainClass: "w-full md:w-56 h-64 md:h-72", accentClass: "w-24 h-24 md:w-28 md:h-28", accentRound: "rounded-full" },
+  { textSide: "right", accentCorner: "tr", dotCorner: "bl", rotate: -1.1, mainClass: "w-full md:w-60 h-56 md:h-60", accentClass: "w-24 h-16 md:w-28 md:h-20", accentRound: "" },
+  { textSide: "left", accentCorner: "br", dotCorner: "tl", rotate: 1.2, mainClass: "w-full md:w-64 h-44 md:h-48", accentClass: "w-16 h-24 md:w-20 md:h-28", accentRound: "" },
+  { textSide: "right", accentCorner: "bl", dotCorner: "tr", rotate: -1.8, mainClass: "w-full md:w-52 h-60 md:h-64", accentClass: "w-24 h-24 md:w-28 md:h-28", accentRound: "rounded-full" },
+  { textSide: "left", accentCorner: "tr", dotCorner: "bl", rotate: 1.0, mainClass: "w-full md:w-72 h-40 md:h-44", accentClass: "w-20 h-20 md:w-24 md:h-24", accentRound: "" },
+];
+
+// Main photo + a smaller overlapping accent photo, echoing the layered,
+// non-repetitive photo compositions used across the reference design —
+// reworked here in the site's own navy/gold/parchment language.
+function ImageCluster({
+  mainSrc,
+  mainAlt,
+  accentSrc,
+  accentAlt,
+  layout,
+}: {
+  mainSrc: string;
+  mainAlt: string;
+  accentSrc: string;
+  accentAlt: string;
+  layout: (typeof LAYOUTS)[number];
+}) {
+  return (
+    <div
+      className={`relative shrink-0 mx-auto md:mx-0 ${layout.mainClass}`}
+      style={{ marginTop: 8, marginBottom: 20 }}
+    >
+      <DotGrid style={CORNER_STYLE[layout.dotCorner]} />
+      <div
+        className="relative w-full h-full"
+        style={{
+          transform: `rotate(${layout.rotate}deg)`,
+          border: `1px solid ${LINE}`,
+          borderTop: `3px solid ${GOLD}`,
+          boxShadow: SHADOW,
+          background: "#fff",
+        }}
+      >
+        <ImageSlot src={mainSrc} alt={mainAlt} className="h-full" />
+      </div>
+      <div
+        className={`absolute overflow-hidden ${layout.accentClass} ${layout.accentRound}`}
+        style={{
+          ...CORNER_STYLE[layout.accentCorner],
+          border: `4px solid ${PARCHMENT}`,
+          boxShadow: "0 10px 22px -10px rgba(20,30,55,0.45)",
+          zIndex: 1,
+        }}
+      >
+        <ImageSlot src={accentSrc} alt={accentAlt} className="h-full" />
+      </div>
+    </div>
+  );
+}
+
 export default function ResourcesAcademique() {
-  const [open, setOpen] = useState<Record<number, boolean>>({ 0: true });
-
-  const toggle = (i: number) =>
-    setOpen((prev) => ({ ...prev, [i]: !prev[i] }));
-
   return (
     <div style={{ background: PARCHMENT }} className="min-h-screen">
       {/* EN-TÊTE — matches the other section heroes */}
@@ -251,77 +328,63 @@ export default function ResourcesAcademique() {
       {/* RESSOURCES */}
       <section className="max-w-6xl mx-auto px-4 pt-14 pb-4">
         <SectionHeading roman="I." title="Ressources mises à disposition" />
-        <div className="bg-white" style={{ boxShadow: SHADOW, border: `1px solid ${LINE}` }}>
+        <div className="space-y-16 md:space-y-24 pt-4">
           {RESSOURCES.map((r, i) => {
-            const isOpen = !!open[i];
+            const layout = LAYOUTS[i % LAYOUTS.length];
+            const tinted = i % 2 === 1;
             return (
               <div
                 key={r.titre}
-                style={{ borderBottom: i !== RESSOURCES.length - 1 ? `1px solid ${LINE}` : "none" }}
+                className="relative"
+                style={
+                  tinted
+                    ? { background: PARCHMENT_ALT, margin: "0 -1.5rem", padding: "2.5rem 1.5rem", borderRadius: 4 }
+                    : undefined
+                }
               >
-                <button
-                  type="button"
-                  onClick={() => toggle(i)}
-                  aria-expanded={isOpen}
-                  className="w-full flex items-center gap-4 py-6 px-6 md:px-8 text-left"
-                  style={{ background: "transparent", cursor: "pointer" }}
+                <div
+                  className={`flex flex-col gap-8 md:gap-14 md:items-center ${
+                    layout.textSide === "left" ? "md:flex-row-reverse" : "md:flex-row"
+                  }`}
                 >
-                  <RessourceIcon glyph={r.icone} />
-                  <h3 className="text-lg font-bold leading-snug flex-1" style={{ color: NAVY, fontFamily: FONT }}>
-                    {r.titre}
-                  </h3>
-                  <Chevron open={isOpen} />
-                </button>
+                  <ImageCluster
+                    mainSrc={r.image}
+                    mainAlt={r.alt}
+                    accentSrc={r.imageAccent}
+                    accentAlt={r.altAccent}
+                    layout={layout}
+                  />
 
-                {isOpen && (
-                  <div className="pb-10 px-6 md:px-8">
-                    <div
-                      className={`flex flex-col gap-6 md:gap-10 md:items-center ${
-                        i % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"
-                      }`}
-                    >
-                      <div
-                        className="relative w-full md:w-60 shrink-0"
-                        style={{ transform: i % 2 === 0 ? "rotate(-1.4deg)" : "rotate(1.4deg)" }}
-                      >
-                        {/* second sheet peeking out behind — same depth cue as the
-                            mission cards, alternated left/right per row */}
-                        <div
-                          aria-hidden
-                          className="absolute"
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-4">
+                      <RessourceIcon glyph={r.icone} />
+                      <h3 className="text-xl font-bold leading-snug" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
+                        {r.titre}
+                      </h3>
+                    </div>
+                    <div className="w-10 h-[2px] mb-4" style={{ background: GOLD }} />
+                    <p className="leading-relaxed mb-5 text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                      {r.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {r.detail.map((d) => (
+                        <span
+                          key={d}
+                          className="text-xs px-3 py-1.5 leading-relaxed"
                           style={{
-                            top: 10,
-                            left: i % 2 === 0 ? -8 : 10,
-                            right: i % 2 === 0 ? 10 : -8,
-                            bottom: -10,
-                            background: NAVY,
-                            transform: i % 2 === 0 ? "rotate(2.2deg)" : "rotate(-2.2deg)",
-                            boxShadow: "0 16px 30px -18px rgba(10,20,40,0.5)",
+                            border: `1px solid ${LINE}`,
+                            color: INK_SOFT,
+                            fontFamily: FONT,
+                            background: "#ffffff",
+                            borderRadius: 999,
                           }}
-                        />
-                        <div className="relative">
-                          <ImageSlot src={r.image} alt={r.alt} />
-                        </div>
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <p className="leading-relaxed mb-4 text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
-                          {r.description}
-                        </p>
-                        <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
-                          {r.detail.map((d) => (
-                            <li key={d} className="flex gap-2">
-                              <span className="shrink-0" style={{ color: GOLD }} aria-hidden>
-                                ✦
-                              </span>
-                              <span className="leading-relaxed">{d}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                        >
+                          {d}
+                        </span>
+                      ))}
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}
