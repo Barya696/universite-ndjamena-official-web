@@ -21,6 +21,10 @@ import CooperationDoublesDiplomes from "./Components/Universites/International/C
 import Partenariats from "./Components/Universites/International/Partenariats";
 import Nouvelles_Evenements from "./Components/Universites/Nouvelles_&_Evenements/Nouvelles_&_Evenements";
 import Recherches from "./Components/Universites/Recherches/Recherches";
+import LaboratoiresCentres from "./Components/Universites/Recherches/LaboratoiresCentres";
+import Publications from "./Components/Universites/Recherches/Publications";
+import AppelsProjets from "./Components/Universites/Recherches/AppelsProjets";
+import AxesRecherche from "./Components/Universites/Recherches/AxesRecherche";
 import Inscription from "./Components/Inscription/Inscription";
 import Portail_Etudiant from "./Components/Portail_Etudiant/Portail_Etudiant";
 import Bibliotheque from "./Components/Bibliothèque/Bibliothèque";
@@ -186,6 +190,38 @@ export default function AppRoutes() {
         element={
           <Mainlayout>
             <Recherches />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/recherches/laboratoires-centres"
+        element={
+          <Mainlayout>
+            <LaboratoiresCentres />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/recherches/publications"
+        element={
+          <Mainlayout>
+            <Publications />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/recherches/appels-projets"
+        element={
+          <Mainlayout>
+            <AppelsProjets />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/recherches/axes-recherche"
+        element={
+          <Mainlayout>
+            <AxesRecherche />
           </Mainlayout>
         }
       />

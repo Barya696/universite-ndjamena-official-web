@@ -65,10 +65,10 @@ const NAV_ITEMS: NavItem[] = [
     label: "Recherches",
     href: "/universite/recherches",
     links: [
-      { label: "Laboratoires & centres", href: "/universite/recherches" },
-      { label: "Publications", href: "/universite/recherches" },
-      { label: "Appels à projets", href: "/universite/recherches" },
-      { label: "Axes de recherche", href: "/universite/recherches" },
+      { label: "Laboratoires & centres", href: "/universite/recherches/laboratoires-centres" },
+      { label: "Publications", href: "/universite/recherches/publications" },
+      { label: "Appels à projets", href: "/universite/recherches/appels-projets" },
+      { label: "Axes de recherche", href: "/universite/recherches/axes-recherche" },
     ],
   },
 ];
@@ -162,10 +162,10 @@ const TOPBAR_NAV_ITEMS: NavItem[] = [
         label: "Recherches",
         href: "/universite/recherches",
         links: [
-          { label: "Laboratoires & centres", href: "/universite/recherches" },
-          { label: "Publications", href: "/universite/recherches" },
-          { label: "Appels à projets", href: "/universite/recherches" },
-          { label: "Axes de recherche", href: "/universite/recherches" },
+          { label: "Laboratoires & centres", href: "/universite/recherches/laboratoires-centres" },
+          { label: "Publications", href: "/universite/recherches/publications" },
+          { label: "Appels à projets", href: "/universite/recherches/appels-projets" },
+          { label: "Axes de recherche", href: "/universite/recherches/axes-recherche" },
         ],
       },
       {
