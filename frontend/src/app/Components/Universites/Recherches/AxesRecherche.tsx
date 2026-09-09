@@ -1,7 +1,16 @@
 import { BRAND } from "../../Utils/brand";
 
 const NAVY = BRAND.navy;
+const NAVY_DEEP = BRAND.navyDeep;
 const GOLD = BRAND.gold;
+const PARCHMENT = "#FAF8F3";
+const PARCHMENT_ALT = "#F3EEE1";
+const LINE = "#DDD6C4";
+const INK_SOFT = "#565553";
+const INK_FAINT = "#8A8A8A";
+const SHADOW = "0 4px 18px -8px rgba(20,30,55,0.18)";
+// Matches the sans-serif used in the site footer / HistoireMission page.
+const FONT = "'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
 const CHIFFRES = [
   { k: "Axes scientifiques prioritaires", v: "7" },
@@ -148,21 +157,35 @@ const DEMARCHES = [
   },
 ];
 
+function SectionHeading({ roman, title }: { roman: string; title: string }) {
+  return (
+    <div className="flex items-baseline gap-3 mb-8">
+      <span className="text-sm" style={{ color: GOLD, fontFamily: FONT }}>
+        {roman}
+      </span>
+      <h2 className="text-2xl font-bold pb-2 flex-1" style={{ color: NAVY, fontFamily: FONT, borderBottom: `2px solid ${NAVY}` }}>
+        {title}
+      </h2>
+    </div>
+  );
+}
+
 export default function AxesRecherche() {
   return (
-    <div className="bg-white min-h-screen">
+    <div style={{ background: PARCHMENT }} className="min-h-screen">
+      {/* EN-TÊTE */}
       <section
         className="py-16 px-4 md:px-[50px]"
-        style={{ background: `linear-gradient(180deg, ${BRAND.navyDeep} 0%, ${NAVY} 100%)` }}
+        style={{ background: `linear-gradient(180deg, ${NAVY_DEEP} 0%, ${NAVY} 100%)` }}
       >
         <div className="max-w-6xl mx-auto">
-          <p className="uppercase tracking-[0.2em] text-xs mb-3" style={{ color: GOLD }}>
+          <p className="uppercase tracking-[0.2em] text-xs mb-3" style={{ color: GOLD, fontFamily: FONT }}>
             Recherches
           </p>
           <h1 className="text-4xl md:text-5xl font-bold mb-3" style={{ color: GOLD, fontFamily: "Georgia, serif" }}>
             Axes de recherche
           </h1>
-          <p className="text-lg text-white/80 max-w-3xl leading-relaxed">
+          <p className="text-lg text-white/80 max-w-3xl leading-relaxed" style={{ fontFamily: FONT }}>
             Sept axes scientifiques pluridisciplinaires, alignés sur les ODD et
             les priorités nationales & sahéliennes, structurent la recherche
             de l'UDN. Ils regroupent 380 chercheurs, 20 laboratoires et
@@ -171,131 +194,166 @@ export default function AxesRecherche() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-4 gap-4 text-sm">
+      {/* CHIFFRES CLÉS */}
+      <section className="max-w-6xl mx-auto px-4 pt-14 pb-4">
+        <SectionHeading roman="I." title="Chiffres clés" />
+        <div className="grid md:grid-cols-4 gap-6 pt-2">
           {CHIFFRES.map((s) => (
             <div
               key={s.k}
-              className="p-4 rounded-lg border text-center"
-              style={{ background: "#f8fafc", borderTop: `3px solid ${GOLD}`, borderColor: "#e2e8f0" }}
+              className="text-center p-5 bg-white"
+              style={{
+                boxShadow: SHADOW,
+                border: `1px solid ${LINE}`,
+                borderTop: `3px solid ${GOLD}`,
+                backgroundImage: `linear-gradient(160deg, #ffffff 0%, ${PARCHMENT} 100%)`,
+              }}
             >
-              <p className="text-xs uppercase tracking-wider text-[#646464] mb-1">{s.k}</p>
-              <p className="text-xl font-bold" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>{s.v}</p>
+              <p className="text-xs uppercase tracking-wider mb-2" style={{ color: GOLD, fontFamily: FONT, letterSpacing: "0.1em" }}>
+                {s.k}
+              </p>
+              <p className="text-xl font-bold" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
+                {s.v}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 pb-12 space-y-8">
-        {AXES.map((a) => (
-          <article
-            key={a.code}
-            className="rounded-lg border overflow-hidden"
-            style={{ borderColor: "#e2e8f0" }}
-          >
-            <div className="px-6 py-5" style={{ background: a.color }}>
-              <div className="flex flex-wrap items-center gap-3 mb-1">
-                <span
-                  className="px-2.5 py-1 rounded text-xs font-bold tracking-widest"
-                  style={{ background: "rgba(200,168,75,0.22)", color: GOLD, fontFamily: "Georgia, serif" }}
+      {/* SEPT AXES PRIORITAIRES */}
+      <section className="py-14 mt-6" style={{ background: PARCHMENT_ALT }}>
+        <div className="max-w-6xl mx-auto px-4">
+          <SectionHeading roman="II." title="Sept axes prioritaires" />
+          <div className="space-y-8 pt-2">
+            {AXES.map((a) => (
+              <article
+                key={a.code}
+                className="bg-white overflow-hidden"
+                style={{ boxShadow: SHADOW, border: `1px solid ${LINE}` }}
+              >
+                <div
+                  className="px-6 py-5"
+                  style={{
+                    background: `linear-gradient(135deg, ${a.color} 0%, ${NAVY_DEEP} 100%)`,
+                    borderBottom: `2px solid ${GOLD}`,
+                  }}
                 >
-                  {a.code}
-                </span>
-                <h2 className="font-bold text-white text-lg" style={{ fontFamily: "Georgia, serif" }}>
-                  {a.titre}
-                </h2>
-              </div>
-            </div>
-            <div className="p-6 bg-white space-y-5">
-              <p className="text-[#444] leading-relaxed text-[15px]">{a.resume}</p>
-              <div className="flex flex-wrap gap-1.5">
-                {a.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="text-[11px] font-semibold px-2 py-1 rounded"
-                    style={{
-                      color: NAVY,
-                      background: "rgba(26,58,92,0.08)",
-                      border: "1px solid #c8d8e8",
-                    }}
-                  >
-                    #{t}
-                  </span>
-                ))}
-              </div>
-              <div className="grid md:grid-cols-[1.1fr_1.1fr_1.8fr] gap-5 text-sm">
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Pilotage</p>
-                  <p className="text-[#444] leading-relaxed">{a.pilote}</p>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span
+                      className="px-2.5 py-1 text-xs font-bold tracking-widest"
+                      style={{ background: "rgba(255,255,255,0.14)", color: GOLD, fontFamily: "Georgia, serif", borderRadius: 4 }}
+                    >
+                      {a.code}
+                    </span>
+                    <h3 className="font-bold text-lg" style={{ color: "#fff", fontFamily: FONT }}>
+                      {a.titre}
+                    </h3>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Laboratoires rattachés</p>
-                  <div className="flex flex-wrap gap-1.5 mt-1">
-                    {a.laboratoires.map((lab) => (
+                <div className="p-6 space-y-5">
+                  <p className="leading-relaxed text-[15px]" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                    {a.resume}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {a.tags.map((t) => (
                       <span
-                        key={lab}
-                        className="px-2 py-1 rounded text-xs font-bold"
-                        style={{ background: NAVY, color: "#fff", fontFamily: "Georgia, serif" }}
+                        key={t}
+                        className="text-[11px] font-semibold px-2 py-1"
+                        style={{
+                          color: NAVY,
+                          background: "rgba(200,168,75,0.10)",
+                          border: `1px solid ${LINE}`,
+                          fontFamily: FONT,
+                          borderRadius: 4,
+                        }}
                       >
-                        {lab}
+                        #{t}
                       </span>
                     ))}
                   </div>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Réalisations clés</p>
-                  <ul className="space-y-1.5 text-[#444]">
-                    {a.realisations.map((r) => (
-                      <li key={r} className="flex gap-2">
-                        <span style={{ color: GOLD }}>✦</span>
-                        <span className="leading-relaxed">{r}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      <section style={{ background: "#f6f6f6" }} className="py-12 px-4">
-        <div className="max-w-6xl mx-auto pb-8">
-          <h2
-            className="text-2xl font-bold mb-6 pb-2 inline-block"
-            style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `3px solid ${GOLD}` }}
-          >
-            Organisation de la recherche
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {DEMARCHES.map((d) => (
-              <article
-                key={d.titre}
-                className="rounded-lg border overflow-hidden"
-                style={{ borderColor: "#e2e8f0", background: "#fff" }}
-              >
-                <div className="px-5 py-4 flex items-center gap-3" style={{ background: NAVY }}>
-                  <span className="text-2xl">{d.icone}</span>
-                  <h3
-                    className="font-bold text-white text-base"
-                    style={{ fontFamily: "Georgia, serif" }}
-                  >
-                    {d.titre}
-                  </h3>
-                </div>
-                <div className="p-5">
-                  <ul className="space-y-2 text-sm text-[#444]">
-                    {d.detail.map((x) => (
-                      <li key={x} className="flex gap-2">
-                        <span style={{ color: GOLD }}>✦</span>
-                        <span className="leading-relaxed">{x}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="grid md:grid-cols-[1.1fr_1.1fr_1.8fr] gap-5 text-sm">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest mb-1" style={{ color: INK_FAINT, fontFamily: FONT }}>
+                        Pilotage
+                      </p>
+                      <p className="leading-relaxed" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                        {a.pilote}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest mb-1" style={{ color: INK_FAINT, fontFamily: FONT }}>
+                        Laboratoires rattachés
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 mt-1">
+                        {a.laboratoires.map((lab) => (
+                          <span
+                            key={lab}
+                            className="px-2 py-1 text-xs font-bold"
+                            style={{ background: NAVY, color: GOLD, fontFamily: "Georgia, serif", borderRadius: 4 }}
+                          >
+                            {lab}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest mb-1" style={{ color: INK_FAINT, fontFamily: FONT }}>
+                        Réalisations clés
+                      </p>
+                      <ul className="space-y-1.5" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                        {a.realisations.map((r) => (
+                          <li key={r} className="flex gap-2">
+                            <span className="shrink-0" style={{ color: GOLD }} aria-hidden>
+                              ✦
+                            </span>
+                            <span className="leading-relaxed">{r}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ORGANISATION DE LA RECHERCHE */}
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <SectionHeading roman="III." title="Organisation de la recherche" />
+        <div className="grid md:grid-cols-3 gap-6 pt-2">
+          {DEMARCHES.map((d) => (
+            <article
+              key={d.titre}
+              className="bg-white overflow-hidden"
+              style={{ boxShadow: SHADOW, border: `1px solid ${LINE}` }}
+            >
+              <div
+                className="px-5 py-4 flex items-center gap-3"
+                style={{ background: `linear-gradient(135deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)`, borderBottom: `2px solid ${GOLD}` }}
+              >
+                <span className="text-2xl" aria-hidden>
+                  {d.icone}
+                </span>
+                <h3 className="font-bold text-base" style={{ color: GOLD, fontFamily: FONT }}>
+                  {d.titre}
+                </h3>
+              </div>
+              <div className="p-5">
+                <ul className="space-y-2 text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                  {d.detail.map((x) => (
+                    <li key={x} className="flex gap-2">
+                      <span className="shrink-0" style={{ color: GOLD }} aria-hidden>
+                        ✦
+                      </span>
+                      <span className="leading-relaxed">{x}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
     </div>
