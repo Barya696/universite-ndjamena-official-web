@@ -1,7 +1,24 @@
+import type { ReactNode } from "react";
 import { BRAND } from "../../Utils/brand";
 
 const NAVY = BRAND.navy;
+const NAVY_DEEP = BRAND.navyDeep;
 const GOLD = BRAND.gold;
+const PARCHMENT = "#FAF8F3";
+const PARCHMENT_ALT = "#F3EEE1";
+const LINE = "#DDD6C4";
+const INK_SOFT = "#565553";
+const INK_FAINT = "#8A8A8A";
+const SHADOW = "0 4px 18px -8px rgba(20,30,55,0.18)";
+// Matches the sans-serif used in the site footer / HistoireMission page.
+const FONT = "'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif";
+
+const STATS = [
+  { k: "Projets financés en cours", v: "6" },
+  { k: "Budget total mobilisé 2024", v: "3,33 Md FCFA" },
+  { k: "Appels futurs à comparaître", v: "6" },
+  { k: "Chercheurs accompagnés / an", v: "180+" },
+];
 
 const EN_COURS = [
   {
@@ -117,21 +134,62 @@ const APPELS_FUTURS = [
   },
 ];
 
+const SOUMETTRE = [
+  { strong: "Étape 1", rest: "· Pré-candidature — synopsis 3 p. au VPR 3 mois avant DL" },
+  { strong: "Étape 2", rest: "· Avis éthique (CONE) + avis laboratoire d'affectation" },
+  { strong: "Étape 3", rest: "· Montage budgétaire + convention service recherche" },
+  { strong: "Étape 4", rest: "· Soumission + accusé de réception" },
+  { strong: "Étape 5", rest: "· Notification · signature convention · lancement" },
+];
+
+const APPUI = [
+  "Service Recherche & Partenariats — Campus Toukra, Bât. A, A-118",
+  "VPR : Prof. Mahamat Youssouf · vice-rectorat-recherche@undt.edu.td",
+  "Appui juridique & budgétaire · 12 points d'appui facultaires",
+  "Newsletter mensuelle : recherche-actus@undt.edu.td (abonnement libre)",
+  "Calendrier : appels-projets-recherche.undt.edu.td",
+];
+
+function SectionHeading({ roman, title }: { roman: string; title: string }) {
+  return (
+    <div className="flex items-baseline gap-3 mb-8">
+      <span className="text-sm" style={{ color: GOLD, fontFamily: FONT }}>
+        {roman}
+      </span>
+      <h2 className="text-2xl font-bold pb-2 flex-1" style={{ color: NAVY, fontFamily: FONT, borderBottom: `2px solid ${NAVY}` }}>
+        {title}
+      </h2>
+    </div>
+  );
+}
+
+function Field({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div>
+      <p className="text-[10px] uppercase tracking-widest mb-1" style={{ color: INK_FAINT, fontFamily: FONT }}>
+        {label}
+      </p>
+      {children}
+    </div>
+  );
+}
+
 export default function AppelsProjets() {
   return (
-    <div className="bg-white min-h-screen">
+    <div style={{ background: PARCHMENT }} className="min-h-screen">
+      {/* EN-TÊTE */}
       <section
         className="py-16 px-4 md:px-[50px]"
-        style={{ background: `linear-gradient(180deg, ${BRAND.navyDeep} 0%, ${NAVY} 100%)` }}
+        style={{ background: `linear-gradient(180deg, ${NAVY_DEEP} 0%, ${NAVY} 100%)` }}
       >
         <div className="max-w-6xl mx-auto">
-          <p className="uppercase tracking-[0.2em] text-xs mb-3" style={{ color: GOLD }}>
+          <p className="uppercase tracking-[0.2em] text-xs mb-3" style={{ color: GOLD, fontFamily: FONT }}>
             Recherches
           </p>
           <h1 className="text-4xl md:text-5xl font-bold mb-3" style={{ color: GOLD, fontFamily: "Georgia, serif" }}>
             Appels à projets
           </h1>
-          <p className="text-lg text-white/80 max-w-3xl leading-relaxed">
+          <p className="text-lg text-white/80 max-w-3xl leading-relaxed" style={{ fontFamily: FONT }}>
             Suivez en temps réel les projets de recherche financés par les grands
             bailleurs internationaux et les prochains appels à proposition.
             L'Université de N'Djamena accompagne ses chercheurs tout au long du
@@ -140,160 +198,157 @@ export default function AppelsProjets() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-4 gap-4 text-sm">
-          {[
-            { k: "Projets financés en cours", v: "6" },
-            { k: "Budget total mobilisé 2024", v: "3,33 Md FCFA" },
-            { k: "Appels futurs à comparaître", v: "6" },
-            { k: "Chercheurs accompagnés / an", v: "180+" },
-          ].map((s) => (
+      {/* EN BREF */}
+      <section className="max-w-6xl mx-auto px-4 pt-14 pb-4">
+        <SectionHeading roman="I." title="En bref" />
+        <div className="grid md:grid-cols-4 gap-6 pt-2">
+          {STATS.map((s) => (
             <div
               key={s.k}
-              className="p-4 rounded-lg border text-center"
-              style={{ background: "#f8fafc", borderTop: `3px solid ${GOLD}`, borderColor: "#e2e8f0" }}
+              className="text-center p-5 bg-white"
+              style={{
+                boxShadow: SHADOW,
+                border: `1px solid ${LINE}`,
+                borderTop: `3px solid ${GOLD}`,
+                backgroundImage: `linear-gradient(160deg, #ffffff 0%, ${PARCHMENT} 100%)`,
+              }}
             >
-              <p className="text-xs uppercase tracking-wider text-[#646464] mb-1">{s.k}</p>
-              <p className="text-xl font-bold" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>{s.v}</p>
+              <p className="text-xs uppercase tracking-wider mb-2" style={{ color: GOLD, fontFamily: FONT, letterSpacing: "0.1em" }}>
+                {s.k}
+              </p>
+              <p className="text-xl font-bold" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
+                {s.v}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 pb-12">
-        <h2
-          className="text-2xl font-bold mb-6 pb-2 inline-block"
-          style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `3px solid ${GOLD}` }}
-        >
-          Projets financés en cours
-        </h2>
-        <article className="rounded-lg border overflow-hidden" style={{ borderColor: "#e2e8f0" }}>
-          <div className="bg-white divide-y divide-gray-100">
+      {/* PROJETS FINANCÉS EN COURS */}
+      <section className="py-14 mt-6" style={{ background: PARCHMENT_ALT }}>
+        <div className="max-w-6xl mx-auto px-4">
+          <SectionHeading roman="II." title="Projets financés en cours" />
+          <article className="bg-white overflow-hidden" style={{ boxShadow: SHADOW, border: `1px solid ${LINE}` }}>
             {EN_COURS.map((p, i) => (
-              <div key={p.acronyme} className="px-5 py-5">
+              <div key={p.acronyme} className="px-5 py-5" style={{ borderTop: i === 0 ? "none" : `1px solid ${LINE}` }}>
                 <div className="flex flex-col md:flex-row md:items-start md:gap-4 mb-3">
                   <span
-                    className="inline-flex shrink-0 items-center justify-center rounded-lg px-2.5 py-1 text-[11px] font-bold tracking-widest"
-                    style={{ background: NAVY, color: GOLD, fontFamily: "Georgia, serif" }}
+                    className="inline-flex shrink-0 items-center justify-center px-2.5 py-1 text-[11px] font-bold tracking-widest"
+                    style={{ background: NAVY, color: GOLD, fontFamily: "Georgia, serif", borderRadius: 4 }}
                   >
                     {p.acronyme}
                   </span>
-                  <h3 className="font-bold text-[15px] md:text-base leading-snug mt-1 md:mt-0" style={{ color: NAVY }}>
+                  <h3 className="font-bold text-[15px] md:text-base leading-snug mt-1 md:mt-0" style={{ color: NAVY, fontFamily: FONT }}>
                     {p.intitule}
                   </h3>
                 </div>
                 <div className="grid md:grid-cols-6 gap-3 text-xs md:text-sm mt-3">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Financement</p>
-                    <p className="text-[#444] leading-relaxed">{p.financement}</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Montant</p>
-                    <p className="text-[#444] leading-relaxed">{p.montant}</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Période</p>
-                    <p className="text-[#444] leading-relaxed">{p.periode}</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Pilote</p>
-                    <p className="text-[#444] leading-relaxed">{p.pilote}</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Partenaires</p>
-                    <p className="text-[#444] leading-relaxed">{p.partenaires}</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Statut</p>
+                  <Field label="Financement">
+                    <p className="leading-relaxed" style={{ color: INK_SOFT, fontFamily: FONT }}>{p.financement}</p>
+                  </Field>
+                  <Field label="Montant">
+                    <p className="leading-relaxed" style={{ color: INK_SOFT, fontFamily: FONT }}>{p.montant}</p>
+                  </Field>
+                  <Field label="Période">
+                    <p className="leading-relaxed" style={{ color: INK_SOFT, fontFamily: FONT }}>{p.periode}</p>
+                  </Field>
+                  <Field label="Pilote">
+                    <p className="leading-relaxed" style={{ color: INK_SOFT, fontFamily: FONT }}>{p.pilote}</p>
+                  </Field>
+                  <Field label="Partenaires">
+                    <p className="leading-relaxed" style={{ color: INK_SOFT, fontFamily: FONT }}>{p.partenaires}</p>
+                  </Field>
+                  <Field label="Statut">
                     <span
-                      className="inline-block px-2.5 py-1 rounded text-[11px] font-semibold"
-                      style={{ background: "rgba(26,58,92,0.08)", color: NAVY }}
+                      className="inline-block px-2.5 py-1 text-[11px] font-semibold"
+                      style={{ background: "rgba(200,168,75,0.14)", color: "#806724", fontFamily: FONT, borderRadius: 999 }}
                     >
                       {p.statut}
                     </span>
-                  </div>
+                  </Field>
                 </div>
               </div>
             ))}
-          </div>
+          </article>
+        </div>
+      </section>
+
+      {/* PROCHAINS APPELS */}
+      <section className="max-w-6xl mx-auto px-4 pt-14 pb-4">
+        <SectionHeading roman="III." title="Prochains appels à propositions" />
+        <article className="bg-white overflow-hidden" style={{ boxShadow: SHADOW, border: `1px solid ${LINE}` }}>
+          {APPELS_FUTURS.map((a, i) => (
+            <div
+              key={a.date_limite + a.financement}
+              className="grid md:grid-cols-[1fr_1.1fr_1.5fr_1fr_1fr_1.2fr] gap-3 px-5 py-4 text-sm items-start"
+              style={{ borderTop: i === 0 ? "none" : `1px solid ${LINE}` }}
+            >
+              <Field label="Date limite">
+                <p className="font-semibold" style={{ color: NAVY, fontFamily: FONT }}>{a.date_limite}</p>
+              </Field>
+              <Field label="Appel">
+                <p className="font-semibold" style={{ color: NAVY, fontFamily: FONT }}>{a.financement}</p>
+              </Field>
+              <Field label="Type">
+                <p className="leading-relaxed" style={{ color: INK_SOFT, fontFamily: FONT }}>{a.type}</p>
+              </Field>
+              <Field label="Montant max">
+                <p style={{ color: INK_SOFT, fontFamily: FONT }}>{a.montant_max}</p>
+              </Field>
+              <Field label="Axes">
+                <p style={{ color: INK_SOFT, fontFamily: FONT }}>{a.axe}</p>
+              </Field>
+              <Field label="Contact">
+                <p className="text-[13px] leading-relaxed" style={{ color: INK_SOFT, fontFamily: FONT }}>{a.contact}</p>
+              </Field>
+            </div>
+          ))}
         </article>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 pb-12">
-        <h2
-          className="text-2xl font-bold mb-6 pb-2 inline-block"
-          style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `3px solid ${GOLD}` }}
-        >
-          Prochains appels à propositions
-        </h2>
-        <article className="rounded-lg border overflow-hidden" style={{ borderColor: "#e2e8f0" }}>
-          <div className="bg-white divide-y divide-gray-100">
-            {APPELS_FUTURS.map((a) => (
-              <div
-                key={a.date_limite + a.financement}
-                className="grid md:grid-cols-[1fr_1.1fr_1.5fr_1fr_1fr_1.2fr] gap-3 px-5 py-4 text-sm items-start"
-              >
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Date limite</p>
-                  <p className="font-semibold" style={{ color: NAVY }}>{a.date_limite}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Appel</p>
-                  <p className="font-semibold" style={{ color: NAVY }}>{a.financement}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Type</p>
-                  <p className="text-[#444] leading-relaxed">{a.type}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Montant max</p>
-                  <p className="text-[#444]">{a.montant_max}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Axes</p>
-                  <p className="text-[#444]">{a.axe}</p>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-[#8a8a8a] mb-1">Contact</p>
-                  <p className="text-[#444] text-[13px] leading-relaxed">{a.contact}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </article>
-      </section>
-
-      <section style={{ background: "#f6f6f6" }} className="py-12 px-4">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6">
-          <div className="rounded-lg border p-6" style={{ background: "#fff", borderColor: "#e2e8f0" }}>
-            <h3
-              className="text-xl font-bold mb-3 pb-2 inline-block"
-              style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `3px solid ${GOLD}` }}
+      {/* COMMENT SOUMETTRE & APPUI */}
+      <section className="py-14 mt-6" style={{ background: PARCHMENT_ALT }}>
+        <div className="max-w-6xl mx-auto px-4">
+          <SectionHeading roman="IV." title="Comment soumettre & appui au montage" />
+          <div className="grid md:grid-cols-2 gap-6 pt-2">
+            <div
+              className="p-6 bg-white"
+              style={{ boxShadow: SHADOW, border: `1px solid ${LINE}`, borderTop: `3px solid ${GOLD}` }}
             >
-              Comment soumettre ?
-            </h3>
-            <ul className="space-y-2.5 text-sm text-[#444]">
-              <li>✦ <strong style={{color: NAVY}}>Étape 1</strong> · Pré-candidature — synopsis 3 p. au VPR 3 mois avant DL</li>
-              <li>✦ <strong style={{color: NAVY}}>Étape 2</strong> · Avis éthique (CONE) + avis laboratoire d'affectation</li>
-              <li>✦ <strong style={{color: NAVY}}>Étape 3</strong> · Montage budgétaire + convention service recherche</li>
-              <li>✦ <strong style={{color: NAVY}}>Étape 4</strong> · Soumission + accusé de réception</li>
-              <li>✦ <strong style={{color: NAVY}}>Étape 5</strong> · Notification · signature convention · lancement</li>
-            </ul>
-          </div>
-          <div className="rounded-lg border p-6" style={{ background: "#fff", borderColor: "#e2e8f0" }}>
-            <h3
-              className="text-xl font-bold mb-3 pb-2 inline-block"
-              style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `3px solid ${GOLD}` }}
+              <h3 className="text-lg font-bold mb-4" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
+                Comment soumettre ?
+              </h3>
+              <ul className="space-y-2.5 text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                {SOUMETTRE.map((s) => (
+                  <li key={s.strong} className="flex gap-2">
+                    <span className="shrink-0" style={{ color: GOLD }} aria-hidden>
+                      ✦
+                    </span>
+                    <span className="leading-relaxed">
+                      <strong style={{ color: NAVY }}>{s.strong}</strong> {s.rest}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div
+              className="p-6 bg-white"
+              style={{ boxShadow: SHADOW, border: `1px solid ${LINE}`, borderTop: `3px solid ${GOLD}` }}
             >
-              Appui au montage
-            </h3>
-            <ul className="space-y-2.5 text-sm text-[#444]">
-              <li>✦ Service Recherche & Partenariats — Campus Toukra, Bât. A, A-118</li>
-              <li>✦ VPR : Prof. Mahamat Youssouf · vice-rectorat-recherche@undt.edu.td</li>
-              <li>✦ Appui juridique & budgétaire · 12 points d'appui facultaires</li>
-              <li>✦ Newsletter mensuelle : <strong>recherche-actus@undt.edu.td</strong> (abonnement libre)</li>
-              <li>✦ Calendrier : appels-projets-recherche.undt.edu.td</li>
-            </ul>
+              <h3 className="text-lg font-bold mb-4" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
+                Appui au montage
+              </h3>
+              <ul className="space-y-2.5 text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                {APPUI.map((a) => (
+                  <li key={a} className="flex gap-2">
+                    <span className="shrink-0" style={{ color: GOLD }} aria-hidden>
+                      ✦
+                    </span>
+                    <span className="leading-relaxed">{a}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
