@@ -1,7 +1,60 @@
 import { BRAND } from "../../Utils/brand";
 
 const NAVY = BRAND.navy;
+const NAVY_DEEP = BRAND.navyDeep;
 const GOLD = BRAND.gold;
+const PARCHMENT = "#FAF8F3";
+const PARCHMENT_ALT = "#F3EEE1";
+const LINE = "#DDD6C4";
+const INK_SOFT = "#565553";
+const SHADOW = "0 4px 18px -8px rgba(20,30,55,0.18)";
+// Matches the sans-serif used in the site footer / HistoireMission page.
+const FONT = "'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif";
+
+const STATS = [
+  { k: "Étudiants en mobilité / an", v: "250+" },
+  { k: "Universités partenaires", v: "35+" },
+  { k: "Pays de destination", v: "18" },
+  { k: "Places financées ERASMUS+", v: "160" },
+];
+
+const PARCOURS = [
+  {
+    type: "Semestre d'études (LICENCE)",
+    duree: "4 – 6 mois",
+    credits: "30 ECTS",
+    destinations: "France, Belgique, Cameroun, Niger, Sénégal",
+    bourses: "ERASMUS+, AUF, fonds propres",
+  },
+  {
+    type: "Année d'études (MASTER)",
+    duree: "9 mois",
+    credits: "60 ECTS",
+    destinations: "France, Égypte, Afrique du Sud, Nigeria",
+    bourses: "AU, Campus France, BCE",
+  },
+  {
+    type: "Stage professionnel court",
+    duree: "2 – 3 mois",
+    credits: "15 ECTS",
+    destinations: "18 pays africains & européens",
+    bourses: "ERASMUS+ Stages, AUF",
+  },
+  {
+    type: "Double diplôme Master",
+    duree: "2 ans (M1 + M2)",
+    credits: "120 ECTS",
+    destinations: "Bordeaux, Montpellier, Yaoundé I, Niamey",
+    bourses: "ACE Impact, AUF, AU",
+  },
+  {
+    type: "Thèse en codirection",
+    duree: "3 ans",
+    credits: "Diplôme conjoint",
+    destinations: "France, Cameroun, Niger, Égypte",
+    bourses: "Bourses de thèse gouvernementales & CNRS",
+  },
+];
 
 const PROGRAMMES = [
   {
@@ -46,55 +99,47 @@ const PROGRAMMES = [
   },
 ];
 
-const PARCOURS = [
-  {
-    type: "Semestre d'études (LICENCE)",
-    duree: "4 – 6 mois",
-    credits: "30 ECTS",
-    destinations: "France, Belgique, Cameroun, Niger, Sénégal",
-    bourses: "ERASMUS+, AUF, fonds propres",
-  },
-  {
-    type: "Année d'études (MASTER)",
-    duree: "9 mois",
-    credits: "60 ECTS",
-    destinations: "France, Égypte, Afrique du Sud, Nigeria",
-    bourses: "AU, Campus France, BCE",
-  },
-  {
-    type: "Stage professionnel court",
-    duree: "2 – 3 mois",
-    credits: "15 ECTS",
-    destinations: "18 pays africains & européens",
-    bourses: "ERASMUS+ Stages, AUF",
-  },
-  {
-    type: "Double diplôme Master",
-    duree: "2 ans (M1 + M2)",
-    credits: "120 ECTS",
-    destinations: "Bordeaux, Montpellier, Yaoundé I, Niamey",
-    bourses: "ACE Impact, AUF, AU",
-  },
-  {
-    type: "Thèse en codirection",
-    duree: "3 ans",
-    credits: "Diplôme conjoint",
-    destinations: "France, Cameroun, Niger, Égypte",
-    bourses: "Bourses de thèse gouvernementales & CNRS",
-  },
+const CANDIDATER = [
+  { strong: "1. S'informer", rest: "— Réunions BCI en janvier & février" },
+  { strong: "2. Déposer", rest: "— Dossier sur candidatures-international.undt.edu.td" },
+  { strong: "3. Sélection", rest: "— Jury facultaire + classement sur dossier" },
+  { strong: "4. Entretien", rest: "— Pour les places les plus financées" },
+  { strong: "5. Attribution", rest: "— Résultats, signature de la convention" },
+  { strong: "6. Préparatifs", rest: "— Visa, logement, équivalences, réunion départ" },
 ];
+
+const ELIGIBILITE = [
+  "Être régulièrement inscrit à l'UDN (L2+, M1, D1)",
+  "Moyenne générale minimale : 12 / 20 (semestre précédent)",
+  "Niveau linguistique : B1 en français / B1-B2 en anglais selon destination",
+  "Pour ERASMUS+ : 2ème année d'études minimum, nationalité tchadienne",
+  "Aucune dette envers l'université (certificat de non-dette)",
+  "Projet d'études cohérent & lettre de motivation argumentée",
+];
+
+function SectionHeading({ roman, title }: { roman: string; title: string }) {
+  return (
+    <div className="flex items-baseline gap-3 mb-8">
+      <span className="text-sm" style={{ color: GOLD, fontFamily: FONT }}>
+        {roman}
+      </span>
+      <h2 className="text-2xl font-bold pb-2 flex-1" style={{ color: NAVY, fontFamily: FONT, borderBottom: `2px solid ${NAVY}` }}>
+        {title}
+      </h2>
+    </div>
+  );
+}
 
 export default function ProgrammesEchange() {
   return (
-    <div className="bg-white min-h-screen">
+    <div style={{ background: PARCHMENT }} className="min-h-screen">
+      {/* EN-TÊTE */}
       <section
         className="py-16 px-4 md:px-[50px]"
-        style={{
-          background: `linear-gradient(180deg, ${BRAND.navyDeep} 0%, ${NAVY} 100%)`,
-        }}
+        style={{ background: `linear-gradient(180deg, ${NAVY_DEEP} 0%, ${NAVY} 100%)` }}
       >
         <div className="max-w-6xl mx-auto">
-          <p className="uppercase tracking-[0.2em] text-xs mb-3" style={{ color: GOLD }}>
+          <p className="uppercase tracking-[0.2em] text-xs mb-3" style={{ color: GOLD, fontFamily: FONT }}>
             International
           </p>
           <h1
@@ -103,7 +148,7 @@ export default function ProgrammesEchange() {
           >
             Programmes d'échange
           </h1>
-          <p className="text-lg text-white/80 max-w-3xl leading-relaxed">
+          <p className="text-lg text-white/80 max-w-3xl leading-relaxed" style={{ fontFamily: FONT }}>
             Plus de 250 étudiants par an partent en mobilité grâce à des programmes
             financés par l'Union Européenne, l'Union Africaine, l'UNESCO et l'AUF.
             Que ce soit pour un semestre, un stage ou un double diplôme, l'UDN
@@ -112,20 +157,24 @@ export default function ProgrammesEchange() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-4 gap-4 text-sm">
-          {[
-            { k: "Étudiants en mobilité / an", v: "250+" },
-            { k: "Universités partenaires", v: "35+" },
-            { k: "Pays de destination", v: "18" },
-            { k: "Places financées ERASMUS+", v: "160" },
-          ].map((s) => (
+      {/* EN BREF */}
+      <section className="max-w-6xl mx-auto px-4 pt-14 pb-4">
+        <SectionHeading roman="I." title="En bref" />
+        <div className="grid md:grid-cols-4 gap-6 pt-2">
+          {STATS.map((s) => (
             <div
               key={s.k}
-              className="p-4 rounded-lg border text-center"
-              style={{ background: "#f8fafc", borderTop: `3px solid ${GOLD}`, borderColor: "#e2e8f0" }}
+              className="text-center p-5 bg-white"
+              style={{
+                boxShadow: SHADOW,
+                border: `1px solid ${LINE}`,
+                borderTop: `3px solid ${GOLD}`,
+                backgroundImage: `linear-gradient(160deg, #ffffff 0%, ${PARCHMENT} 100%)`,
+              }}
             >
-              <p className="text-xs uppercase tracking-wider text-[#646464] mb-1">{s.k}</p>
+              <p className="text-xs uppercase tracking-wider mb-2" style={{ color: GOLD, fontFamily: FONT, letterSpacing: "0.1em" }}>
+                {s.k}
+              </p>
               <p className="text-xl font-bold" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
                 {s.v}
               </p>
@@ -134,68 +183,75 @@ export default function ProgrammesEchange() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 pb-12">
-        <h2
-          className="text-2xl font-bold mb-6 pb-2 inline-block"
-          style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `3px solid ${GOLD}` }}
-        >
-          Types de parcours
-        </h2>
-        <article className="rounded-lg border overflow-hidden" style={{ borderColor: "#e2e8f0" }}>
-          <div className="px-5 py-4" style={{ background: NAVY }}>
-            <h2 className="font-bold text-white text-lg" style={{ fontFamily: "Georgia, serif" }}>
-              Offre de mobilité LMD
-            </h2>
-          </div>
-          <div className="bg-white divide-y divide-gray-100">
-            {PARCOURS.map((p) => (
-              <div
-                key={p.type}
-                className="grid md:grid-cols-[1.4fr_0.8fr_0.9fr_1.4fr_1.3fr] gap-3 px-5 py-3.5 text-sm items-center"
-              >
-                <div className="font-semibold" style={{ color: NAVY }}>{p.type}</div>
-                <div className="text-[#444]">{p.duree}</div>
-                <div className="text-[#444]">{p.credits}</div>
-                <div className="text-[#444]">{p.destinations}</div>
-                <div className="text-[#444]">
-                  <span
-                    className="inline-block px-2 py-0.5 rounded text-xs"
-                    style={{ background: "rgba(200,168,75,0.12)", color: "#806724" }}
-                  >
-                    {p.bourses}
-                  </span>
+      {/* TYPES DE PARCOURS */}
+      <section className="py-14 mt-6" style={{ background: PARCHMENT_ALT }}>
+        <div className="max-w-6xl mx-auto px-4">
+          <SectionHeading roman="II." title="Types de parcours" />
+          <article className="bg-white overflow-hidden" style={{ boxShadow: SHADOW, border: `1px solid ${LINE}` }}>
+            <div
+              className="px-5 py-4"
+              style={{ background: `linear-gradient(135deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)`, borderBottom: `2px solid ${GOLD}` }}
+            >
+              <h3 className="font-bold text-lg" style={{ color: GOLD, fontFamily: FONT }}>
+                Offre de mobilité LMD
+              </h3>
+            </div>
+            <div>
+              {PARCOURS.map((p, i) => (
+                <div
+                  key={p.type}
+                  className="grid md:grid-cols-[1.4fr_0.8fr_0.9fr_1.4fr_1.3fr] gap-3 px-5 py-3.5 text-sm items-center"
+                  style={{ borderTop: i === 0 ? "none" : `1px solid ${LINE}` }}
+                >
+                  <div className="font-semibold" style={{ color: NAVY, fontFamily: FONT }}>
+                    {p.type}
+                  </div>
+                  <div style={{ color: INK_SOFT, fontFamily: FONT }}>{p.duree}</div>
+                  <div style={{ color: INK_SOFT, fontFamily: FONT }}>{p.credits}</div>
+                  <div style={{ color: INK_SOFT, fontFamily: FONT }}>{p.destinations}</div>
+                  <div>
+                    <span
+                      className="inline-block px-2 py-0.5 text-xs"
+                      style={{ background: "rgba(200,168,75,0.14)", color: "#806724", fontFamily: FONT, borderRadius: 999 }}
+                    >
+                      {p.bourses}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </article>
+              ))}
+            </div>
+          </article>
+        </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 pb-12">
-        <h2
-          className="text-2xl font-bold mb-6 pb-2 inline-block"
-          style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `3px solid ${GOLD}` }}
-        >
-          Programmes clés
-        </h2>
-        <div className="grid md:grid-cols-2 gap-6">
+      {/* PROGRAMMES CLÉS */}
+      <section className="max-w-6xl mx-auto px-4 pt-14 pb-4">
+        <SectionHeading roman="III." title="Programmes clés" />
+        <div className="grid md:grid-cols-2 gap-6 pt-2">
           {PROGRAMMES.map((p) => (
             <article
               key={p.titre}
-              className="rounded-lg border overflow-hidden"
-              style={{ borderColor: "#e2e8f0" }}
+              className="bg-white overflow-hidden"
+              style={{ boxShadow: SHADOW, border: `1px solid ${LINE}` }}
             >
-              <div className="px-6 py-5 flex items-center gap-3" style={{ background: NAVY }}>
-                <span className="text-2xl">{p.icone}</span>
-                <h3 className="font-bold text-white text-lg" style={{ fontFamily: "Georgia, serif" }}>
+              <div
+                className="px-6 py-5 flex items-center gap-3"
+                style={{ background: `linear-gradient(135deg, ${NAVY} 0%, ${NAVY_DEEP} 100%)`, borderBottom: `2px solid ${GOLD}` }}
+              >
+                <span className="text-2xl" aria-hidden>
+                  {p.icone}
+                </span>
+                <h3 className="font-bold text-lg" style={{ color: GOLD, fontFamily: FONT }}>
                   {p.titre}
                 </h3>
               </div>
-              <div className="p-6 bg-white">
-                <ul className="space-y-2 text-sm text-[#444]">
+              <div className="p-6">
+                <ul className="space-y-2 text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
                   {p.detail.map((d) => (
                     <li key={d} className="flex gap-2">
-                      <span style={{ color: GOLD }}>✦</span>
+                      <span className="shrink-0" style={{ color: GOLD }} aria-hidden>
+                        ✦
+                      </span>
                       <span className="leading-relaxed">{d}</span>
                     </li>
                   ))}
@@ -206,45 +262,49 @@ export default function ProgrammesEchange() {
         </div>
       </section>
 
-      <section style={{ background: "#f6f6f6" }} className="py-12 px-4">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6">
-          <div
-            className="rounded-lg border p-6"
-            style={{ background: "#fff", borderColor: "#e2e8f0" }}
-          >
-            <h3
-              className="text-xl font-bold mb-3 pb-2 inline-block"
-              style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `3px solid ${GOLD}` }}
+      {/* CANDIDATER & ÉLIGIBILITÉ */}
+      <section className="py-14 mt-6" style={{ background: PARCHMENT_ALT }}>
+        <div className="max-w-6xl mx-auto px-4">
+          <SectionHeading roman="IV." title="Comment candidater & conditions" />
+          <div className="grid md:grid-cols-2 gap-6 pt-2">
+            <div
+              className="p-6 bg-white"
+              style={{ boxShadow: SHADOW, border: `1px solid ${LINE}`, borderTop: `3px solid ${GOLD}` }}
             >
-              Comment candidater ?
-            </h3>
-            <ul className="space-y-2 text-sm text-[#444]">
-              <li>✦ <strong style={{color: NAVY}}>1. S'informer</strong> — Réunions BCI en janvier & février</li>
-              <li>✦ <strong style={{color: NAVY}}>2. Déposer</strong> — Dossier sur candidatures-international.undt.edu.td</li>
-              <li>✦ <strong style={{color: NAVY}}>3. Sélection</strong> — Jury facultaire + classement sur dossier</li>
-              <li>✦ <strong style={{color: NAVY}}>4. Entretien</strong> — Pour les places les plus financées</li>
-              <li>✦ <strong style={{color: NAVY}}>5. Attribution</strong> — Résultats, signature de la convention</li>
-              <li>✦ <strong style={{color: NAVY}}>6. Préparatifs</strong> — Visa, logement, équivalences, réunion départ</li>
-            </ul>
-          </div>
-          <div
-            className="rounded-lg border p-6"
-            style={{ background: "#fff", borderColor: "#e2e8f0" }}
-          >
-            <h3
-              className="text-xl font-bold mb-3 pb-2 inline-block"
-              style={{ color: NAVY, fontFamily: "Georgia, serif", borderBottom: `3px solid ${GOLD}` }}
+              <h3 className="text-lg font-bold mb-4" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
+                Comment candidater ?
+              </h3>
+              <ul className="space-y-2 text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                {CANDIDATER.map((c) => (
+                  <li key={c.strong} className="flex gap-2">
+                    <span className="shrink-0" style={{ color: GOLD }} aria-hidden>
+                      ✦
+                    </span>
+                    <span className="leading-relaxed">
+                      <strong style={{ color: NAVY }}>{c.strong}</strong> {c.rest}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div
+              className="p-6 bg-white"
+              style={{ boxShadow: SHADOW, border: `1px solid ${LINE}`, borderTop: `3px solid ${GOLD}` }}
             >
-              Conditions d'éligibilité
-            </h3>
-            <ul className="space-y-2 text-sm text-[#444]">
-              <li>✦ Être régulièrement inscrit à l'UDN (L2+, M1, D1)</li>
-              <li>✦ Moyenne générale minimale : <strong style={{color: NAVY}}>12 / 20</strong> (semestre précédent)</li>
-              <li>✦ Niveau linguistique : B1 en français / B1/B2 en anglais selon destination</li>
-              <li>✦ Pour ERASMUS+ : 2ème année d'études minimum, nationalité tchadienne</li>
-              <li>✦ Aucune dette envers l'université (certificat de non-dette)</li>
-              <li>✦ Projet d'études cohérent & lettre de motivation argumentée</li>
-            </ul>
+              <h3 className="text-lg font-bold mb-4" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
+                Conditions d'éligibilité
+              </h3>
+              <ul className="space-y-2 text-sm" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                {ELIGIBILITE.map((e) => (
+                  <li key={e} className="flex gap-2">
+                    <span className="shrink-0" style={{ color: GOLD }} aria-hidden>
+                      ✦
+                    </span>
+                    <span className="leading-relaxed">{e}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
