@@ -1,7 +1,23 @@
 import { BRAND } from "../../Utils/brand";
 
 const NAVY = BRAND.navy;
+const NAVY_DEEP = BRAND.navyDeep;
 const GOLD = BRAND.gold;
+const PARCHMENT = "#FAF8F3";
+const PARCHMENT_ALT = "#F3EEE1";
+const LINE = "#DDD6C4";
+const INK = "#2B2B2B";
+const INK_SOFT = "#565553";
+const SHADOW = "0 4px 18px -8px rgba(20,30,55,0.18)";
+// Matches the sans-serif used in the site footer / HistoireMission page.
+const FONT = "'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif";
+
+const STATS = [
+  { k: "Actualités publiées (2024)", v: "184" },
+  { k: "Catégories", v: "8" },
+  { k: "Abonnés newsletter", v: "22 500+" },
+  { k: "Communiqués publiés", v: "39" },
+];
 
 const NOUVELLES = [
   {
@@ -81,12 +97,26 @@ const CATEGORIES = [
   "Événements",
 ];
 
+function SectionHeading({ roman, title }: { roman: string; title: string }) {
+  return (
+    <div className="flex items-baseline gap-3 mb-8">
+      <span className="text-sm" style={{ color: GOLD, fontFamily: FONT }}>
+        {roman}
+      </span>
+      <h2 className="text-2xl font-bold pb-2 flex-1" style={{ color: NAVY, fontFamily: FONT, borderBottom: `2px solid ${NAVY}` }}>
+        {title}
+      </h2>
+    </div>
+  );
+}
+
 export default function Nouvelles() {
   return (
-    <div className="bg-white min-h-screen">
+    <div style={{ background: PARCHMENT }} className="min-h-screen">
+      {/* EN-TÊTE */}
       <section
         className="py-16 px-4 md:px-[50px]"
-        style={{ background: `linear-gradient(180deg, ${BRAND.navyDeep} 0%, ${NAVY} 100%)` }}
+        style={{ background: `linear-gradient(180deg, ${NAVY_DEEP} 0%, ${NAVY} 100%)` }}
       >
         <div className="max-w-6xl mx-auto">
           <p className="uppercase tracking-[0.2em] text-xs mb-3" style={{ color: GOLD }}>
@@ -106,36 +136,44 @@ export default function Nouvelles() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-4 gap-4 text-sm">
-          {[
-            { k: "Actualités publiées (2024)", v: "184" },
-            { k: "Catégories", v: "8" },
-            { k: "Abonnés newsletter", v: "22 500+" },
-            { k: "Communiqués publiés", v: "39" },
-          ].map((s) => (
+      {/* I. VUE D'ENSEMBLE */}
+      <section className="max-w-5xl mx-auto px-4 pt-14 pb-4">
+        <SectionHeading roman="I." title="Vue d'ensemble" />
+        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 pt-2">
+          {STATS.map((s) => (
             <div
               key={s.k}
-              className="p-4 rounded-lg border text-center"
-              style={{ background: "#f8fafc", borderTop: `3px solid ${GOLD}`, borderColor: "#e2e8f0" }}
+              className="bg-white p-6 text-center"
+              style={{
+                boxShadow: SHADOW,
+                border: `1px solid ${LINE}`,
+                borderTop: `3px solid ${GOLD}`,
+                backgroundImage: `linear-gradient(160deg, #ffffff 0%, ${PARCHMENT} 100%)`,
+              }}
             >
-              <p className="text-xs uppercase tracking-wider text-[#646464] mb-1">{s.k}</p>
-              <p className="text-xl font-bold" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>{s.v}</p>
+              <p className="text-xs uppercase tracking-wider mb-2" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                {s.k}
+              </p>
+              <p className="text-2xl font-bold" style={{ color: NAVY, fontFamily: FONT }}>
+                {s.v}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 pb-10">
-        <div className="flex flex-wrap gap-2">
+      {/* II. FILTRER PAR CATÉGORIE */}
+      <section className="max-w-5xl mx-auto px-4 pt-8 pb-10">
+        <SectionHeading roman="II." title="Filtrer par catégorie" />
+        <div className="flex flex-wrap gap-2 pt-2">
           {CATEGORIES.map((c, i) => (
             <button
               key={c}
-              className="text-sm px-3 py-1.5 rounded-full transition"
+              className="text-sm px-4 py-1.5 transition"
               style={
                 i === 0
-                  ? { background: NAVY, color: "#fff", border: `1px solid ${NAVY}` }
-                  : { background: "#fff", color: NAVY, border: "1px solid #cbd5e1" }
+                  ? { background: NAVY, color: "#fff", border: `1px solid ${NAVY}`, fontFamily: FONT }
+                  : { background: "#fff", color: INK, border: `1px solid ${LINE}`, fontFamily: FONT }
               }
             >
               {c}
@@ -144,49 +182,58 @@ export default function Nouvelles() {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 pb-16 grid md:grid-cols-2 gap-6">
-        {NOUVELLES.map((n) => (
-          <article
-            key={n.titre}
-            className="rounded-lg border overflow-hidden hover:shadow-md transition"
-            style={{ borderColor: "#e2e8f0", background: "#fff" }}
-          >
-            <div
-              className="h-44 w-full bg-center bg-cover"
-              style={{
-                backgroundImage: `url(https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=${encodeURIComponent(
-                  n.image_prompt
-                )}&image_size=landscape_16_9)`,
-              }}
-            />
-            <div className="p-5 space-y-3">
-              <div className="flex items-center justify-between gap-3">
-                <span
-                  className="text-xs font-semibold px-2 py-1 rounded inline-block"
-                  style={{ background: "#e8f0f8", color: NAVY }}
-                >
-                  {n.categorie}
-                </span>
-                <span className="text-xs text-[#646464]" style={{ fontFamily: "monospace" }}>{n.date}</span>
-              </div>
-              <a
-                href="#"
-                className="font-bold text-[16px] leading-snug block hover:underline"
-                style={{ color: NAVY, fontFamily: "Georgia, serif" }}
+      {/* III. DERNIÈRES ACTUALITÉS — document-style cards */}
+      <section className="py-14" style={{ background: PARCHMENT_ALT }}>
+        <div className="max-w-5xl mx-auto px-4">
+          <SectionHeading roman="III." title="Dernières actualités" />
+          <div className="grid md:grid-cols-2 gap-8 pt-2">
+            {NOUVELLES.map((n) => (
+              <article
+                key={n.titre}
+                className="bg-white overflow-hidden transition hover:-translate-y-0.5"
+                style={{ border: `1px solid ${LINE}`, boxShadow: SHADOW }}
               >
-                {n.titre}
-              </a>
-              <p className="text-sm text-[#646464] leading-relaxed">{n.extrait}</p>
-              <a
-                href="#"
-                className="inline-flex items-center gap-1 text-sm font-semibold"
-                style={{ color: GOLD }}
-              >
-                Lire la suite →
-              </a>
-            </div>
-          </article>
-        ))}
+                <div
+                  className="h-44 w-full bg-center bg-cover"
+                  style={{
+                    backgroundImage: `url(https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=${encodeURIComponent(
+                      n.image_prompt
+                    )}&image_size=landscape_16_9)`,
+                    borderBottom: `3px solid ${GOLD}`,
+                  }}
+                />
+                <div className="p-6 space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <span
+                      className="text-xs font-semibold px-2.5 py-1 inline-block"
+                      style={{ background: PARCHMENT_ALT, color: NAVY, border: `1px solid ${LINE}`, fontFamily: FONT }}
+                    >
+                      {n.categorie}
+                    </span>
+                    <span className="text-xs" style={{ color: INK_SOFT, fontFamily: "monospace" }}>{n.date}</span>
+                  </div>
+                  <a
+                    href="#"
+                    className="font-bold text-[16px] leading-snug block hover:underline"
+                    style={{ color: NAVY, fontFamily: FONT }}
+                  >
+                    {n.titre}
+                  </a>
+                  <p className="text-sm leading-relaxed" style={{ color: INK_SOFT, fontFamily: FONT }}>
+                    {n.extrait}
+                  </p>
+                  <a
+                    href="#"
+                    className="inline-flex items-center gap-1 text-sm font-semibold"
+                    style={{ color: GOLD, fontFamily: FONT }}
+                  >
+                    Lire la suite →
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );
