@@ -20,6 +20,10 @@ import ProgrammesEchange from "./Components/Universites/International/Programmes
 import CooperationDoublesDiplomes from "./Components/Universites/International/CooperationDoublesDiplomes";
 import Partenariats from "./Components/Universites/International/Partenariats";
 import Nouvelles_Evenements from "./Components/Universites/Nouvelles_&_Evenements/Nouvelles_&_Evenements";
+import Nouvelles from "./Components/Universites/Nouvelles_&_Evenements/Nouvelles";
+import Evenements from "./Components/Universites/Nouvelles_&_Evenements/Evenements";
+import CalendrierAcademique from "./Components/Universites/Nouvelles_&_Evenements/CalendrierAcademique";
+import Communiques from "./Components/Universites/Nouvelles_&_Evenements/Communiques";
 import Recherches from "./Components/Universites/Recherches/Recherches";
 import LaboratoiresCentres from "./Components/Universites/Recherches/LaboratoiresCentres";
 import Publications from "./Components/Universites/Recherches/Publications";
@@ -182,6 +186,38 @@ export default function AppRoutes() {
         element={
           <Mainlayout>
             <Nouvelles_Evenements />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/nouvelles-evenements/nouvelles"
+        element={
+          <Mainlayout>
+            <Nouvelles />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/nouvelles-evenements/evenements"
+        element={
+          <Mainlayout>
+            <Evenements />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/nouvelles-evenements/calendrier-academique"
+        element={
+          <Mainlayout>
+            <CalendrierAcademique />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/universite/nouvelles-evenements/communiques"
+        element={
+          <Mainlayout>
+            <Communiques />
           </Mainlayout>
         }
       />
