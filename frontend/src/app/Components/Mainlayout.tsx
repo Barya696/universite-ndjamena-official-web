@@ -18,60 +18,7 @@ interface NavItem {
   links?: NavLink[];
 }
 
-const NAV_ITEMS: NavItem[] = [
-  {
-    label: "À propos",
-    href: "/universite/a-propos",
-    links: [
-      { label: "Histoire & Mission", href: "/universite/a-propos/histoire-mission" },
-      { label: "Mot du Recteur", href: "/universite/a-propos/mot-recteur" },
-      { label: "Gouvernance", href: "/universite/a-propos/gouvernance" },
-      { label: "Chiffres clés", href: "/universite/a-propos/chiffres-cles" },
-      { label: "Nos Politiques", href: "/universite/a-propos/nos-politiques" },
-      { label: "Personels", href: "/universite/a-propos/personels" },
-    ],
-  },
-  {
-    label: "Formations",
-    href: "/universite/formations",
-    links: [
-      { label: "Resources academique", href: "/universite/formations/resources-academique" },
-      { label: "License", href: "/universite/formations/license" },
-      { label: "Master", href: "/universite/formations/master" },
-      { label: "Doctorat", href: "/universite/formations/doctorat" },
-    ],
-  },
-  {
-    label: "International",
-    href: "/universite/international",
-    links: [
-      { label: "Étudiants internationaux", href: "/universite/international/etudiants-internationaux" },
-      { label: "Programmes d'échange", href: "/universite/international/programmes-echange" },
-      { label: "Coopération & doubles diplômes", href: "/universite/international/cooperation-doubles-diplomes" },
-      { label: "Partenariats", href: "/universite/international/partenariats" },
-    ],
-  },
-  {
-    label: "Actualités",
-    href: "/universite/nouvelles-evenements",
-    links: [
-      { label: "Nouvelles", href: "/universite/nouvelles-evenements/nouvelles" },
-      { label: "Événements", href: "/universite/nouvelles-evenements/evenements" },
-      { label: "Calendrier académique", href: "/universite/nouvelles-evenements/calendrier-academique" },
-      { label: "Communiqués", href: "/universite/nouvelles-evenements/communiques" },
-    ],
-  },
-  {
-    label: "Recherches",
-    href: "/universite/recherches",
-    links: [
-      { label: "Laboratoires & centres", href: "/universite/recherches/laboratoires-centres" },
-      { label: "Publications", href: "/universite/recherches/publications" },
-      { label: "Appels à projets", href: "/universite/recherches/appels-projets" },
-      { label: "Axes de recherche", href: "/universite/recherches/axes-recherche" },
-    ],
-  },
-];
+const NAV_ITEMS: NavItem[] = [];
 
 export function UDNCrest({ size = 36 }: { size?: number }) {
   return (
@@ -132,63 +79,9 @@ const isTopBarActiveForPath = (pathname: string, item: NavItem) => {
 
 const TOPBAR_NAV_ITEMS: NavItem[] = [
   {
-    label: "Université",
+    label: "Accueil",
     href: "/",
     icon: <GraduationCap className="w-4 h-4 shrink-0" />,
-    links: [
-      {
-        label: "À propos",
-        href: "/universite/a-propos",
-        links: [
-          { label: "Histoire & Mission", href: "/universite/a-propos/histoire-mission" },
-          { label: "Mot du Recteur", href: "/universite/a-propos/mot-recteur" },
-          { label: "Gouvernance", href: "/universite/a-propos/gouvernance" },
-          { label: "Chiffres clés", href: "/universite/a-propos/chiffres-cles" },
-          { label: "Nos Politiques", href: "/universite/a-propos/nos-politiques" },
-          { label: "Personels", href: "/universite/a-propos/personels" },
-        ],
-      },
-      {
-        label: "Formations",
-        href: "/universite/formations",
-        links: [
-          { label: "Resources academique", href: "/universite/formations/resources-academique" },
-          { label: "License", href: "/universite/formations/license" },
-          { label: "Master", href: "/universite/formations/master" },
-          { label: "Doctorat", href: "/universite/formations/doctorat" },
-        ],
-      },
-      {
-        label: "Recherches",
-        href: "/universite/recherches",
-        links: [
-          { label: "Laboratoires & centres", href: "/universite/recherches/laboratoires-centres" },
-          { label: "Publications", href: "/universite/recherches/publications" },
-          { label: "Appels à projets", href: "/universite/recherches/appels-projets" },
-          { label: "Axes de recherche", href: "/universite/recherches/axes-recherche" },
-        ],
-      },
-      {
-        label: "International",
-        href: "/universite/international",
-        links: [
-          { label: "Étudiants internationaux", href: "/universite/international/etudiants-internationaux" },
-          { label: "Programmes d'échange", href: "/universite/international/programmes-echange" },
-          { label: "Coopération & doubles diplômes", href: "/universite/international/cooperation-doubles-diplomes" },
-          { label: "Partenariats", href: "/universite/international/partenariats" },
-        ],
-      },
-      {
-        label: "Nouvelles & Événements",
-        href: "/universite/nouvelles-evenements",
-        links: [
-          { label: "Nouvelles", href: "/universite/nouvelles-evenements/nouvelles" },
-          { label: "Événements", href: "/universite/nouvelles-evenements/evenements" },
-          { label: "Calendrier académique", href: "/universite/nouvelles-evenements/calendrier-academique" },
-          { label: "Communiqués", href: "/universite/nouvelles-evenements/communiques" },
-        ],
-      },
-    ],
   },
   {
     label: "Portail_Etudiant",
@@ -863,22 +756,19 @@ export default function Mainlayout({ children }: MainLayoutProps) {
             {
               heading: "L'Université",
               links: [
-                { label: "Histoire & Mission", href: "/universite/a-propos/histoire-mission" },
-                { label: "Gouvernance", href: "/universite/a-propos/gouvernance" },
-                { label: "Plan Stratégique", href: "/universite/a-propos/nos-politiques" },
-                { label: "Accréditations", href: "/universite/a-propos/chiffres-cles" },
-                { label: "Partenariats", href: "/universite/international" },
+                { label: "Accueil", href: "/" },
+                { label: "Candidature 2024–2025", href: "/candidature" },
+                { label: "Inscription en ligne", href: "/inscription" },
+                { label: "Portail étudiant", href: "/portail-etudiant" },
               ],
             },
             {
               heading: "Formations",
               links: [
-                { label: "Droit & Sciences Politiques", href: "/universite/formations" },
-                { label: "Lettres & Sciences Humaines", href: "/universite/formations" },
-                { label: "Sciences Exactes", href: "/universite/formations" },
-                { label: "Sciences de la Santé", href: "/universite/formations" },
-                { label: "Sciences Économiques", href: "/universite/formations" },
                 { label: "Candidature 2024–2025", href: "/candidature" },
+                { label: "Inscription en ligne", href: "/inscription" },
+                { label: "Bibliothèques", href: "/bibliotheque" },
+                { label: "Portail étudiant", href: "/portail-etudiant" },
               ],
             },
             {
@@ -895,12 +785,12 @@ export default function Mainlayout({ children }: MainLayoutProps) {
             {
               heading: "Contact & Médias",
               links: [
-                { label: "Campus Toukra", href: "/universite/a-propos" },
-                { label: "Campus Farcha", href: "/universite/a-propos" },
-                { label: "Campus Ardep-Djoumal", href: "/universite/a-propos" },
                 { label: "Presse & Médias", href: "/media" },
-                { label: "Actualités", href: "/universite/nouvelles-evenements" },
                 { label: "Inscription en ligne", href: "/inscription" },
+                { label: "Candidature 2024–2025", href: "/candidature" },
+                { label: "Portail étudiant", href: "/portail-etudiant" },
+                { label: "Bibliothèque", href: "/bibliotheque" },
+                { label: "Accueil", href: "/" },
               ],
             },
           ].map((col) => (
