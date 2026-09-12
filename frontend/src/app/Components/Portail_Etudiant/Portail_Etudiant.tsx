@@ -618,7 +618,7 @@ function DashboardHeader({ onLogout }: { onLogout: () => void }) {
             className="text-lg font-bold"
             style={{ color: NAVY, fontFamily: "Georgia, serif" }}
           >
-            Bonjour, {STUDENT.firstName} 👋
+            Bonjour, {STUDENT.firstName}
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -1021,7 +1021,7 @@ export default function Portail_Etudiant() {
     <div>
       <div className="p-4 bg-white border-b text-center" style={{ borderColor: "#e2e8f0" }}>
         <p className="text-xs text-[#64748b]">
-          💡 Démonstration : cliquez sur{" "}
+          Démonstration : cliquez sur{" "}
           <button
             onClick={() => setView("dashboard")}
             className="underline font-semibold"
