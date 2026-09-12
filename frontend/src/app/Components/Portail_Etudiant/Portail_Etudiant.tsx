@@ -18,7 +18,10 @@ import {
   Award,
   TrendingUp,
   Users,
-  MessageSquare,
+  Lock,
+  Key,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 const NAVY = BRAND.navy;
@@ -922,20 +925,54 @@ function TabContent({ tab }: { tab: DashboardTab }) {
   }
 
   // Profil
+  const [editing, setEditing] = useState(false);
+  const [email, setEmail] = useState(STUDENT.email);
+  const [pwd, setPwd] = useState("");
+  const [pwdConfirm, setPwdConfirm] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = () => {
+    setSaved(true);
+    setEditing(false);
+    setPwd("");
+    setPwdConfirm("");
+    setTimeout(() => setSaved(false), 3000);
+  };
+
+  const handleCancel = () => {
+    setEditing(false);
+    setEmail(STUDENT.email);
+    setPwd("");
+    setPwdConfirm("");
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <h2
-          className="text-xl font-bold"
-          style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-        >
-          Mon profil
-        </h2>
-        <p className="text-sm text-[#64748b] mt-1">
-          Informations personnelles & parcours académique
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h2
+            className="text-xl font-bold"
+            style={{ color: NAVY, fontFamily: "Georgia, serif" }}
+          >
+            Mon profil
+          </h2>
+          <p className="text-sm text-[#64748b] mt-1">
+            Informations personnelles & parcours académique
+          </p>
+        </div>
+        {saved && (
+          <span
+            className="text-sm font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5"
+            style={{ background: "#f0fdf4", color: "#16a34a" }}
+          >
+            <CheckCircle2 className="w-4 h-4" />
+            Modifications enregistrées
+          </span>
+        )}
       </div>
 
+      {/* Static card - Academic info (read-only) */}
       <div
         className="rounded-xl border overflow-hidden bg-white"
         style={{ borderColor: "#e2e8f0" }}
@@ -954,13 +991,19 @@ function TabContent({ tab }: { tab: DashboardTab }) {
               {STUDENT.avatar}
             </div>
           </div>
+          <span
+            className="absolute top-4 right-4 text-xs font-semibold px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5"
+            style={{ background: "rgba(255,255,255,0.12)", color: "#fff" }}
+          >
+            <Lock className="w-3.5 h-3.5" />
+            Informations académiques — Lecture seule
+          </span>
         </div>
 
         <div className="pt-12 px-6 pb-6 grid md:grid-cols-2 gap-x-8 gap-y-5">
           {[
             { k: "Nom complet", v: `${STUDENT.firstName} ${STUDENT.lastName}` },
             { k: "N° étudiant", v: STUDENT.studentId },
-            { k: "Email universitaire", v: STUDENT.email },
             { k: "Téléphone", v: "+235 6X XX XX XX" },
             { k: "Faculté", v: STUDENT.faculty },
             { k: "Filière & niveau", v: STUDENT.level },
@@ -976,15 +1019,203 @@ function TabContent({ tab }: { tab: DashboardTab }) {
               </p>
             </div>
           ))}
-          <div className="md:col-span-2 pt-3 border-t" style={{ borderColor: "#e2e8f0" }}>
-            <button
-              className="text-sm font-semibold px-4 py-2 rounded-lg border flex items-center gap-2 hover:bg-[#f8fafc] transition-colors"
-              style={{ borderColor: "#cbd5e1", color: NAVY }}
+        </div>
+      </div>
+
+      {/* Editable card - Credentials */}
+      <div
+        className="rounded-xl border overflow-hidden bg-white"
+        style={{ borderColor: "#e2e8f0" }}
+      >
+        <div
+          className="px-6 py-4 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+          style={{ borderColor: "#e2e8f0", background: "#f8fafc" }}
+        >
+          <div className="flex items-center gap-2.5">
+            <div
+              className="w-9 h-9 rounded-lg flex items-center justify-center"
+              style={{ background: "#e2e8f0", color: NAVY }}
             >
-              <MessageSquare className="w-4 h-4" />
-              Modifier mes informations
-            </button>
+              <Key className="w-4.5 h-4.5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-[15px]" style={{ color: NAVY }}>
+                Identifiants de connexion
+              </h3>
+              <p className="text-xs text-[#64748b]">
+                Les seules informations modifiables : email et mot de passe
+              </p>
+            </div>
           </div>
+          {!editing && (
+            <button
+              onClick={() => setEditing(true)}
+              className="text-sm font-semibold px-4 py-2 rounded-lg flex items-center justify-center gap-1.5 text-white"
+              style={{ background: NAVY }}
+            >
+              <User className="w-4 h-4" />
+              Modifier identifiants
+            </button>
+          )}
+        </div>
+
+        <div className="p-6 space-y-5">
+          <div>
+            <label
+              className="block text-sm font-semibold mb-1.5"
+              style={{ color: NAVY }}
+            >
+              Adresse email universitaire
+            </label>
+            {editing ? (
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-lg border text-[15px] focus:outline-none focus:ring-2"
+                style={{
+                  borderColor: "#cbd5e1",
+                  boxShadow: "none",
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = NAVY;
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "#cbd5e1";
+                }}
+              />
+            ) : (
+              <div
+                className="px-4 py-2.5 rounded-lg border flex items-center justify-between"
+                style={{ borderColor: "#e2e8f0", background: "#f8fafc" }}
+              >
+                <span className="text-[15px]" style={{ color: NAVY }}>
+                  {email}
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label
+                className="block text-sm font-semibold mb-1.5"
+                style={{ color: NAVY }}
+              >
+                {editing ? "Nouveau mot de passe" : "Mot de passe"}
+              </label>
+              {editing ? (
+                <div className="relative">
+                  <input
+                    type={showPwd ? "text" : "password"}
+                    value={pwd}
+                    onChange={(e) => setPwd(e.target.value)}
+                    placeholder="Laissez vide pour conserver le mot de passe actuel"
+                    className="w-full px-4 py-2.5 pr-11 rounded-lg border text-[15px] focus:outline-none"
+                    style={{ borderColor: "#cbd5e1" }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = NAVY;
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = "#cbd5e1";
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPwd((s) => !s)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748b] hover:text-[#1e293b]"
+                    tabIndex={-1}
+                    aria-label={showPwd ? "Masquer" : "Afficher"}
+                  >
+                    {showPwd ? (
+                      <EyeOff className="w-4.5 h-4.5" />
+                    ) : (
+                      <Eye className="w-4.5 h-4.5" />
+                    )}
+                  </button>
+                </div>
+              ) : (
+                <div
+                  className="px-4 py-2.5 rounded-lg border flex items-center justify-between"
+                  style={{ borderColor: "#e2e8f0", background: "#f8fafc" }}
+                >
+                  <span
+                    className="text-[15px] tracking-[0.35em]"
+                    style={{ color: "#475569" }}
+                  >
+                    ••••••••
+                  </span>
+                  <span
+                    className="text-xs font-semibold px-2 py-1 rounded"
+                    style={{ background: "#f1f5f9", color: "#64748b" }}
+                  >
+                    Modifié le 14 août 2024
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {editing && (
+              <div>
+                <label
+                  className="block text-sm font-semibold mb-1.5"
+                  style={{ color: NAVY }}
+                >
+                  Confirmer le nouveau mot de passe
+                </label>
+                <input
+                  type={showPwd ? "text" : "password"}
+                  value={pwdConfirm}
+                  onChange={(e) => setPwdConfirm(e.target.value)}
+                  placeholder="Retapez le nouveau mot de passe"
+                  className="w-full px-4 py-2.5 rounded-lg border text-[15px] focus:outline-none"
+                  style={{ borderColor: "#cbd5e1" }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = NAVY;
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "#cbd5e1";
+                  }}
+                />
+                {pwd && pwdConfirm && pwd !== pwdConfirm && (
+                  <p
+                    className="mt-1.5 text-xs font-medium flex items-center gap-1"
+                    style={{ color: "#dc2626" }}
+                  >
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    Les mots de passe ne correspondent pas
+                  </p>
+                )}
+                <p className="mt-1.5 text-xs text-[#64748b]">
+                  Astuce : minimum 8 caractères, une majuscule et un chiffre
+                  recommandés.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {editing && (
+            <div
+              className="flex flex-col sm:flex-row sm:justify-end gap-2.5 pt-2 border-t"
+              style={{ borderColor: "#e2e8f0" }}
+            >
+              <button
+                onClick={handleCancel}
+                className="px-4 py-2.5 rounded-lg font-semibold text-sm border hover:bg-[#f8fafc] transition-colors"
+                style={{ borderColor: "#cbd5e1", color: "#475569" }}
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleSave}
+                className="px-5 py-2.5 rounded-lg font-semibold text-sm flex items-center justify-center gap-1.5 text-white"
+                style={{ background: NAVY }}
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                Enregistrer les modifications
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
