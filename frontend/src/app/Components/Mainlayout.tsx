@@ -885,19 +885,19 @@ export default function Mainlayout({ children }: MainLayoutProps) {
               heading: "Services",
               links: [
                 { label: "Bibliothèques", href: "/bibliotheque" },
-                { label: "Résidences", href: "/contact#residences" },
-                { label: "Service de santé", href: "/contact#sante" },
-                { label: "Orientation & Emploi", href: "/contact#orientation" },
-                { label: "Alumni", href: "/contact#alumni" },
+                { label: "Résidences", href: "#" },
+                { label: "Service de santé", href: "#" },
+                { label: "Orientation & Emploi", href: "#" },
+                { label: "Alumni", href: "#" },
                 { label: "Portail étudiant", href: "/portail-etudiant" },
               ],
             },
             {
               heading: "Contact & Médias",
               links: [
-                { label: "Campus Toukra", href: "/contact#campus" },
-                { label: "Campus Farcha", href: "/contact#campus" },
-                { label: "Campus Ardep-Djoumal", href: "/contact#campus" },
+                { label: "Campus Toukra", href: "/universite/a-propos" },
+                { label: "Campus Farcha", href: "/universite/a-propos" },
+                { label: "Campus Ardep-Djoumal", href: "/universite/a-propos" },
                 { label: "Presse & Médias", href: "/media" },
                 { label: "Actualités", href: "/universite/nouvelles-evenements" },
                 { label: "Inscription en ligne", href: "/inscription" },
@@ -940,13 +940,13 @@ export default function Mainlayout({ children }: MainLayoutProps) {
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <a href="/contact#mentions-legales" className="hover:text-white/70 transition-colors">
+              <a href="#" className="hover:text-white/70 transition-colors">
                 Mentions légales
               </a>
-              <a href="/contact#confidentialite" className="hover:text-white/70 transition-colors">
+              <a href="#" className="hover:text-white/70 transition-colors">
                 Politique de confidentialité
               </a>
-              <a href="/contact#accessibilite" className="hover:text-white/70 transition-colors">
+              <a href="#" className="hover:text-white/70 transition-colors">
                 Accessibilité
               </a>
             </div>
