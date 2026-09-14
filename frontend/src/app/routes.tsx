@@ -33,6 +33,8 @@ import Inscription from "./Components/Inscription/Inscription";
 import Portail_Etudiant from "./Components/Portail_Etudiant/Portail_Etudiant";
 import Bibliotheque from "./Components/Bibliothèque/Bibliothèque";
 import Candidature from "./Components/Candidature/Candidature";
+import CampusContact from "./Components/CampusContact/CampusContact";
+import NotFound from "./Components/NotFound/NotFound";
 
 export default function AppRoutes() {
   return (
@@ -298,6 +300,22 @@ export default function AppRoutes() {
         element={
           <Mainlayout>
             <Candidature />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="/contact"
+        element={
+          <Mainlayout>
+            <CampusContact />
+          </Mainlayout>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          <Mainlayout>
+            <NotFound />
           </Mainlayout>
         }
       />
