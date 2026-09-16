@@ -1,6 +1,13 @@
 import { useState } from "react";
+import {
+  AreaChart,
+  Area,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  Tooltip,
+} from "recharts";
 import StudentLogin from "../Student/StudentLogin";
-import { BRAND } from "../Utils/brand";
 import {
   Home,
   BookOpen,
@@ -24,10 +31,90 @@ import {
   EyeOff,
 } from "lucide-react";
 
-const NAVY = BRAND.navy;
-const GOLD = BRAND.gold;
-const NAVY_DEEP = BRAND.navyDeep;
+/* ── Design tokens — same system as the SmartWaste admin dashboard ── */
+const INK = "#1a1e25";
+const MUTED = "#8a9099";
+const BORDER = "#e8eaed";
+const BORDER_LIGHT = "#f0f1f3";
+const PURPLE = "#7c6be8";
+const TEAL = "#1cb97a";
+const AMBER = "#f59e0b";
+const RED = "#ef4444";
+const BLUE = "#1a5fa8";
+const PINK = "#ff6b9d";
+const BG = "#f5f6f8";
 
+/* ── Types ── */
+interface Badge {
+  t: string;
+  c: string;
+}
+
+interface GaugeItem {
+  label: string;
+  sub: string;
+  val: number;
+  color: string;
+  badges: Badge[];
+  spark: number[];
+  sc: string;
+}
+
+interface HealthItem {
+  label: string;
+  value: number;
+  color: string;
+}
+
+interface ProgItem {
+  name: string;
+  val: string;
+  pct: number;
+  color: string;
+}
+
+interface StatCell {
+  label: string;
+  val: string;
+  color: string;
+}
+
+interface ActivityItem {
+  action: string;
+  actor: string;
+  time: string;
+  status: string;
+}
+
+interface StatusMeta {
+  color: string;
+  label: string;
+}
+
+interface HeaderStat {
+  label: string;
+  value: string;
+  color: string;
+  bars: number[];
+}
+
+interface SparkProps {
+  data: number[];
+  color: string;
+}
+
+interface GaugeProps {
+  value: number;
+  color: string;
+  size?: number;
+}
+
+interface MiniBarChartProps {
+  values: number[];
+  color: string;
+}
+
+/* ── Data ── */
 const STUDENT = {
   firstName: "Ahmat",
   lastName: "Djamal",
@@ -40,35 +127,95 @@ const STUDENT = {
   semester: "Semestre 5",
 };
 
-const STATS = [
+const moyenneTrend: { t: number; v: number }[] = [
+  { t: 0, v: 11.5 },
+  { t: 1, v: 11.8 },
+  { t: 2, v: 11.6 },
+  { t: 3, v: 12.0 },
+  { t: 4, v: 12.3 },
+  { t: 5, v: 12.1 },
+  { t: 6, v: 12.6 },
+  { t: 7, v: 12.9 },
+  { t: 8, v: 12.7 },
+  { t: 9, v: 13.1 },
+  { t: 10, v: 13.3 },
+  { t: 11, v: 13.42 },
+];
+
+const sparkMoyenne: number[] = [12.0, 12.3, 12.1, 12.6, 12.9, 12.7, 13.1, 13.3, 13.42];
+const sparkCredits: number[] = [70, 74, 76, 78, 79, 80, 80, 80, 80];
+const sparkPresence: number[] = [92, 91, 90, 88, 87, 89, 89, 88, 89];
+const sparkRang: number[] = [20, 18, 17, 16, 15, 14, 13, 12, 12];
+
+const toSparkData = (arr: number[]): { i: number; v: number }[] =>
+  arr.map((v, i) => ({ i, v }));
+
+const HEADER_STATS: HeaderStat[] = [
+  { label: "Cours actifs", value: "5", color: PURPLE, bars: [3, 4, 4, 5, 4, 5, 5] },
+  { label: "Échéances", value: "2", color: PINK, bars: [1, 2, 1, 2, 3, 2, 2] },
+];
+
+const GAUGES: GaugeItem[] = [
   {
     label: "Moyenne générale",
-    value: "13,42",
-    suffix: "/ 20",
-    icon: Award,
-    tone: "good",
+    sub: "Sur 20 points",
+    val: 67,
+    color: PURPLE,
+    badges: [
+      { t: "13,42/20", c: TEAL },
+      { t: "+0,8", c: MUTED },
+    ],
+    spark: sparkMoyenne,
+    sc: PURPLE,
   },
   {
     label: "Crédits validés",
-    value: "96",
-    suffix: "/ 120",
-    icon: CheckCircle2,
-    tone: "neutral",
+    sub: "Progression du diplôme",
+    val: 80,
+    color: TEAL,
+    badges: [
+      { t: "96/120", c: TEAL },
+      { t: "+6 ce sem.", c: MUTED },
+    ],
+    spark: sparkCredits,
+    sc: TEAL,
   },
   {
     label: "Taux de présence",
-    value: "89",
-    suffix: "%",
-    icon: Users,
-    tone: "good",
+    sub: "Ce semestre",
+    val: 89,
+    color: BLUE,
+    badges: [
+      { t: "89%", c: BLUE },
+      { t: "-2%", c: AMBER },
+    ],
+    spark: sparkPresence,
+    sc: BLUE,
   },
   {
-    label: "Rang",
-    value: "12",
-    suffix: "/ 45",
-    icon: TrendingUp,
-    tone: "neutral",
+    label: "Classement",
+    sub: "Sur 45 étudiants",
+    val: 73,
+    color: PINK,
+    badges: [
+      { t: "12e/45", c: PINK },
+      { t: "+3", c: TEAL },
+    ],
+    spark: sparkRang,
+    sc: PINK,
   },
+];
+
+const HEALTH: HealthItem[] = [
+  { label: "Crédits validés", value: 80, color: TEAL },
+  { label: "Taux de présence", value: 89, color: BLUE },
+  { label: "Objectif moyenne (≥12/20)", value: 67, color: PURPLE },
+];
+
+const STAT_CELLS: StatCell[] = [
+  { label: "UE validées", val: "3/5", color: TEAL },
+  { label: "En attente", val: "1", color: AMBER },
+  { label: "Absences", val: "4", color: RED },
 ];
 
 const COURSES = [
@@ -80,7 +227,7 @@ const COURSES = [
     credits: 6,
     grade: "14,5",
     status: "En cours",
-    color: "#1a3a5c",
+    color: PURPLE,
   },
   {
     code: "GE3-L3-02",
@@ -90,7 +237,7 @@ const COURSES = [
     credits: 5,
     grade: "12,8",
     status: "En cours",
-    color: "#c8a84b",
+    color: TEAL,
   },
   {
     code: "GE3-L3-03",
@@ -100,7 +247,7 @@ const COURSES = [
     credits: 4,
     grade: "15,0",
     status: "En cours",
-    color: "#306998",
+    color: BLUE,
   },
   {
     code: "GE3-L3-04",
@@ -110,7 +257,7 @@ const COURSES = [
     credits: 5,
     grade: "—",
     status: "À rattraper",
-    color: "#dc2626",
+    color: RED,
   },
   {
     code: "GE3-L3-05",
@@ -120,8 +267,15 @@ const COURSES = [
     credits: 3,
     grade: "13,8",
     status: "Validé",
-    color: "#16a34a",
+    color: PINK,
   },
+];
+
+const PROGRESS: ProgItem[] = [
+  { name: "Comptabilité", val: "14,5/20", pct: 72.5, color: PURPLE },
+  { name: "Gestion fin.", val: "12,8/20", pct: 64, color: TEAL },
+  { name: "Droit affaires", val: "15,0/20", pct: 75, color: BLUE },
+  { name: "Anglais aff.", val: "13,8/20", pct: 69, color: PINK },
 ];
 
 const SCHEDULE = [
@@ -167,40 +321,39 @@ const SCHEDULE = [
   },
 ];
 
-const NOTICES = [
+const ACTIVITY: ActivityItem[] = [
   {
-    id: 1,
-    title: "Inscription pédagogique Semestre 6",
-    date: "10 sept. 2024",
-    category: "Administration",
-    text: "Les inscriptions pédagogiques pour le S6 ouvrent le 23 septembre. Pensez à régler vos frais avant le 30 septembre.",
-    tone: "info",
+    action: "Inscription pédagogique Semestre 6",
+    actor: "Administration",
+    time: "10 sept.",
+    status: "info",
   },
   {
-    id: 2,
-    title: "Contrôle continu — Comptabilité",
-    date: "9 sept. 2024",
-    category: "Évaluation",
-    text: "Premier contrôle continu le vendredi 20 septembre en salle 214. Révisez les chapitres 1 à 4.",
-    tone: "warning",
+    action: "Contrôle continu — Comptabilité",
+    actor: "Évaluation · Salle 214, vendredi 20 sept.",
+    time: "9 sept.",
+    status: "warning",
   },
   {
-    id: 3,
-    title: "Stage de fin d'études — Appel à candidatures",
-    date: "5 sept. 2024",
-    category: "Stage",
-    text: "Offres de stage disponibles auprès de nos partenaires : Ecobank, Bolloré, ONU Tchad. Dossier à déposer avant le 15 oct.",
-    tone: "success",
+    action: "Stage de fin d'études — Appel à candidatures",
+    actor: "Ecobank, Bolloré, ONU Tchad",
+    time: "5 sept.",
+    status: "success",
   },
   {
-    id: 4,
-    title: "Maintenance portail — Samedi 14",
-    date: "4 sept. 2024",
-    category: "Technique",
-    text: "Le portail sera inaccessible de 14h à 18h pour mise à jour. Merci de votre compréhension.",
-    tone: "neutral",
+    action: "Maintenance portail — Samedi 14",
+    actor: "Technique · 14h à 18h",
+    time: "4 sept.",
+    status: "neutral",
   },
 ];
+
+const statusMeta: Record<string, StatusMeta> = {
+  info: { color: BLUE, label: "Info" },
+  warning: { color: AMBER, label: "À préparer" },
+  success: { color: TEAL, label: "Opportunité" },
+  neutral: { color: MUTED, label: "Technique" },
+};
 
 const PAYMENTS = [
   {
@@ -229,37 +382,107 @@ const PAYMENTS = [
 type View = "login" | "dashboard";
 type DashboardTab = "accueil" | "cours" | "emploi" | "notes" | "paiements" | "profil";
 
-function StatCard({
-  stat,
-}: {
-  stat: (typeof STATS)[number];
-}) {
-  const { label, value, suffix, icon: Icon, tone } = stat;
-  const toneColor =
-    tone === "good" ? "#16a34a" : tone === "warn" ? "#d97706" : NAVY;
+/* ── Shared visual primitives ── */
+function Gauge({ value, color, size = 60 }: GaugeProps) {
+  const r = (size - 10) / 2;
+  const circ = 2 * Math.PI * r;
+  const dash = (value / 100) * circ;
   return (
-    <div
-      className="rounded-xl border p-5 bg-white"
-      style={{ borderColor: "#e2e8f0" }}
-    >
-      <div className="flex items-start justify-between">
+    <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={BORDER_LIGHT} strokeWidth={7} />
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={r}
+        fill="none"
+        stroke={color}
+        strokeWidth={7}
+        strokeDasharray={`${dash} ${circ}`}
+        strokeLinecap="butt"
+      />
+    </svg>
+  );
+}
+
+function Spark({ data, color }: SparkProps) {
+  const d = toSparkData(data);
+  return (
+    <ResponsiveContainer width="100%" height={36}>
+      <LineChart data={d} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
+        <Line type="monotone" dataKey="v" stroke={color} strokeWidth={1.5} dot={false} />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}
+
+function MiniBarChart({ values, color }: MiniBarChartProps) {
+  const max = Math.max(...values);
+  return (
+    <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 28 }}>
+      {values.map((v, i) => (
+        <div
+          key={i}
+          style={{
+            width: 4,
+            height: Math.round((v / max) * 22),
+            background: color,
+            opacity: 0.4 + 0.6 * (v / max),
+            borderRadius: 1,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function MetricCard({
+  label,
+  value,
+  suffix,
+  color,
+  icon: Icon,
+}: {
+  label: string;
+  value: string;
+  suffix?: string;
+  color: string;
+  icon: typeof Home;
+}) {
+  return (
+    <div className="so-card" style={{ padding: "18px 20px" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
         <div>
-          <p className="text-sm text-[#64748b] mb-1">{label}</p>
-          <div className="flex items-baseline gap-1">
-            <span
-              className="text-3xl font-bold"
-              style={{ color: toneColor, fontFamily: "Georgia, serif" }}
-            >
-              {value}
-            </span>
-            <span className="text-sm text-[#94a3b8]">{suffix}</span>
+          <div
+            style={{
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              color: MUTED,
+              marginBottom: 6,
+            }}
+          >
+            {label}
+          </div>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+            <span style={{ fontSize: 26, fontWeight: 800, color, letterSpacing: "-0.02em" }}>{value}</span>
+            {suffix && <span style={{ fontSize: 12, color: MUTED }}>{suffix}</span>}
           </div>
         </div>
         <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-          style={{ background: "#f1f5f9", color: NAVY }}
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: 9,
+            background: color + "14",
+            color,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
         >
-          <Icon className="w-5 h-5" />
+          <Icon style={{ width: 18, height: 18 }} />
         </div>
       </div>
     </div>
@@ -267,73 +490,52 @@ function StatCard({
 }
 
 function CourseRow({ course }: { course: (typeof COURSES)[number] }) {
-  const statusColor =
+  const meta =
     course.status === "Validé"
-      ? "#16a34a"
+      ? { color: TEAL, bg: TEAL + "14" }
       : course.status === "À rattraper"
-      ? "#dc2626"
-      : "#2563eb";
-  const statusBg =
-    course.status === "Validé"
-      ? "#f0fdf4"
-      : course.status === "À rattraper"
-      ? "#fef2f2"
-      : "#eff6ff";
+      ? { color: RED, bg: RED + "14" }
+      : { color: BLUE, bg: BLUE + "14" };
 
   return (
-    <div
-      className="flex flex-col md:flex-row md:items-center gap-4 p-4 rounded-lg border hover:shadow-sm transition-shadow bg-white"
-      style={{ borderColor: "#e2e8f0" }}
-    >
-      <div
-        className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 text-white font-bold"
-        style={{ background: course.color }}
-      >
-        <BookOpen className="w-5 h-5" />
+    <div className="so-item-row">
+      <div className="so-item-icon" style={{ background: course.color }}>
+        <BookOpen style={{ width: 18, height: 18, color: "#fff" }} />
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap mb-0.5">
-          <span className="text-xs font-mono text-[#64748b]">
-            {course.code}
-          </span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 2 }}>
+          <span style={{ fontSize: 11, fontFamily: "monospace", color: MUTED }}>{course.code}</span>
           <span
-            className="text-xs px-2 py-0.5 rounded-full"
-            style={{ background: statusBg, color: statusColor }}
+            className="so-badge"
+            style={{ background: meta.bg, color: meta.color }}
           >
             {course.status}
           </span>
-          <span className="text-xs text-[#94a3b8]">{course.credits} ECTS</span>
+          <span style={{ fontSize: 11, color: MUTED }}>{course.credits} ECTS</span>
         </div>
-        <h4 className="font-semibold text-[15px]" style={{ color: NAVY }}>
-          {course.name}
-        </h4>
-        <p className="text-sm text-[#64748b] mt-0.5">
+        <h4 style={{ fontSize: 14.5, fontWeight: 700, color: INK, margin: 0 }}>{course.name}</h4>
+        <p style={{ fontSize: 12.5, color: MUTED, margin: "2px 0 0" }}>
           {course.teacher} · {course.room}
         </p>
       </div>
-      <div className="flex items-center gap-4 md:gap-6">
-        <div className="text-right">
-          <p className="text-xs text-[#94a3b8]">Note</p>
+      <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
+        <div style={{ textAlign: "right" }}>
+          <p style={{ fontSize: 9, color: MUTED, margin: 0, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            Note
+          </p>
           <p
-            className="text-lg font-bold"
             style={{
-              color:
-                course.grade === "—"
-                  ? "#94a3b8"
-                  : parseFloat(course.grade) >= 10
-                  ? "#16a34a"
-                  : "#dc2626",
-              fontFamily: "Georgia, serif",
+              fontSize: 17,
+              fontWeight: 800,
+              margin: 0,
+              color: course.grade === "—" ? MUTED : parseFloat(course.grade.replace(",", ".")) >= 10 ? TEAL : RED,
             }}
           >
             {course.grade}
           </p>
         </div>
-        <button
-          className="text-sm font-semibold px-3 py-1.5 rounded-lg border hover:bg-[#f8fafc] transition-colors flex items-center gap-1"
-          style={{ borderColor: "#cbd5e1", color: NAVY }}
-        >
-          Détails <ChevronRight className="w-4 h-4" />
+        <button className="so-action-btn" style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          Détails <ChevronRight style={{ width: 14, height: 14 }} />
         </button>
       </div>
     </div>
@@ -342,80 +544,29 @@ function CourseRow({ course }: { course: (typeof COURSES)[number] }) {
 
 function ScheduleRow({ s }: { s: (typeof SCHEDULE)[number] }) {
   return (
-    <div
-      className="flex gap-4 p-4 rounded-lg border bg-white"
-      style={{ borderColor: "#e2e8f0" }}
-    >
-      <div className="text-center shrink-0 w-14">
-        <p
-          className="text-xs font-semibold uppercase tracking-wide"
-          style={{ color: GOLD }}
-        >
+    <div className="so-item-row">
+      <div style={{ textAlign: "center", flexShrink: 0, width: 52 }}>
+        <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: PURPLE, margin: 0 }}>
           {s.day.split(" ")[0]}
         </p>
-        <p className="text-xl font-bold" style={{ color: NAVY }}>
-          {s.day.split(" ")[1]}
-        </p>
+        <p style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0 }}>{s.day.split(" ")[1]}</p>
       </div>
-      <div className="w-px bg-[#e2e8f0]" />
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 text-xs text-[#64748b] mb-1 flex-wrap">
-          <span className="inline-flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5" /> {s.time}
+      <div style={{ width: 1, background: BORDER_LIGHT, alignSelf: "stretch" }} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 11.5, color: MUTED, marginBottom: 4, flexWrap: "wrap" }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+            <Clock style={{ width: 13, height: 13 }} /> {s.time}
           </span>
-          <span className="inline-flex items-center gap-1">
-            <MapPin className="w-3.5 h-3.5" /> {s.room}
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+            <MapPin style={{ width: 13, height: 13 }} /> {s.room}
           </span>
-          <span
-            className="px-2 py-0.5 rounded-full text-[11px]"
-            style={{ background: "#f1f5f9", color: NAVY }}
-          >
+          <span className="so-badge" style={{ background: BORDER_LIGHT, color: INK }}>
             {s.type}
           </span>
         </div>
-        <h4 className="font-semibold text-[15px]" style={{ color: NAVY }}>
-          {s.subject}
-        </h4>
-        <p className="text-sm text-[#64748b]">{s.teacher}</p>
+        <h4 style={{ fontSize: 14.5, fontWeight: 700, color: INK, margin: 0 }}>{s.subject}</h4>
+        <p style={{ fontSize: 12.5, color: MUTED, margin: "2px 0 0" }}>{s.teacher}</p>
       </div>
-    </div>
-  );
-}
-
-function NoticeCard({ n }: { n: (typeof NOTICES)[number] }) {
-  const toneDot =
-    n.tone === "success"
-      ? "#16a34a"
-      : n.tone === "warning"
-      ? "#d97706"
-      : n.tone === "info"
-      ? "#2563eb"
-      : "#64748b";
-  return (
-    <div
-      className="p-5 rounded-xl border bg-white"
-      style={{ borderColor: "#e2e8f0" }}
-    >
-      <div className="flex items-center justify-between mb-3">
-        <span
-          className="text-xs font-semibold px-2.5 py-1 rounded-full"
-          style={{ background: "#f1f5f9", color: NAVY }}
-        >
-          {n.category}
-        </span>
-        <span className="text-xs text-[#94a3b8]">{n.date}</span>
-      </div>
-      <h4
-        className="font-semibold text-[15px] mb-2 flex items-start gap-2"
-        style={{ color: NAVY }}
-      >
-        <span
-          className="w-2 h-2 rounded-full mt-2 shrink-0"
-          style={{ background: toneDot }}
-        />
-        {n.title}
-      </h4>
-      <p className="text-sm text-[#64748b] leading-relaxed">{n.text}</p>
     </div>
   );
 }
@@ -423,47 +574,27 @@ function NoticeCard({ n }: { n: (typeof NOTICES)[number] }) {
 function PaymentRow({ p }: { p: (typeof PAYMENTS)[number] }) {
   const isPaid = p.tone === "paid";
   return (
-    <div
-      className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-lg border bg-white"
-      style={{ borderColor: "#e2e8f0" }}
-    >
+    <div className="so-item-row">
       <div
-        className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
-          isPaid ? "text-white" : ""
-        }`}
-        style={{
-          background: isPaid ? "#16a34a" : "#f1f5f9",
-          color: isPaid ? "#fff" : NAVY,
-        }}
+        className="so-item-icon"
+        style={{ background: isPaid ? TEAL : BORDER_LIGHT, color: isPaid ? "#fff" : INK }}
       >
-        {isPaid ? (
-          <CheckCircle2 className="w-5 h-5" />
-        ) : (
-          <AlertCircle className="w-5 h-5" />
-        )}
+        {isPaid ? <CheckCircle2 style={{ width: 18, height: 18 }} /> : <AlertCircle style={{ width: 18, height: 18, color: AMBER }} />}
       </div>
-      <div className="flex-1 min-w-0">
-        <h4 className="font-semibold text-[15px]" style={{ color: NAVY }}>
-          {p.label}
-        </h4>
-        <p className="text-sm text-[#64748b]">{p.date}</p>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <h4 style={{ fontSize: 14.5, fontWeight: 700, color: INK, margin: 0 }}>{p.label}</h4>
+        <p style={{ fontSize: 12.5, color: MUTED, margin: "2px 0 0" }}>{p.date}</p>
       </div>
-      <div className="flex items-center gap-4 sm:gap-6">
-        <div className="text-right">
-          <p className="text-xs text-[#94a3b8]">Montant</p>
-          <p
-            className="text-lg font-bold"
-            style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-          >
-            {p.amount}
+      <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
+        <div style={{ textAlign: "right" }}>
+          <p style={{ fontSize: 9, color: MUTED, margin: 0, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            Montant
           </p>
+          <p style={{ fontSize: 15, fontWeight: 800, color: INK, margin: 0 }}>{p.amount}</p>
         </div>
         <span
-          className="text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap"
-          style={{
-            background: isPaid ? "#f0fdf4" : "#fffbeb",
-            color: isPaid ? "#16a34a" : "#b45309",
-          }}
+          className="so-badge"
+          style={{ background: isPaid ? TEAL + "14" : AMBER + "14", color: isPaid ? TEAL : AMBER }}
         >
           {p.status}
         </span>
@@ -472,6 +603,7 @@ function PaymentRow({ p }: { p: (typeof PAYMENTS)[number] }) {
   );
 }
 
+/* ── Navigation shell ── */
 function Sidebar({
   active,
   onChange,
@@ -491,69 +623,61 @@ function Sidebar({
   ];
 
   return (
-    <aside
-      className="hidden lg:flex flex-col w-64 shrink-0 border-r"
-      style={{ background: "#f8fafc", borderColor: "#e2e8f0" }}
-    >
-      <div
-        className="p-5 border-b"
-        style={{ borderColor: "#e2e8f0", background: "#fff" }}
-      >
-        <div className="flex items-center gap-3">
+    <aside className="so-sidebar">
+      <div className="so-sidebar-header">
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div
-            className="w-11 h-11 rounded-full flex items-center justify-center font-bold text-white"
-            style={{ background: NAVY }}
+            style={{
+              width: 42,
+              height: 42,
+              borderRadius: 10,
+              background: PURPLE,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 800,
+              color: "#fff",
+              fontSize: 14,
+              flexShrink: 0,
+            }}
           >
             {STUDENT.avatar}
           </div>
-          <div className="min-w-0">
-            <p
-              className="font-semibold text-[15px] truncate"
-              style={{ color: NAVY }}
-            >
+          <div style={{ minWidth: 0 }}>
+            <p style={{ fontSize: 13.5, fontWeight: 700, color: INK, margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {STUDENT.firstName} {STUDENT.lastName}
             </p>
-            <p className="text-xs text-[#64748b] truncate">
+            <p style={{ fontSize: 11.5, color: MUTED, margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {STUDENT.studentId}
             </p>
           </div>
         </div>
       </div>
 
-      <nav className="flex-1 p-3 space-y-1">
+      <nav style={{ flex: 1, padding: 10, display: "flex", flexDirection: "column", gap: 3 }}>
         {items.map(({ id, label, icon: Icon }) => {
           const isActive = active === id;
           return (
             <button
               key={id}
               onClick={() => onChange(id)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
+              className="so-nav-btn"
               style={
                 isActive
-                  ? { background: NAVY, color: "#fff" }
-                  : { color: "#475569" }
+                  ? { background: PURPLE, color: "#fff" }
+                  : { color: "#555570", background: "transparent" }
               }
-              onMouseEnter={(e) => {
-                if (!isActive) e.currentTarget.style.background = "#e2e8f0";
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) e.currentTarget.style.background = "transparent";
-              }}
             >
-              <Icon className="w-4.5 h-4.5 shrink-0" />
+              <Icon style={{ width: 17, height: 17, flexShrink: 0 }} />
               <span>{label}</span>
             </button>
           );
         })}
       </nav>
 
-      <div className="p-3 border-t" style={{ borderColor: "#e2e8f0" }}>
-        <button
-          onClick={onLogout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors hover:bg-[#fee2e2]"
-          style={{ color: "#b91c1c" }}
-        >
-          <LogOut className="w-4.5 h-4.5 shrink-0" />
+      <div style={{ padding: 10, borderTop: `1px solid ${BORDER_LIGHT}` }}>
+        <button onClick={onLogout} className="so-nav-btn so-logout-btn">
+          <LogOut style={{ width: 17, height: 17, flexShrink: 0 }} />
           <span>Se déconnecter</span>
         </button>
       </div>
@@ -564,11 +688,9 @@ function Sidebar({
 function MobileNav({
   active,
   onChange,
-  onLogout,
 }: {
   active: DashboardTab;
   onChange: (t: DashboardTab) => void;
-  onLogout: () => void;
 }) {
   const items: { id: DashboardTab; label: string; icon: typeof Home }[] = [
     { id: "accueil", label: "Accueil", icon: Home },
@@ -579,21 +701,30 @@ function MobileNav({
     { id: "profil", label: "Profil", icon: User },
   ];
   return (
-    <nav
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 border-t bg-white"
-      style={{ borderColor: "#e2e8f0" }}
-    >
-      <div className="grid grid-cols-6 max-w-xl mx-auto">
+    <nav className="so-mobile-nav">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", maxWidth: 640, margin: "0 auto" }}>
         {items.map(({ id, label, icon: Icon }) => {
           const isActive = active === id;
           return (
             <button
               key={id}
               onClick={() => onChange(id)}
-              className="flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-medium"
-              style={{ color: isActive ? NAVY : "#94a3b8" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 2,
+                padding: "8px 0",
+                fontSize: 10.5,
+                fontWeight: 600,
+                color: isActive ? PURPLE : MUTED,
+                background: "none",
+                border: "none",
+                fontFamily: "inherit",
+              }}
             >
-              <Icon className="w-5 h-5" />
+              <Icon style={{ width: 19, height: 19 }} />
               <span>{label}</span>
             </button>
           );
@@ -605,55 +736,43 @@ function MobileNav({
 
 function DashboardHeader({ onLogout }: { onLogout: () => void }) {
   return (
-    <header
-      className="sticky top-0 z-30 border-b bg-white"
-      style={{ borderColor: "#e2e8f0" }}
-    >
-      <div className="flex items-center justify-between px-4 md:px-6 h-16 gap-3">
+    <header className="so-topbar">
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", height: 64, gap: 12 }}>
         <div>
-          <p
-            className="text-xs font-semibold uppercase tracking-wide"
-            style={{ color: GOLD }}
-          >
+          <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: PURPLE, margin: 0 }}>
             {STUDENT.year} · {STUDENT.semester}
           </p>
-          <h1
-            className="text-lg font-bold"
-            style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-          >
+          <h1 style={{ fontSize: 17, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>
             Bonjour, {STUDENT.firstName}
           </h1>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            className="relative w-10 h-10 rounded-lg flex items-center justify-center hover:bg-[#f1f5f9] transition-colors"
-            aria-label="Notifications"
-          >
-            <Bell className="w-5 h-5" style={{ color: NAVY }} />
-            <span
-              className="absolute top-2 right-2.5 w-2 h-2 rounded-full"
-              style={{ background: "#dc2626" }}
-            />
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <button className="so-icon-btn" aria-label="Notifications">
+            <Bell style={{ width: 18, height: 18, color: INK }} />
+            <span style={{ position: "absolute", top: 8, right: 9, width: 7, height: 7, borderRadius: "50%", background: RED }} />
           </button>
-          <div className="hidden md:flex items-center gap-2 pl-2 ml-1 border-l" style={{ borderColor: "#e2e8f0" }}>
+          <div className="so-topbar-profile">
             <div
-              className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-white text-sm"
-              style={{ background: NAVY }}
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: "50%",
+                background: PURPLE,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 800,
+                color: "#fff",
+                fontSize: 12.5,
+              }}
             >
               {STUDENT.avatar}
             </div>
-            <div className="text-right">
-              <p
-                className="text-sm font-semibold leading-tight"
-                style={{ color: NAVY }}
-              >
+            <div style={{ textAlign: "right" }}>
+              <p style={{ fontSize: 12.5, fontWeight: 700, color: INK, margin: 0, lineHeight: 1.2 }}>
                 {STUDENT.firstName} {STUDENT.lastName}
               </p>
-              <button
-                onClick={onLogout}
-                className="text-xs hover:underline"
-                style={{ color: "#94a3b8" }}
-              >
+              <button onClick={onLogout} style={{ fontSize: 10.5, color: MUTED, background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "inherit" }}>
                 Se déconnecter
               </button>
             </div>
@@ -664,71 +783,250 @@ function DashboardHeader({ onLogout }: { onLogout: () => void }) {
   );
 }
 
+/* ── Tab content ── */
 function TabContent({ tab }: { tab: DashboardTab }) {
+  const [liveFeedTab, setLiveFeedTab] = useState<"evolution" | "matieres">("evolution");
+  const [editing, setEditing] = useState(false);
+  const [email, setEmail] = useState(STUDENT.email);
+  const [pwd, setPwd] = useState("");
+  const [pwdConfirm, setPwdConfirm] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
+  const [saved, setSaved] = useState(false);
+
   if (tab === "accueil") {
     return (
-      <div className="space-y-6">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {STATS.map((s) => (
-            <StatCard key={s.label} stat={s} />
+      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        {/* Top header row with mini bar charts */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 24, flexWrap: "wrap" }}>
+          {HEADER_STATS.map((s) => (
+            <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED }}>
+                  {s.label}
+                </div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: s.color, letterSpacing: "-0.03em", lineHeight: 1.1 }}>
+                  {s.value}
+                </div>
+              </div>
+              <MiniBarChart values={s.bars} color={s.color} />
+            </div>
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-3">
-            <div className="flex items-center justify-between">
-              <h2
-                className="text-lg font-bold"
-                style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-              >
-                Mes cours — {STUDENT.semester}
-              </h2>
-              <button
-                className="text-sm font-semibold flex items-center gap-1"
-                style={{ color: NAVY }}
-              >
-                Voir tout <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-            {COURSES.slice(0, 4).map((c) => (
-              <CourseRow key={c.code} course={c} />
-            ))}
-          </div>
-
-          <div className="space-y-3">
-            <h2
-              className="text-lg font-bold"
-              style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-            >
-              Emploi de la semaine
-            </h2>
-            <div className="space-y-3">
-              {SCHEDULE.slice(0, 4).map((s, i) => (
-                <ScheduleRow key={i} s={s} />
+        {/* Academic progress card (like Live Operations) */}
+        <div className="so-card">
+          <div className="so-card-header">
+            <span className="so-dot" style={{ background: TEAL }} />
+            <span className="so-card-title">Progression académique</span>
+            <div style={{ display: "flex" }}>
+              {(
+                [
+                  { id: "evolution" as const, label: "Évolution" },
+                  { id: "matieres" as const, label: "Par matière" },
+                ]
+              ).map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setLiveFeedTab(t.id)}
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 600,
+                    padding: "4px 14px",
+                    cursor: "pointer",
+                    color: liveFeedTab === t.id ? PURPLE : "#9a9ab0",
+                    borderBottom: liveFeedTab === t.id ? `2px solid ${PURPLE}` : "2px solid transparent",
+                    background: "none",
+                    borderTop: "none",
+                    borderLeft: "none",
+                    borderRight: "none",
+                    fontFamily: "inherit",
+                  }}
+                >
+                  {t.label}
+                </button>
               ))}
             </div>
           </div>
+
+          <div className="so-livefeed-body">
+            <div className="so-livefeed-left">
+              {liveFeedTab === "evolution" ? (
+                <>
+                  <div style={{ padding: "14px 20px 0", display: "flex", gap: 32 }}>
+                    {[
+                      { label: "Moyenne actuelle", val: "13,42/20", color: PURPLE },
+                      { label: "Crédits", val: "96/120", color: TEAL },
+                      { label: "Présence", val: "89%", color: BLUE },
+                    ].map((s) => (
+                      <div key={s.label}>
+                        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: MUTED, marginBottom: 3 }}>
+                          {s.label}
+                        </div>
+                        <div style={{ fontSize: 24, fontWeight: 800, color: s.color, letterSpacing: "-0.02em" }}>{s.val}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <ResponsiveContainer width="100%" height={160}>
+                    <AreaChart data={moyenneTrend} margin={{ top: 16, right: 0, left: 0, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="moyGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={PURPLE} stopOpacity={0.35} />
+                          <stop offset="100%" stopColor={PURPLE} stopOpacity={0.02} />
+                        </linearGradient>
+                      </defs>
+                      <Tooltip
+                        contentStyle={{ background: INK, border: "none", borderRadius: 6, fontSize: 11 }}
+                        itemStyle={{ color: "#fff" }}
+                        labelStyle={{ display: "none" }}
+                        formatter={(v: number) => [v, "Moyenne"]}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="v"
+                        stroke={PURPLE}
+                        strokeWidth={2}
+                        fill="url(#moyGrad)"
+                        dot={false}
+                        activeDot={{ r: 4, fill: PURPLE, strokeWidth: 0 }}
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </>
+              ) : (
+                <div style={{ padding: "12px 16px" }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12 }}>
+                    Notes par matière
+                  </div>
+                  {PROGRESS.map((d) => (
+                    <div key={d.name} style={{ marginBottom: 14 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
+                        <span>{d.name}</span>
+                        <span>{d.val}</span>
+                      </div>
+                      <div style={{ height: 6, background: BORDER_LIGHT, borderRadius: 3, overflow: "hidden" }}>
+                        <div style={{ width: `${d.pct}%`, height: "100%", background: d.color }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="so-livefeed-right">
+              <div>
+                {PROGRESS.map((p) => (
+                  <div key={p.name}>
+                    <div className="so-prog-label">
+                      <span className="so-prog-name">{p.name}</span>
+                      <span style={{ fontWeight: 700, fontSize: 12, color: INK }}>{p.val}</span>
+                    </div>
+                    <div className="so-prog-track">
+                      <div className="so-prog-fill" style={{ width: `${p.pct}%`, background: p.color }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="so-action-btn-row">
+                <button type="button" className="so-action-btn" style={{ flex: 1 }}>
+                  Relevé complet
+                </button>
+                <button type="button" className="so-action-btn" style={{ flex: 1 }}>
+                  Emploi du temps
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Gauge row */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", borderTop: `1px solid ${BORDER_LIGHT}` }}>
+            {GAUGES.map((g) => (
+              <div key={g.label} className="so-gauge-cell">
+                <div className="so-gauge-wrap">
+                  <Gauge value={g.val} color={g.color} size={60} />
+                  <span className="so-gauge-num">{g.val}</span>
+                </div>
+                <div className="so-gauge-info">
+                  <div className="so-gauge-label">{g.label}</div>
+                  <div className="so-gauge-sublabel">{g.sub}</div>
+                  <div className="so-gauge-badges">
+                    {g.badges.map((b) => (
+                      <span key={b.t} className="so-badge" style={{ background: b.c + "18", color: b.c }}>
+                        {b.t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="so-gauge-spark">
+                  <Spark data={g.spark} color={g.sc} />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2
-              className="text-lg font-bold"
-              style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-            >
-              Dernières nouvelles
-            </h2>
-            <button
-              className="text-sm font-semibold flex items-center gap-1"
-              style={{ color: NAVY }}
-            >
-              Voir tout <ChevronRight className="w-4 h-4" />
-            </button>
+        {/* Bottom: État académique + Actualités */}
+        <div className="so-bottom">
+          <div className="so-card">
+            <div className="so-card-header">
+              <span className="so-dot" style={{ background: TEAL }} />
+              <span className="so-dot" style={{ background: AMBER }} />
+              <span className="so-dot" style={{ background: RED }} />
+              <span className="so-card-title">État académique</span>
+            </div>
+            <div style={{ padding: "20px 20px 0" }}>
+              {HEALTH.map((h) => (
+                <div key={h.label} style={{ marginBottom: 20 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                    <span style={{ fontSize: 13, color: "#4a5568", fontWeight: 500 }}>{h.label}</span>
+                    <span style={{ fontSize: 14, fontWeight: 800, color: h.color }}>{h.value}%</span>
+                  </div>
+                  <div className="so-health-track">
+                    <div className="so-health-fill" style={{ width: `${h.value}%`, background: h.color }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="so-stat-grid">
+              {STAT_CELLS.map((s) => (
+                <div key={s.label} className="so-stat-cell">
+                  <div className="so-stat-label">{s.label}</div>
+                  <div className="so-stat-val" style={{ color: s.color }}>
+                    {s.val}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="grid md:grid-cols-2 gap-4">
-            {NOTICES.slice(0, 4).map((n) => (
-              <NoticeCard key={n.id} n={n} />
-            ))}
+
+          <div className="so-card">
+            <div className="so-card-header">
+              <span className="so-dot" style={{ background: BLUE }} />
+              <span className="so-dot" style={{ background: TEAL }} />
+              <span className="so-card-title">Actualités</span>
+              <span style={{ fontSize: 10, color: MUTED }}>Cette semaine</span>
+            </div>
+            {ACTIVITY.map((item, i) => {
+              const meta = statusMeta[item.status];
+              return (
+                <div key={i} className="so-act-row">
+                  <span className="so-act-dot" style={{ background: meta.color }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="so-act-action">{item.action}</div>
+                    <div className="so-act-actor">{item.actor}</div>
+                  </div>
+                  <div className="so-act-right">
+                    <div className="so-act-time">{item.time}</div>
+                    <span
+                      className="so-act-badge"
+                      style={{ color: meta.color, borderColor: meta.color + "55", background: meta.color + "10" }}
+                    >
+                      {meta.label}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -737,19 +1035,14 @@ function TabContent({ tab }: { tab: DashboardTab }) {
 
   if (tab === "cours") {
     return (
-      <div className="space-y-4">
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <div>
-          <h2
-            className="text-xl font-bold"
-            style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-          >
-            Mes cours
-          </h2>
-          <p className="text-sm text-[#64748b] mt-1">
+          <h2 style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>Mes cours</h2>
+          <p style={{ fontSize: 13, color: MUTED, margin: "4px 0 0" }}>
             {COURSES.length} unités d'enseignement · {STUDENT.semester}
           </p>
         </div>
-        <div className="space-y-3">
+        <div className="so-card" style={{ padding: 8 }}>
           {COURSES.map((c) => (
             <CourseRow key={c.code} course={c} />
           ))}
@@ -760,19 +1053,12 @@ function TabContent({ tab }: { tab: DashboardTab }) {
 
   if (tab === "emploi") {
     return (
-      <div className="space-y-4">
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <div>
-          <h2
-            className="text-xl font-bold"
-            style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-          >
-            Emploi du temps
-          </h2>
-          <p className="text-sm text-[#64748b] mt-1">
-            Semaine du 9 au 15 septembre 2024
-          </p>
+          <h2 style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>Emploi du temps</h2>
+          <p style={{ fontSize: 13, color: MUTED, margin: "4px 0 0" }}>Semaine du 9 au 15 septembre 2024</p>
         </div>
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="so-card" style={{ padding: 8 }}>
           {SCHEDULE.map((s, i) => (
             <ScheduleRow key={i} s={s} />
           ))}
@@ -782,80 +1068,71 @@ function TabContent({ tab }: { tab: DashboardTab }) {
   }
 
   if (tab === "notes") {
+    const rows = [
+      { code: "CA", name: "Comptabilité approfondie", credits: 6, cc: "14,0", ex: "14,8", note: "14,5", decision: "ACQ" },
+      { code: "GF", name: "Gestion financière", credits: 5, cc: "12,5", ex: "13,0", note: "12,8", decision: "ACQ" },
+      { code: "DA", name: "Droit des affaires", credits: 4, cc: "15,2", ex: "14,9", note: "15,0", decision: "ACQ" },
+      { code: "MS", name: "Marketing stratégique", credits: 5, cc: "—", ex: "—", note: "—", decision: "—" },
+      { code: "AA", name: "Anglais des affaires", credits: 3, cc: "14,0", ex: "13,6", note: "13,8", decision: "ACQ" },
+    ];
     return (
-      <div className="space-y-6">
+      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         <div>
-          <h2
-            className="text-xl font-bold"
-            style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-          >
-            Notes & résultats
-          </h2>
-          <p className="text-sm text-[#64748b] mt-1">
-            Relevé provisoire — {STUDENT.semester}
-          </p>
+          <h2 style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>Notes & résultats</h2>
+          <p style={{ fontSize: 13, color: MUTED, margin: "4px 0 0" }}>Relevé provisoire — {STUDENT.semester}</p>
         </div>
 
-        <div className="grid sm:grid-cols-3 gap-4">
-          <StatCard stat={STATS[0]} />
-          <StatCard stat={STATS[1]} />
-          <StatCard stat={STATS[3]} />
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 14 }}>
+          <MetricCard label="Moyenne générale" value="13,42" suffix="/ 20" color={PURPLE} icon={Award} />
+          <MetricCard label="Crédits validés" value="96" suffix="/ 120" color={TEAL} icon={CheckCircle2} />
+          <MetricCard label="Rang" value="12" suffix="/ 45" color={PINK} icon={TrendingUp} />
         </div>
 
-        <div
-          className="rounded-xl border overflow-hidden bg-white"
-          style={{ borderColor: "#e2e8f0" }}
-        >
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead style={{ background: "#f8fafc" }}>
+        <div className="so-card">
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", fontSize: 13, borderCollapse: "collapse" }}>
+              <thead style={{ background: BORDER_LIGHT }}>
                 <tr>
-                  <th className="text-left px-5 py-3 font-semibold" style={{ color: NAVY }}>
-                    UE
-                  </th>
-                  <th className="text-left px-5 py-3 font-semibold" style={{ color: NAVY }}>
-                    Intitulé
-                  </th>
-                  <th className="text-left px-5 py-3 font-semibold" style={{ color: NAVY }}>
-                    Crédits
-                  </th>
-                  <th className="text-center px-5 py-3 font-semibold" style={{ color: NAVY }}>
-                    CC
-                  </th>
-                  <th className="text-center px-5 py-3 font-semibold" style={{ color: NAVY }}>
-                    Examen
-                  </th>
-                  <th className="text-center px-5 py-3 font-semibold" style={{ color: NAVY }}>
-                    Note finale
-                  </th>
-                  <th className="text-center px-5 py-3 font-semibold" style={{ color: NAVY }}>
-                    Décision
-                  </th>
+                  {["UE", "Intitulé", "Crédits", "CC", "Examen", "Note finale", "Décision"].map((h, i) => (
+                    <th
+                      key={h}
+                      style={{
+                        textAlign: i === 3 || i === 4 || i === 5 || i === 6 ? "center" : "left",
+                        padding: "12px 18px",
+                        fontWeight: 700,
+                        color: INK,
+                        fontSize: 11.5,
+                      }}
+                    >
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { code: "CA", name: "Comptabilité approfondie", credits: 6, cc: "14,0", ex: "14,8", note: "14,5", decision: "ACQ" },
-                  { code: "GF", name: "Gestion financière", credits: 5, cc: "12,5", ex: "13,0", note: "12,8", decision: "ACQ" },
-                  { code: "DA", name: "Droit des affaires", credits: 4, cc: "15,2", ex: "14,9", note: "15,0", decision: "ACQ" },
-                  { code: "MS", name: "Marketing stratégique", credits: 5, cc: "—", ex: "—", note: "—", decision: "—" },
-                  { code: "AA", name: "Anglais des affaires", credits: 3, cc: "14,0", ex: "13,6", note: "13,8", decision: "ACQ" },
-                ].map((row, i) => (
-                  <tr key={i} style={{ borderTop: "1px solid #e2e8f0" }}>
-                    <td className="px-5 py-3 font-mono text-[13px] text-[#64748b]">{row.code}</td>
-                    <td className="px-5 py-3 font-medium" style={{ color: NAVY }}>{row.name}</td>
-                    <td className="px-5 py-3 text-[#475569]">{row.credits}</td>
-                    <td className="px-5 py-3 text-center font-mono">{row.cc}</td>
-                    <td className="px-5 py-3 text-center font-mono">{row.ex}</td>
-                    <td className="px-5 py-3 text-center font-bold" style={{ color: row.note === "—" ? "#94a3b8" : NAVY }}>
+                {rows.map((row, i) => (
+                  <tr key={i} style={{ borderTop: `1px solid ${BORDER_LIGHT}` }}>
+                    <td style={{ padding: "12px 18px", fontFamily: "monospace", fontSize: 12, color: MUTED }}>{row.code}</td>
+                    <td style={{ padding: "12px 18px", fontWeight: 600, color: INK }}>{row.name}</td>
+                    <td style={{ padding: "12px 18px", color: "#475569" }}>{row.credits}</td>
+                    <td style={{ padding: "12px 18px", textAlign: "center", fontFamily: "monospace" }}>{row.cc}</td>
+                    <td style={{ padding: "12px 18px", textAlign: "center", fontFamily: "monospace" }}>{row.ex}</td>
+                    <td
+                      style={{
+                        padding: "12px 18px",
+                        textAlign: "center",
+                        fontWeight: 800,
+                        color: row.note === "—" ? MUTED : INK,
+                      }}
+                    >
                       {row.note}
                     </td>
-                    <td className="px-5 py-3 text-center">
+                    <td style={{ padding: "12px 18px", textAlign: "center" }}>
                       <span
-                        className="px-2 py-1 rounded text-xs font-bold"
+                        className="so-badge"
                         style={{
-                          background: row.decision === "ACQ" ? "#f0fdf4" : row.decision === "—" ? "#f1f5f9" : "#fef2f2",
-                          color: row.decision === "ACQ" ? "#16a34a" : row.decision === "—" ? "#64748b" : "#dc2626",
+                          background: row.decision === "ACQ" ? TEAL + "14" : row.decision === "—" ? BORDER_LIGHT : RED + "14",
+                          color: row.decision === "ACQ" ? TEAL : row.decision === "—" ? MUTED : RED,
                         }}
                       >
                         {row.decision}
@@ -873,49 +1150,38 @@ function TabContent({ tab }: { tab: DashboardTab }) {
 
   if (tab === "paiements") {
     return (
-      <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
           <div>
-            <h2
-              className="text-xl font-bold"
-              style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-            >
-              Paiements & factures
-            </h2>
-            <p className="text-sm text-[#64748b] mt-1">
-              Année académique {STUDENT.year}
-            </p>
+            <h2 style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>Paiements & factures</h2>
+            <p style={{ fontSize: 13, color: MUTED, margin: "4px 0 0" }}>Année académique {STUDENT.year}</p>
           </div>
           <button
-            className="px-4 py-2 rounded-lg font-semibold text-sm text-white flex items-center justify-center gap-2"
-            style={{ background: NAVY }}
+            style={{
+              padding: "10px 18px",
+              borderRadius: 8,
+              fontWeight: 700,
+              fontSize: 13,
+              color: "#fff",
+              background: PURPLE,
+              border: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
           >
-            Payer en ligne <ChevronRight className="w-4 h-4" />
+            Payer en ligne <ChevronRight style={{ width: 15, height: 15 }} />
           </button>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-4">
-          <StatCard
-            stat={{
-              label: "Total payé",
-              value: "75 000",
-              suffix: "FCFA",
-              icon: CheckCircle2,
-              tone: "good",
-            }}
-          />
-          <StatCard
-            stat={{
-              label: "Restant dû",
-              value: "72 500",
-              suffix: "FCFA",
-              icon: AlertCircle,
-              tone: "warn",
-            }}
-          />
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14 }}>
+          <MetricCard label="Total payé" value="75 000" suffix="FCFA" color={TEAL} icon={CheckCircle2} />
+          <MetricCard label="Restant dû" value="72 500" suffix="FCFA" color={AMBER} icon={AlertCircle} />
         </div>
 
-        <div className="space-y-3">
+        <div className="so-card" style={{ padding: 8 }}>
           {PAYMENTS.map((p, i) => (
             <PaymentRow key={i} p={p} />
           ))}
@@ -924,14 +1190,7 @@ function TabContent({ tab }: { tab: DashboardTab }) {
     );
   }
 
-  // Profil
-  const [editing, setEditing] = useState(false);
-  const [email, setEmail] = useState(STUDENT.email);
-  const [pwd, setPwd] = useState("");
-  const [pwdConfirm, setPwdConfirm] = useState("");
-  const [showPwd, setShowPwd] = useState(false);
-  const [saved, setSaved] = useState(false);
-
+  /* Profil */
   const handleSave = () => {
     setSaved(true);
     setEditing(false);
@@ -948,59 +1207,71 @@ function TabContent({ tab }: { tab: DashboardTab }) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
         <div>
-          <h2
-            className="text-xl font-bold"
-            style={{ color: NAVY, fontFamily: "Georgia, serif" }}
-          >
-            Mon profil
-          </h2>
-          <p className="text-sm text-[#64748b] mt-1">
-            Informations personnelles & parcours académique
-          </p>
+          <h2 style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>Mon profil</h2>
+          <p style={{ fontSize: 13, color: MUTED, margin: "4px 0 0" }}>Informations personnelles & parcours académique</p>
         </div>
         {saved && (
           <span
-            className="text-sm font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5"
-            style={{ background: "#f0fdf4", color: "#16a34a" }}
+            className="so-badge"
+            style={{ background: TEAL + "14", color: TEAL, display: "flex", alignItems: "center", gap: 6, fontSize: 12, padding: "6px 12px" }}
           >
-            <CheckCircle2 className="w-4 h-4" />
+            <CheckCircle2 style={{ width: 14, height: 14 }} />
             Modifications enregistrées
           </span>
         )}
       </div>
 
-      {/* Static card - Academic info (read-only) */}
-      <div
-        className="rounded-xl border overflow-hidden bg-white"
-        style={{ borderColor: "#e2e8f0" }}
-      >
+      {/* Academic info (read-only) */}
+      <div className="so-card">
         <div
-          className="h-32 relative"
           style={{
-            background: `linear-gradient(135deg, ${NAVY_DEEP} 0%, ${NAVY} 100%)`,
+            height: 128,
+            position: "relative",
+            background: `linear-gradient(135deg, ${INK} 0%, ${PURPLE} 100%)`,
           }}
         >
-          <div className="absolute -bottom-10 left-6">
+          <div style={{ position: "absolute", bottom: -40, left: 24 }}>
             <div
-              className="w-20 h-20 rounded-2xl border-4 flex items-center justify-center font-bold text-2xl text-white"
-              style={{ background: GOLD, borderColor: "#fff" }}
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: 18,
+                border: "4px solid #fff",
+                background: PINK,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 800,
+                fontSize: 26,
+                color: "#fff",
+              }}
             >
               {STUDENT.avatar}
             </div>
           </div>
           <span
-            className="absolute top-4 right-4 text-xs font-semibold px-3 py-1.5 rounded-lg inline-flex items-center gap-1.5"
-            style={{ background: "rgba(255,255,255,0.12)", color: "#fff" }}
+            className="so-badge"
+            style={{
+              position: "absolute",
+              top: 16,
+              right: 16,
+              background: "rgba(255,255,255,0.14)",
+              color: "#fff",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              padding: "7px 12px",
+            }}
           >
-            <Lock className="w-3.5 h-3.5" />
+            <Lock style={{ width: 13, height: 13 }} />
             Informations académiques — Lecture seule
           </span>
         </div>
 
-        <div className="pt-12 px-6 pb-6 grid md:grid-cols-2 gap-x-8 gap-y-5">
+        <div style={{ padding: "48px 24px 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20 }}>
           {[
             { k: "Nom complet", v: `${STUDENT.firstName} ${STUDENT.lastName}` },
             { k: "N° étudiant", v: STUDENT.studentId },
@@ -1011,60 +1282,66 @@ function TabContent({ tab }: { tab: DashboardTab }) {
             { k: "Campus principal", v: "Campus de Toukra, N'Djamena" },
           ].map(({ k, v }) => (
             <div key={k}>
-              <p className="text-xs text-[#94a3b8] font-semibold uppercase tracking-wide mb-1">
+              <p style={{ fontSize: 10, color: MUTED, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 4px" }}>
                 {k}
               </p>
-              <p className="text-[15px]" style={{ color: NAVY }}>
-                {v}
-              </p>
+              <p style={{ fontSize: 14.5, color: INK, margin: 0 }}>{v}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Editable card - Credentials */}
-      <div
-        className="rounded-xl border overflow-hidden bg-white"
-        style={{ borderColor: "#e2e8f0" }}
-      >
-        <div
-          className="px-6 py-4 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
-          style={{ borderColor: "#e2e8f0", background: "#f8fafc" }}
-        >
-          <div className="flex items-center gap-2.5">
-            <div
-              className="w-9 h-9 rounded-lg flex items-center justify-center"
-              style={{ background: "#e2e8f0", color: NAVY }}
-            >
-              <Key className="w-4.5 h-4.5" />
-            </div>
-            <div>
-              <h3 className="font-bold text-[15px]" style={{ color: NAVY }}>
-                Identifiants de connexion
-              </h3>
-              <p className="text-xs text-[#64748b]">
-                Les seules informations modifiables : email et mot de passe
-              </p>
-            </div>
+      {/* Editable credentials */}
+      <div className="so-card">
+        <div className="so-card-header" style={{ background: "#fafafd" }}>
+          <div
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: 8,
+              background: BORDER_LIGHT,
+              color: INK,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <Key style={{ width: 16, height: 16 }} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <h3 style={{ fontSize: 14, fontWeight: 800, color: INK, margin: 0 }}>Identifiants de connexion</h3>
+            <p style={{ fontSize: 11.5, color: MUTED, margin: "2px 0 0" }}>
+              Les seules informations modifiables : email et mot de passe
+            </p>
           </div>
           {!editing && (
             <button
               onClick={() => setEditing(true)}
-              className="text-sm font-semibold px-4 py-2 rounded-lg flex items-center justify-center gap-1.5 text-white"
-              style={{ background: NAVY }}
+              style={{
+                fontSize: 12.5,
+                fontWeight: 700,
+                padding: "9px 16px",
+                borderRadius: 8,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                color: "#fff",
+                background: PURPLE,
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "inherit",
+              }}
             >
-              <User className="w-4 h-4" />
+              <User style={{ width: 14, height: 14 }} />
               Modifier identifiants
             </button>
           )}
         </div>
 
-        <div className="p-6 space-y-5">
+        <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 20 }}>
           <div>
-            <label
-              className="block text-sm font-semibold mb-1.5"
-              style={{ color: NAVY }}
-            >
+            <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: INK, marginBottom: 6 }}>
               Adresse email universitaire
             </label>
             {editing ? (
@@ -1072,83 +1349,52 @@ function TabContent({ tab }: { tab: DashboardTab }) {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-lg border text-[15px] focus:outline-none focus:ring-2"
-                style={{
-                  borderColor: "#cbd5e1",
-                  boxShadow: "none",
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = NAVY;
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = "#cbd5e1";
-                }}
+                className="so-input"
               />
             ) : (
-              <div
-                className="px-4 py-2.5 rounded-lg border flex items-center justify-between"
-                style={{ borderColor: "#e2e8f0", background: "#f8fafc" }}
-              >
-                <span className="text-[15px]" style={{ color: NAVY }}>
-                  {email}
-                </span>
-              </div>
+              <div className="so-input-static">{email}</div>
             )}
           </div>
 
-          <div className="space-y-4">
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div>
-              <label
-                className="block text-sm font-semibold mb-1.5"
-                style={{ color: NAVY }}
-              >
+              <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: INK, marginBottom: 6 }}>
                 {editing ? "Nouveau mot de passe" : "Mot de passe"}
               </label>
               {editing ? (
-                <div className="relative">
+                <div style={{ position: "relative" }}>
                   <input
                     type={showPwd ? "text" : "password"}
                     value={pwd}
                     onChange={(e) => setPwd(e.target.value)}
                     placeholder="Laissez vide pour conserver le mot de passe actuel"
-                    className="w-full px-4 py-2.5 pr-11 rounded-lg border text-[15px] focus:outline-none"
-                    style={{ borderColor: "#cbd5e1" }}
-                    onFocus={(e) => {
-                      e.currentTarget.style.borderColor = NAVY;
-                    }}
-                    onBlur={(e) => {
-                      e.currentTarget.style.borderColor = "#cbd5e1";
-                    }}
+                    className="so-input"
+                    style={{ paddingRight: 44 }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPwd((s) => !s)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748b] hover:text-[#1e293b]"
+                    style={{
+                      position: "absolute",
+                      right: 12,
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "none",
+                      border: "none",
+                      color: MUTED,
+                      cursor: "pointer",
+                      display: "flex",
+                    }}
                     tabIndex={-1}
                     aria-label={showPwd ? "Masquer" : "Afficher"}
                   >
-                    {showPwd ? (
-                      <EyeOff className="w-4.5 h-4.5" />
-                    ) : (
-                      <Eye className="w-4.5 h-4.5" />
-                    )}
+                    {showPwd ? <EyeOff style={{ width: 17, height: 17 }} /> : <Eye style={{ width: 17, height: 17 }} />}
                   </button>
                 </div>
               ) : (
-                <div
-                  className="px-4 py-2.5 rounded-lg border flex items-center justify-between"
-                  style={{ borderColor: "#e2e8f0", background: "#f8fafc" }}
-                >
-                  <span
-                    className="text-[15px] tracking-[0.35em]"
-                    style={{ color: "#475569" }}
-                  >
-                    ••••••••
-                  </span>
-                  <span
-                    className="text-xs font-semibold px-2 py-1 rounded"
-                    style={{ background: "#f1f5f9", color: "#64748b" }}
-                  >
+                <div className="so-input-static" style={{ justifyContent: "space-between", display: "flex", alignItems: "center" }}>
+                  <span style={{ letterSpacing: "0.35em", color: "#475569" }}>••••••••</span>
+                  <span className="so-badge" style={{ background: BORDER_LIGHT, color: MUTED }}>
                     Modifié le 14 août 2024
                   </span>
                 </div>
@@ -1157,10 +1403,7 @@ function TabContent({ tab }: { tab: DashboardTab }) {
 
             {editing && (
               <div>
-                <label
-                  className="block text-sm font-semibold mb-1.5"
-                  style={{ color: NAVY }}
-                >
+                <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: INK, marginBottom: 6 }}>
                   Confirmer le nouveau mot de passe
                 </label>
                 <input
@@ -1168,50 +1411,57 @@ function TabContent({ tab }: { tab: DashboardTab }) {
                   value={pwdConfirm}
                   onChange={(e) => setPwdConfirm(e.target.value)}
                   placeholder="Retapez le nouveau mot de passe"
-                  className="w-full px-4 py-2.5 rounded-lg border text-[15px] focus:outline-none"
-                  style={{ borderColor: "#cbd5e1" }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = NAVY;
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "#cbd5e1";
-                  }}
+                  className="so-input"
                 />
                 {pwd && pwdConfirm && pwd !== pwdConfirm && (
-                  <p
-                    className="mt-1.5 text-xs font-medium flex items-center gap-1"
-                    style={{ color: "#dc2626" }}
-                  >
-                    <AlertCircle className="w-3.5 h-3.5" />
+                  <p style={{ marginTop: 6, fontSize: 12, fontWeight: 600, color: RED, display: "flex", alignItems: "center", gap: 4 }}>
+                    <AlertCircle style={{ width: 14, height: 14 }} />
                     Les mots de passe ne correspondent pas
                   </p>
                 )}
-                <p className="mt-1.5 text-xs text-[#64748b]">
-                  Astuce : minimum 8 caractères, une majuscule et un chiffre
-                  recommandés.
+                <p style={{ marginTop: 6, fontSize: 12, color: MUTED }}>
+                  Astuce : minimum 8 caractères, une majuscule et un chiffre recommandés.
                 </p>
               </div>
             )}
           </div>
 
           {editing && (
-            <div
-              className="flex flex-col sm:flex-row sm:justify-end gap-2.5 pt-2 border-t"
-              style={{ borderColor: "#e2e8f0" }}
-            >
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, paddingTop: 8, borderTop: `1px solid ${BORDER_LIGHT}` }}>
               <button
                 onClick={handleCancel}
-                className="px-4 py-2.5 rounded-lg font-semibold text-sm border hover:bg-[#f8fafc] transition-colors"
-                style={{ borderColor: "#cbd5e1", color: "#475569" }}
+                style={{
+                  padding: "10px 18px",
+                  borderRadius: 8,
+                  fontWeight: 700,
+                  fontSize: 13,
+                  border: `1px solid ${BORDER}`,
+                  color: "#475569",
+                  background: "#fff",
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                }}
               >
                 Annuler
               </button>
               <button
                 onClick={handleSave}
-                className="px-5 py-2.5 rounded-lg font-semibold text-sm flex items-center justify-center gap-1.5 text-white"
-                style={{ background: NAVY }}
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: 8,
+                  fontWeight: 700,
+                  fontSize: 13,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  color: "#fff",
+                  background: PURPLE,
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                }}
               >
-                <CheckCircle2 className="w-4 h-4" />
+                <CheckCircle2 style={{ width: 15, height: 15 }} />
                 Enregistrer les modifications
               </button>
             </div>
@@ -1226,17 +1476,165 @@ function StudentDashboard({ onLogout }: { onLogout: () => void }) {
   const [active, setActive] = useState<DashboardTab>("accueil");
 
   return (
-    <div className="min-h-screen flex bg-[#f5f7fb]">
+    <div style={{ minHeight: "100vh", display: "flex", background: BG, fontFamily: "'Nunito Sans', 'DM Sans', -apple-system, sans-serif" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&display=swap');
+
+        .so-sidebar {
+          display: none;
+          flex-direction: column;
+          width: 256px;
+          flex-shrink: 0;
+          border-right: 1px solid ${BORDER_LIGHT};
+          background: #fafafd;
+        }
+        .so-sidebar-header {
+          padding: 20px; border-bottom: 1px solid ${BORDER_LIGHT}; background: #fff;
+        }
+        .so-nav-btn {
+          width: 100%; display: flex; align-items: center; gap: 12px;
+          padding: 10px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600;
+          border: none; cursor: pointer; text-align: left; font-family: inherit;
+          transition: background 0.15s;
+        }
+        .so-nav-btn:hover { background: ${BORDER_LIGHT}; }
+        .so-logout-btn { color: #c0392b; }
+        .so-logout-btn:hover { background: #fdecea; }
+
+        .so-mobile-nav {
+          position: fixed; bottom: 0; left: 0; right: 0; z-index: 40;
+          border-top: 1px solid ${BORDER_LIGHT}; background: #fff;
+        }
+
+        .so-topbar { position: sticky; top: 0; z-index: 30; border-bottom: 1px solid ${BORDER_LIGHT}; background: #fff; }
+        .so-icon-btn {
+          position: relative; width: 38px; height: 38px; border-radius: 8px;
+          display: flex; align-items: center; justify-content: center;
+          background: none; border: none; cursor: pointer;
+        }
+        .so-icon-btn:hover { background: ${BORDER_LIGHT}; }
+        .so-topbar-profile {
+          display: none; align-items: center; gap: 10px; padding-left: 10px; margin-left: 4px;
+          border-left: 1px solid ${BORDER_LIGHT};
+        }
+
+        .so-card {
+          background: #fff; border: 1px solid ${BORDER}; border-radius: 12px; overflow: hidden;
+        }
+        .so-card-header {
+          padding: 14px 20px 12px; border-bottom: 1px solid ${BORDER_LIGHT};
+          display: flex; align-items: center; gap: 10px;
+        }
+        .so-card-title { font-size: 14px; font-weight: 700; color: ${INK}; letter-spacing: -0.01em; flex: 1; }
+        .so-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+        .so-item-row {
+          display: flex; align-items: center; gap: 14px; padding: 14px 12px;
+          border-bottom: 1px solid ${BORDER_LIGHT};
+        }
+        .so-item-row:last-child { border-bottom: none; }
+        .so-item-icon {
+          width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .so-badge {
+          font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 5px;
+          white-space: nowrap; display: inline-block;
+        }
+        .so-action-btn {
+          font-size: 11.5px; font-weight: 700; color: #555570;
+          background: #f4f4f9; border: 1px solid #e8e8f4; border-radius: 7px;
+          padding: 8px 12px; text-align: center; cursor: pointer; font-family: inherit;
+        }
+        .so-action-btn:hover { background: #ededf8; }
+        .so-action-btn-row { display: flex; gap: 8px; margin-top: 4px; }
+
+        .so-livefeed-body { display: flex; }
+        .so-livefeed-left { flex: 1; min-width: 0; }
+        .so-livefeed-right {
+          width: 210px; border-left: 1px solid ${BORDER_LIGHT};
+          padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .so-prog-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+        .so-prog-name { color: #555570; font-weight: 500; }
+        .so-prog-track { height: 5px; background: #f0f0f8; border-radius: 3px; overflow: hidden; margin-bottom: 14px; }
+        .so-prog-fill { height: 5px; border-radius: 3px; }
+
+        .so-gauge-cell {
+          display: flex; align-items: center; gap: 10px; padding: 14px 12px;
+          border-right: 1px solid ${BORDER_LIGHT}; min-width: 0; overflow: hidden;
+        }
+        .so-gauge-cell:last-child { border-right: none; }
+        .so-gauge-wrap { position: relative; width: 60px; height: 60px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .so-gauge-num { position: absolute; font-size: 13px; font-weight: 800; color: ${INK}; letter-spacing: -0.02em; }
+        .so-gauge-info { flex: 1; min-width: 0; }
+        .so-gauge-label {
+          font-size: 9px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+          color: ${MUTED}; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .so-gauge-sublabel { font-size: 10.5px; color: ${MUTED}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .so-gauge-badges { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+        .so-gauge-spark { flex-shrink: 0; width: 68px; height: 36px; }
+
+        .so-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .so-health-track { height: 6px; background: ${BORDER_LIGHT}; border-radius: 3px; margin-top: 6px; overflow: hidden; }
+        .so-health-fill { height: 6px; border-radius: 3px; }
+
+        .so-stat-grid { display: flex; border-top: 1px solid ${BORDER_LIGHT}; }
+        .so-stat-cell { flex: 1; padding: 14px 16px; border-right: 1px solid ${BORDER_LIGHT}; }
+        .so-stat-cell:last-child { border-right: none; }
+        .so-stat-label { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: ${MUTED}; margin-bottom: 4px; }
+        .so-stat-val { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+
+        .so-act-row { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #f8f9fa; }
+        .so-act-row:last-child { border-bottom: none; }
+        .so-act-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+        .so-act-action { font-size: 13px; font-weight: 600; color: ${INK}; }
+        .so-act-actor { font-size: 11px; color: ${MUTED}; margin-top: 2px; }
+        .so-act-right { margin-left: auto; text-align: right; flex-shrink: 0; }
+        .so-act-time { font-size: 11px; color: #b0b5bc; }
+        .so-act-badge {
+          font-size: 9px; font-weight: 700; letter-spacing: 0.06em; padding: 3px 8px;
+          display: inline-block; margin-top: 4px; text-transform: uppercase; border-radius: 4px; border: 1px solid currentColor;
+        }
+
+        .so-input {
+          width: 100%; padding: 11px 14px; border-radius: 8px; border: 1px solid ${BORDER};
+          font-size: 14px; font-family: inherit; outline: none; color: ${INK};
+        }
+        .so-input:focus { border-color: ${PURPLE}; box-shadow: 0 0 0 3px ${PURPLE}1a; }
+        .so-input-static {
+          padding: 11px 14px; border-radius: 8px; border: 1px solid ${BORDER_LIGHT};
+          background: #fafafd; font-size: 14px; color: ${INK};
+        }
+
+        @media (min-width: 1024px) {
+          .so-sidebar { display: flex; }
+          .so-mobile-nav { display: none; }
+          .so-topbar-profile { display: flex; }
+        }
+        @media (max-width: 1024px) {
+          .so-bottom { grid-template-columns: 1fr; }
+          .so-livefeed-body { flex-direction: column; }
+          .so-livefeed-right { width: 100%; border-left: none; border-top: 1px solid ${BORDER_LIGHT}; }
+        }
+        @media (max-width: 768px) {
+          .so-gauge-cell { min-width: 100%; border-right: none !important; border-bottom: 1px solid ${BORDER_LIGHT}; }
+          .so-gauge-cell:last-child { border-bottom: none; }
+        }
+      `}</style>
+
       <Sidebar active={active} onChange={setActive} onLogout={onLogout} />
 
-      <div className="flex-1 flex flex-col min-w-0 lg:pb-0 pb-20">
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, paddingBottom: 80 }}>
         <DashboardHeader onLogout={onLogout} />
-        <main className="flex-1 px-4 md:px-6 py-6 max-w-7xl w-full mx-auto">
+        <main style={{ flex: 1, padding: "24px 20px", maxWidth: 1280, width: "100%", margin: "0 auto" }}>
           <TabContent tab={active} />
         </main>
       </div>
 
-      <MobileNav active={active} onChange={setActive} onLogout={onLogout} />
+      <MobileNav active={active} onChange={setActive} />
     </div>
   );
 }
@@ -1250,13 +1648,12 @@ export default function Portail_Etudiant() {
 
   return (
     <div>
-      <div className="p-4 bg-white border-b text-center" style={{ borderColor: "#e2e8f0" }}>
-        <p className="text-xs text-[#64748b]">
+      <div style={{ padding: 16, background: "#fff", borderBottom: `1px solid ${BORDER}`, textAlign: "center" }}>
+        <p style={{ fontSize: 12, color: MUTED, margin: 0 }}>
           Démonstration : cliquez sur{" "}
           <button
             onClick={() => setView("dashboard")}
-            className="underline font-semibold"
-            style={{ color: NAVY }}
+            style={{ textDecoration: "underline", fontWeight: 700, color: PURPLE, background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}
           >
             accéder au tableau de bord
           </button>{" "}
