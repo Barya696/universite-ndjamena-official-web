@@ -24,25 +24,41 @@ import {
   AlertCircle,
   Award,
   TrendingUp,
-  Users,
   Lock,
   Key,
   Eye,
   EyeOff,
+  ShieldCheck,
 } from "lucide-react";
 
-/* ── Design tokens — same system as the SmartWaste admin dashboard ── */
-const INK = "#1a1e25";
-const MUTED = "#8a9099";
-const BORDER = "#e8eaed";
-const BORDER_LIGHT = "#f0f1f3";
-const PURPLE = "#7c6be8";
-const TEAL = "#1cb97a";
-const AMBER = "#f59e0b";
-const RED = "#ef4444";
-const BLUE = "#1a5fa8";
-const PINK = "#ff6b9d";
-const BG = "#f5f6f8";
+/* ─────────────────────────────────────────────────────────────────────────
+   DESIGN SYSTEM — Registrar / administrative identity
+   Palette: deep institutional navy + a single restrained brass accent.
+   Status colors (success/warning/danger/info) are reserved strictly for
+   actual status meaning — never used decoratively.
+   Type: Source Serif 4 for headings, figures and identity; Inter for UI,
+   body copy and dense data.
+   ───────────────────────────────────────────────────────────────────────── */
+const INK = "#1b2130";        // primary text
+const NAVY = "#101a2e";       // brand / sidebar / header
+const NAVY_SOFT = "#1c2b45";  // sidebar hover / secondary surfaces
+const GOLD = "#9c7a2e";       // single accent — used for emphasis & active state
+const GOLD_SOFT = "#c9a55a";
+const MUTED = "#6b7280";
+const MUTED_SOFT = "#9aa1ac";
+const BORDER = "#dbdfe6";
+const BORDER_LIGHT = "#eceef2";
+const BG = "#f2f3f5";
+const SURFACE = "#ffffff";
+
+const SUCCESS = "#2f6b46";
+const WARNING = "#a3701f";
+const DANGER = "#a5382c";
+const INFO = "#3c5c85";
+const PLUM = "#6a4356"; // secondary accent, reserved for ranking only
+
+const SERIF = "'Source Serif 4', Georgia, serif";
+const SANS = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 
 /* ── Types ── */
 interface Badge {
@@ -57,7 +73,6 @@ interface GaugeItem {
   color: string;
   badges: Badge[];
   spark: number[];
-  sc: string;
 }
 
 interface HealthItem {
@@ -70,7 +85,6 @@ interface ProgItem {
   name: string;
   val: string;
   pct: number;
-  color: string;
 }
 
 interface StatCell {
@@ -94,8 +108,6 @@ interface StatusMeta {
 interface HeaderStat {
   label: string;
   value: string;
-  color: string;
-  bars: number[];
 }
 
 interface SparkProps {
@@ -107,11 +119,6 @@ interface GaugeProps {
   value: number;
   color: string;
   size?: number;
-}
-
-interface MiniBarChartProps {
-  values: number[];
-  color: string;
 }
 
 /* ── Data ── */
@@ -151,8 +158,8 @@ const toSparkData = (arr: number[]): { i: number; v: number }[] =>
   arr.map((v, i) => ({ i, v }));
 
 const HEADER_STATS: HeaderStat[] = [
-  { label: "Cours actifs", value: "5", color: PURPLE, bars: [3, 4, 4, 5, 4, 5, 5] },
-  { label: "Échéances", value: "2", color: PINK, bars: [1, 2, 1, 2, 3, 2, 2] },
+  { label: "Cours actifs", value: "5" },
+  { label: "Échéances", value: "2" },
 ];
 
 const GAUGES: GaugeItem[] = [
@@ -160,62 +167,58 @@ const GAUGES: GaugeItem[] = [
     label: "Moyenne générale",
     sub: "Sur 20 points",
     val: 67,
-    color: PURPLE,
+    color: GOLD,
     badges: [
-      { t: "13,42/20", c: TEAL },
+      { t: "13,42/20", c: GOLD },
       { t: "+0,8", c: MUTED },
     ],
     spark: sparkMoyenne,
-    sc: PURPLE,
   },
   {
     label: "Crédits validés",
     sub: "Progression du diplôme",
     val: 80,
-    color: TEAL,
+    color: SUCCESS,
     badges: [
-      { t: "96/120", c: TEAL },
+      { t: "96/120", c: SUCCESS },
       { t: "+6 ce sem.", c: MUTED },
     ],
     spark: sparkCredits,
-    sc: TEAL,
   },
   {
     label: "Taux de présence",
     sub: "Ce semestre",
     val: 89,
-    color: BLUE,
+    color: INFO,
     badges: [
-      { t: "89%", c: BLUE },
-      { t: "-2%", c: AMBER },
+      { t: "89 %", c: INFO },
+      { t: "-2 %", c: WARNING },
     ],
     spark: sparkPresence,
-    sc: BLUE,
   },
   {
     label: "Classement",
     sub: "Sur 45 étudiants",
     val: 73,
-    color: PINK,
+    color: PLUM,
     badges: [
-      { t: "12e/45", c: PINK },
-      { t: "+3", c: TEAL },
+      { t: "12e / 45", c: PLUM },
+      { t: "+3", c: SUCCESS },
     ],
     spark: sparkRang,
-    sc: PINK,
   },
 ];
 
 const HEALTH: HealthItem[] = [
-  { label: "Crédits validés", value: 80, color: TEAL },
-  { label: "Taux de présence", value: 89, color: BLUE },
-  { label: "Objectif moyenne (≥12/20)", value: 67, color: PURPLE },
+  { label: "Crédits validés", value: 80, color: SUCCESS },
+  { label: "Taux de présence", value: 89, color: INFO },
+  { label: "Objectif moyenne (≥12/20)", value: 67, color: GOLD },
 ];
 
 const STAT_CELLS: StatCell[] = [
-  { label: "UE validées", val: "3/5", color: TEAL },
-  { label: "En attente", val: "1", color: AMBER },
-  { label: "Absences", val: "4", color: RED },
+  { label: "UE validées", val: "3/5", color: SUCCESS },
+  { label: "En attente", val: "1", color: WARNING },
+  { label: "Absences", val: "4", color: DANGER },
 ];
 
 const COURSES = [
@@ -227,7 +230,6 @@ const COURSES = [
     credits: 6,
     grade: "14,5",
     status: "En cours",
-    color: PURPLE,
   },
   {
     code: "GE3-L3-02",
@@ -237,7 +239,6 @@ const COURSES = [
     credits: 5,
     grade: "12,8",
     status: "En cours",
-    color: TEAL,
   },
   {
     code: "GE3-L3-03",
@@ -247,7 +248,6 @@ const COURSES = [
     credits: 4,
     grade: "15,0",
     status: "En cours",
-    color: BLUE,
   },
   {
     code: "GE3-L3-04",
@@ -257,7 +257,6 @@ const COURSES = [
     credits: 5,
     grade: "—",
     status: "À rattraper",
-    color: RED,
   },
   {
     code: "GE3-L3-05",
@@ -267,15 +266,14 @@ const COURSES = [
     credits: 3,
     grade: "13,8",
     status: "Validé",
-    color: PINK,
   },
 ];
 
 const PROGRESS: ProgItem[] = [
-  { name: "Comptabilité", val: "14,5/20", pct: 72.5, color: PURPLE },
-  { name: "Gestion fin.", val: "12,8/20", pct: 64, color: TEAL },
-  { name: "Droit affaires", val: "15,0/20", pct: 75, color: BLUE },
-  { name: "Anglais aff.", val: "13,8/20", pct: 69, color: PINK },
+  { name: "Comptabilité", val: "14,5/20", pct: 72.5 },
+  { name: "Gestion fin.", val: "12,8/20", pct: 64 },
+  { name: "Droit affaires", val: "15,0/20", pct: 75 },
+  { name: "Anglais aff.", val: "13,8/20", pct: 69 },
 ];
 
 const SCHEDULE = [
@@ -349,9 +347,9 @@ const ACTIVITY: ActivityItem[] = [
 ];
 
 const statusMeta: Record<string, StatusMeta> = {
-  info: { color: BLUE, label: "Info" },
-  warning: { color: AMBER, label: "À préparer" },
-  success: { color: TEAL, label: "Opportunité" },
+  info: { color: INFO, label: "Info" },
+  warning: { color: WARNING, label: "À préparer" },
+  success: { color: SUCCESS, label: "Opportunité" },
   neutral: { color: MUTED, label: "Technique" },
 };
 
@@ -383,20 +381,20 @@ type View = "login" | "dashboard";
 type DashboardTab = "accueil" | "cours" | "emploi" | "notes" | "paiements" | "profil";
 
 /* ── Shared visual primitives ── */
-function Gauge({ value, color, size = 60 }: GaugeProps) {
-  const r = (size - 10) / 2;
+function Gauge({ value, color, size = 58 }: GaugeProps) {
+  const r = (size - 8) / 2;
   const circ = 2 * Math.PI * r;
   const dash = (value / 100) * circ;
   return (
     <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={BORDER_LIGHT} strokeWidth={7} />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={BORDER_LIGHT} strokeWidth={5} />
       <circle
         cx={size / 2}
         cy={size / 2}
         r={r}
         fill="none"
         stroke={color}
-        strokeWidth={7}
+        strokeWidth={5}
         strokeDasharray={`${dash} ${circ}`}
         strokeLinecap="butt"
       />
@@ -407,7 +405,7 @@ function Gauge({ value, color, size = 60 }: GaugeProps) {
 function Spark({ data, color }: SparkProps) {
   const d = toSparkData(data);
   return (
-    <ResponsiveContainer width="100%" height={36}>
+    <ResponsiveContainer width="100%" height={32}>
       <LineChart data={d} margin={{ top: 2, right: 2, left: 2, bottom: 2 }}>
         <Line type="monotone" dataKey="v" stroke={color} strokeWidth={1.5} dot={false} />
       </LineChart>
@@ -415,22 +413,18 @@ function Spark({ data, color }: SparkProps) {
   );
 }
 
-function MiniBarChart({ values, color }: MiniBarChartProps) {
-  const max = Math.max(...values);
+function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 28 }}>
-      {values.map((v, i) => (
-        <div
-          key={i}
-          style={{
-            width: 4,
-            height: Math.round((v / max) * 22),
-            background: color,
-            opacity: 0.4 + 0.6 * (v / max),
-            borderRadius: 1,
-          }}
-        />
-      ))}
+    <div
+      style={{
+        fontSize: 11,
+        fontWeight: 600,
+        letterSpacing: "0.03em",
+        color: MUTED,
+        fontFamily: SANS,
+      }}
+    >
+      {children}
     </div>
   );
 }
@@ -452,37 +446,28 @@ function MetricCard({
     <div className="so-card" style={{ padding: "18px 20px" }}>
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
         <div>
-          <div
-            style={{
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: MUTED,
-              marginBottom: 6,
-            }}
-          >
-            {label}
-          </div>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-            <span style={{ fontSize: 26, fontWeight: 800, color, letterSpacing: "-0.02em" }}>{value}</span>
-            {suffix && <span style={{ fontSize: 12, color: MUTED }}>{suffix}</span>}
+          <SectionLabel>{label}</SectionLabel>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 5, marginTop: 6 }}>
+            <span style={{ fontSize: 27, fontWeight: 600, color, letterSpacing: "-0.01em", fontFamily: SERIF }}>
+              {value}
+            </span>
+            {suffix && <span style={{ fontSize: 12.5, color: MUTED }}>{suffix}</span>}
           </div>
         </div>
         <div
           style={{
-            width: 36,
-            height: 36,
-            borderRadius: 9,
-            background: color + "14",
-            color,
+            width: 34,
+            height: 34,
+            borderRadius: 6,
+            background: NAVY,
+            color: GOLD_SOFT,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             flexShrink: 0,
           }}
         >
-          <Icon style={{ width: 18, height: 18 }} />
+          <Icon style={{ width: 16, height: 16 }} />
         </div>
       </div>
     </div>
@@ -492,50 +477,48 @@ function MetricCard({
 function CourseRow({ course }: { course: (typeof COURSES)[number] }) {
   const meta =
     course.status === "Validé"
-      ? { color: TEAL, bg: TEAL + "14" }
+      ? { color: SUCCESS, bg: "#eef4f0" }
       : course.status === "À rattraper"
-      ? { color: RED, bg: RED + "14" }
-      : { color: BLUE, bg: BLUE + "14" };
+      ? { color: DANGER, bg: "#f7ecea" }
+      : { color: INFO, bg: "#eef1f6" };
 
   return (
     <div className="so-item-row">
-      <div className="so-item-icon" style={{ background: course.color }}>
-        <BookOpen style={{ width: 18, height: 18, color: "#fff" }} />
+      <div className="so-item-icon">
+        <BookOpen style={{ width: 17, height: 17, color: GOLD_SOFT }} />
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 2 }}>
-          <span style={{ fontSize: 11, fontFamily: "monospace", color: MUTED }}>{course.code}</span>
-          <span
-            className="so-badge"
-            style={{ background: meta.bg, color: meta.color }}
-          >
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 3 }}>
+          <span style={{ fontSize: 11, fontFamily: "monospace", color: MUTED_SOFT }}>{course.code}</span>
+          <span className="so-badge" style={{ background: meta.bg, color: meta.color }}>
             {course.status}
           </span>
-          <span style={{ fontSize: 11, color: MUTED }}>{course.credits} ECTS</span>
+          <span style={{ fontSize: 11.5, color: MUTED_SOFT }}>{course.credits} ECTS</span>
         </div>
-        <h4 style={{ fontSize: 14.5, fontWeight: 700, color: INK, margin: 0 }}>{course.name}</h4>
-        <p style={{ fontSize: 12.5, color: MUTED, margin: "2px 0 0" }}>
+        <h4 style={{ fontSize: 14.5, fontWeight: 600, color: INK, margin: 0, fontFamily: SERIF }}>
+          {course.name}
+        </h4>
+        <p style={{ fontSize: 12.5, color: MUTED, margin: "3px 0 0" }}>
           {course.teacher} · {course.room}
         </p>
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 18, flexShrink: 0 }}>
         <div style={{ textAlign: "right" }}>
-          <p style={{ fontSize: 9, color: MUTED, margin: 0, textTransform: "uppercase", letterSpacing: "0.06em" }}>
-            Note
-          </p>
+          <p style={{ fontSize: 10, color: MUTED_SOFT, margin: 0 }}>Note</p>
           <p
             style={{
               fontSize: 17,
-              fontWeight: 800,
+              fontWeight: 600,
               margin: 0,
-              color: course.grade === "—" ? MUTED : parseFloat(course.grade.replace(",", ".")) >= 10 ? TEAL : RED,
+              fontFamily: SERIF,
+              color: course.grade === "—" ? MUTED_SOFT : parseFloat(course.grade.replace(",", ".")) >= 10 ? SUCCESS : DANGER,
             }}
           >
             {course.grade}
           </p>
         </div>
         <button className="so-action-btn" style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          Détails <ChevronRight style={{ width: 14, height: 14 }} />
+          Détails <ChevronRight style={{ width: 13, height: 13 }} />
         </button>
       </div>
     </div>
@@ -545,15 +528,17 @@ function CourseRow({ course }: { course: (typeof COURSES)[number] }) {
 function ScheduleRow({ s }: { s: (typeof SCHEDULE)[number] }) {
   return (
     <div className="so-item-row">
-      <div style={{ textAlign: "center", flexShrink: 0, width: 52 }}>
-        <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: PURPLE, margin: 0 }}>
+      <div style={{ textAlign: "center", flexShrink: 0, width: 50 }}>
+        <p style={{ fontSize: 10, fontWeight: 600, color: GOLD, margin: 0, fontFamily: SANS }}>
           {s.day.split(" ")[0]}
         </p>
-        <p style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0 }}>{s.day.split(" ")[1]}</p>
+        <p style={{ fontSize: 20, fontWeight: 600, color: INK, margin: 0, fontFamily: SERIF }}>
+          {s.day.split(" ")[1]}
+        </p>
       </div>
       <div style={{ width: 1, background: BORDER_LIGHT, alignSelf: "stretch" }} />
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 11.5, color: MUTED, marginBottom: 4, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 11.5, color: MUTED, marginBottom: 4, flexWrap: "wrap" }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
             <Clock style={{ width: 13, height: 13 }} /> {s.time}
           </span>
@@ -564,8 +549,8 @@ function ScheduleRow({ s }: { s: (typeof SCHEDULE)[number] }) {
             {s.type}
           </span>
         </div>
-        <h4 style={{ fontSize: 14.5, fontWeight: 700, color: INK, margin: 0 }}>{s.subject}</h4>
-        <p style={{ fontSize: 12.5, color: MUTED, margin: "2px 0 0" }}>{s.teacher}</p>
+        <h4 style={{ fontSize: 14.5, fontWeight: 600, color: INK, margin: 0, fontFamily: SERIF }}>{s.subject}</h4>
+        <p style={{ fontSize: 12.5, color: MUTED, margin: "3px 0 0" }}>{s.teacher}</p>
       </div>
     </div>
   );
@@ -577,24 +562,26 @@ function PaymentRow({ p }: { p: (typeof PAYMENTS)[number] }) {
     <div className="so-item-row">
       <div
         className="so-item-icon"
-        style={{ background: isPaid ? TEAL : BORDER_LIGHT, color: isPaid ? "#fff" : INK }}
+        style={{ background: isPaid ? "#eef4f0" : "#f8f2e7" }}
       >
-        {isPaid ? <CheckCircle2 style={{ width: 18, height: 18 }} /> : <AlertCircle style={{ width: 18, height: 18, color: AMBER }} />}
+        {isPaid ? (
+          <CheckCircle2 style={{ width: 17, height: 17, color: SUCCESS }} />
+        ) : (
+          <AlertCircle style={{ width: 17, height: 17, color: WARNING }} />
+        )}
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <h4 style={{ fontSize: 14.5, fontWeight: 700, color: INK, margin: 0 }}>{p.label}</h4>
-        <p style={{ fontSize: 12.5, color: MUTED, margin: "2px 0 0" }}>{p.date}</p>
+        <h4 style={{ fontSize: 14.5, fontWeight: 600, color: INK, margin: 0, fontFamily: SERIF }}>{p.label}</h4>
+        <p style={{ fontSize: 12.5, color: MUTED, margin: "3px 0 0" }}>{p.date}</p>
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 18, flexShrink: 0 }}>
         <div style={{ textAlign: "right" }}>
-          <p style={{ fontSize: 9, color: MUTED, margin: 0, textTransform: "uppercase", letterSpacing: "0.06em" }}>
-            Montant
-          </p>
-          <p style={{ fontSize: 15, fontWeight: 800, color: INK, margin: 0 }}>{p.amount}</p>
+          <p style={{ fontSize: 10, color: MUTED_SOFT, margin: 0 }}>Montant</p>
+          <p style={{ fontSize: 15, fontWeight: 600, color: INK, margin: 0, fontFamily: SERIF }}>{p.amount}</p>
         </div>
         <span
           className="so-badge"
-          style={{ background: isPaid ? TEAL + "14" : AMBER + "14", color: isPaid ? TEAL : AMBER }}
+          style={{ background: isPaid ? "#eef4f0" : "#f8f2e7", color: isPaid ? SUCCESS : WARNING }}
         >
           {p.status}
         </span>
@@ -625,59 +612,50 @@ function Sidebar({
   return (
     <aside className="so-sidebar">
       <div className="so-sidebar-header">
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div
-            style={{
-              width: 42,
-              height: 42,
-              borderRadius: 10,
-              background: PURPLE,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: 800,
-              color: "#fff",
-              fontSize: 14,
-              flexShrink: 0,
-            }}
-          >
-            {STUDENT.avatar}
+        <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
+          <div className="so-seal">
+            <ShieldCheck style={{ width: 18, height: 18, color: GOLD_SOFT }} />
           </div>
           <div style={{ minWidth: 0 }}>
-            <p style={{ fontSize: 13.5, fontWeight: 700, color: INK, margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              {STUDENT.firstName} {STUDENT.lastName}
+            <p style={{ fontSize: 12.5, fontWeight: 600, color: "#fff", margin: 0, fontFamily: SERIF, letterSpacing: "0.01em" }}>
+              Université de N'Djamena
             </p>
-            <p style={{ fontSize: 11.5, color: MUTED, margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              {STUDENT.studentId}
-            </p>
+            <p style={{ fontSize: 10.5, color: "#8b93a3", margin: 0 }}>Portail étudiant</p>
           </div>
         </div>
       </div>
 
-      <nav style={{ flex: 1, padding: 10, display: "flex", flexDirection: "column", gap: 3 }}>
+      <div className="so-sidebar-id">
+        <div className="so-sidebar-avatar">{STUDENT.avatar}</div>
+        <div style={{ minWidth: 0 }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: "#fff", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            {STUDENT.firstName} {STUDENT.lastName}
+          </p>
+          <p style={{ fontSize: 11, color: "#8b93a3", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            {STUDENT.studentId}
+          </p>
+        </div>
+      </div>
+
+      <nav style={{ flex: 1, padding: "6px 10px", display: "flex", flexDirection: "column", gap: 2 }}>
         {items.map(({ id, label, icon: Icon }) => {
           const isActive = active === id;
           return (
             <button
               key={id}
               onClick={() => onChange(id)}
-              className="so-nav-btn"
-              style={
-                isActive
-                  ? { background: PURPLE, color: "#fff" }
-                  : { color: "#555570", background: "transparent" }
-              }
+              className={`so-nav-btn${isActive ? " so-nav-btn-active" : ""}`}
             >
-              <Icon style={{ width: 17, height: 17, flexShrink: 0 }} />
+              <Icon style={{ width: 16, height: 16, flexShrink: 0 }} />
               <span>{label}</span>
             </button>
           );
         })}
       </nav>
 
-      <div style={{ padding: 10, borderTop: `1px solid ${BORDER_LIGHT}` }}>
+      <div style={{ padding: 10, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
         <button onClick={onLogout} className="so-nav-btn so-logout-btn">
-          <LogOut style={{ width: 17, height: 17, flexShrink: 0 }} />
+          <LogOut style={{ width: 16, height: 16, flexShrink: 0 }} />
           <span>Se déconnecter</span>
         </button>
       </div>
@@ -718,10 +696,10 @@ function MobileNav({
                 padding: "8px 0",
                 fontSize: 10.5,
                 fontWeight: 600,
-                color: isActive ? PURPLE : MUTED,
+                color: isActive ? GOLD : MUTED,
                 background: "none",
                 border: "none",
-                fontFamily: "inherit",
+                fontFamily: SANS,
               }}
             >
               <Icon style={{ width: 19, height: 19 }} />
@@ -737,39 +715,24 @@ function MobileNav({
 function DashboardHeader({ onLogout }: { onLogout: () => void }) {
   return (
     <header className="so-topbar">
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", height: 64, gap: 12 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px", height: 68, gap: 12 }}>
         <div>
-          <p style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: PURPLE, margin: 0 }}>
+          <p style={{ fontSize: 11, fontWeight: 600, color: GOLD, margin: 0, letterSpacing: "0.01em" }}>
             {STUDENT.year} · {STUDENT.semester}
           </p>
-          <h1 style={{ fontSize: 17, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>
+          <h1 style={{ fontSize: 19, fontWeight: 600, color: INK, margin: "2px 0 0", fontFamily: SERIF, letterSpacing: "-0.005em" }}>
             Bonjour, {STUDENT.firstName}
           </h1>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <button className="so-icon-btn" aria-label="Notifications">
-            <Bell style={{ width: 18, height: 18, color: INK }} />
-            <span style={{ position: "absolute", top: 8, right: 9, width: 7, height: 7, borderRadius: "50%", background: RED }} />
+            <Bell style={{ width: 17, height: 17, color: INK }} />
+            <span style={{ position: "absolute", top: 8, right: 9, width: 6, height: 6, borderRadius: "50%", background: DANGER }} />
           </button>
           <div className="so-topbar-profile">
-            <div
-              style={{
-                width: 34,
-                height: 34,
-                borderRadius: "50%",
-                background: PURPLE,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 800,
-                color: "#fff",
-                fontSize: 12.5,
-              }}
-            >
-              {STUDENT.avatar}
-            </div>
+            <div className="so-topbar-avatar">{STUDENT.avatar}</div>
             <div style={{ textAlign: "right" }}>
-              <p style={{ fontSize: 12.5, fontWeight: 700, color: INK, margin: 0, lineHeight: 1.2 }}>
+              <p style={{ fontSize: 12.5, fontWeight: 600, color: INK, margin: 0, lineHeight: 1.2 }}>
                 {STUDENT.firstName} {STUDENT.lastName}
               </p>
               <button onClick={onLogout} style={{ fontSize: 10.5, color: MUTED, background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "inherit" }}>
@@ -796,27 +759,20 @@ function TabContent({ tab }: { tab: DashboardTab }) {
   if (tab === "accueil") {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-        {/* Top header row with mini bar charts */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 24, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 28, flexWrap: "wrap" }}>
           {HEADER_STATS.map((s) => (
-            <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED }}>
-                  {s.label}
-                </div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: s.color, letterSpacing: "-0.03em", lineHeight: 1.1 }}>
-                  {s.value}
-                </div>
+            <div key={s.label} style={{ textAlign: "right" }}>
+              <SectionLabel>{s.label}</SectionLabel>
+              <div style={{ fontSize: 21, fontWeight: 600, color: INK, letterSpacing: "-0.01em", fontFamily: SERIF, marginTop: 2 }}>
+                {s.value}
               </div>
-              <MiniBarChart values={s.bars} color={s.color} />
             </div>
           ))}
         </div>
 
-        {/* Academic progress card (like Live Operations) */}
         <div className="so-card">
           <div className="so-card-header">
-            <span className="so-dot" style={{ background: TEAL }} />
+            <span className="so-rule" />
             <span className="so-card-title">Progression académique</span>
             <div style={{ display: "flex" }}>
               {(
@@ -829,19 +785,7 @@ function TabContent({ tab }: { tab: DashboardTab }) {
                   key={t.id}
                   type="button"
                   onClick={() => setLiveFeedTab(t.id)}
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 600,
-                    padding: "4px 14px",
-                    cursor: "pointer",
-                    color: liveFeedTab === t.id ? PURPLE : "#9a9ab0",
-                    borderBottom: liveFeedTab === t.id ? `2px solid ${PURPLE}` : "2px solid transparent",
-                    background: "none",
-                    borderTop: "none",
-                    borderLeft: "none",
-                    borderRight: "none",
-                    fontFamily: "inherit",
-                  }}
+                  className={`so-tab-btn${liveFeedTab === t.id ? " so-tab-btn-active" : ""}`}
                 >
                   {t.label}
                 </button>
@@ -853,17 +797,17 @@ function TabContent({ tab }: { tab: DashboardTab }) {
             <div className="so-livefeed-left">
               {liveFeedTab === "evolution" ? (
                 <>
-                  <div style={{ padding: "14px 20px 0", display: "flex", gap: 32 }}>
+                  <div style={{ padding: "16px 22px 0", display: "flex", gap: 36 }}>
                     {[
-                      { label: "Moyenne actuelle", val: "13,42/20", color: PURPLE },
-                      { label: "Crédits", val: "96/120", color: TEAL },
-                      { label: "Présence", val: "89%", color: BLUE },
+                      { label: "Moyenne actuelle", val: "13,42/20", color: GOLD },
+                      { label: "Crédits", val: "96/120", color: SUCCESS },
+                      { label: "Présence", val: "89 %", color: INFO },
                     ].map((s) => (
                       <div key={s.label}>
-                        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: MUTED, marginBottom: 3 }}>
-                          {s.label}
+                        <SectionLabel>{s.label}</SectionLabel>
+                        <div style={{ fontSize: 24, fontWeight: 600, color: s.color, letterSpacing: "-0.01em", fontFamily: SERIF, marginTop: 3 }}>
+                          {s.val}
                         </div>
-                        <div style={{ fontSize: 24, fontWeight: 800, color: s.color, letterSpacing: "-0.02em" }}>{s.val}</div>
                       </div>
                     ))}
                   </div>
@@ -871,12 +815,12 @@ function TabContent({ tab }: { tab: DashboardTab }) {
                     <AreaChart data={moyenneTrend} margin={{ top: 16, right: 0, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id="moyGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor={PURPLE} stopOpacity={0.35} />
-                          <stop offset="100%" stopColor={PURPLE} stopOpacity={0.02} />
+                          <stop offset="0%" stopColor={GOLD} stopOpacity={0.25} />
+                          <stop offset="100%" stopColor={GOLD} stopOpacity={0.02} />
                         </linearGradient>
                       </defs>
                       <Tooltip
-                        contentStyle={{ background: INK, border: "none", borderRadius: 6, fontSize: 11 }}
+                        contentStyle={{ background: NAVY, border: "none", borderRadius: 6, fontSize: 11 }}
                         itemStyle={{ color: "#fff" }}
                         labelStyle={{ display: "none" }}
                         formatter={(v: number) => [v, "Moyenne"]}
@@ -884,31 +828,31 @@ function TabContent({ tab }: { tab: DashboardTab }) {
                       <Area
                         type="monotone"
                         dataKey="v"
-                        stroke={PURPLE}
+                        stroke={GOLD}
                         strokeWidth={2}
                         fill="url(#moyGrad)"
                         dot={false}
-                        activeDot={{ r: 4, fill: PURPLE, strokeWidth: 0 }}
+                        activeDot={{ r: 4, fill: GOLD, strokeWidth: 0 }}
                       />
                     </AreaChart>
                   </ResponsiveContainer>
                 </>
               ) : (
-                <div style={{ padding: "12px 16px" }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12 }}>
-                    Notes par matière
+                <div style={{ padding: "16px 22px" }}>
+                  <SectionLabel>Notes par matière</SectionLabel>
+                  <div style={{ marginTop: 14 }}>
+                    {PROGRESS.map((d) => (
+                      <div key={d.name} style={{ marginBottom: 14 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, fontWeight: 600, marginBottom: 6, color: INK }}>
+                          <span>{d.name}</span>
+                          <span>{d.val}</span>
+                        </div>
+                        <div style={{ height: 4, background: BORDER_LIGHT, borderRadius: 2, overflow: "hidden" }}>
+                          <div style={{ width: `${d.pct}%`, height: "100%", background: GOLD }} />
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  {PROGRESS.map((d) => (
-                    <div key={d.name} style={{ marginBottom: 14 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
-                        <span>{d.name}</span>
-                        <span>{d.val}</span>
-                      </div>
-                      <div style={{ height: 6, background: BORDER_LIGHT, borderRadius: 3, overflow: "hidden" }}>
-                        <div style={{ width: `${d.pct}%`, height: "100%", background: d.color }} />
-                      </div>
-                    </div>
-                  ))}
                 </div>
               )}
             </div>
@@ -919,10 +863,10 @@ function TabContent({ tab }: { tab: DashboardTab }) {
                   <div key={p.name}>
                     <div className="so-prog-label">
                       <span className="so-prog-name">{p.name}</span>
-                      <span style={{ fontWeight: 700, fontSize: 12, color: INK }}>{p.val}</span>
+                      <span style={{ fontWeight: 600, fontSize: 12, color: INK }}>{p.val}</span>
                     </div>
                     <div className="so-prog-track">
-                      <div className="so-prog-fill" style={{ width: `${p.pct}%`, background: p.color }} />
+                      <div className="so-prog-fill" style={{ width: `${p.pct}%` }} />
                     </div>
                   </div>
                 ))}
@@ -938,48 +882,44 @@ function TabContent({ tab }: { tab: DashboardTab }) {
             </div>
           </div>
 
-          {/* Gauge row */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", borderTop: `1px solid ${BORDER_LIGHT}` }}>
             {GAUGES.map((g) => (
               <div key={g.label} className="so-gauge-cell">
                 <div className="so-gauge-wrap">
-                  <Gauge value={g.val} color={g.color} size={60} />
-                  <span className="so-gauge-num">{g.val}</span>
+                  <Gauge value={g.val} color={g.color} size={58} />
+                  <span className="so-gauge-num" style={{ color: g.color }}>{g.val}</span>
                 </div>
                 <div className="so-gauge-info">
                   <div className="so-gauge-label">{g.label}</div>
                   <div className="so-gauge-sublabel">{g.sub}</div>
                   <div className="so-gauge-badges">
                     {g.badges.map((b) => (
-                      <span key={b.t} className="so-badge" style={{ background: b.c + "18", color: b.c }}>
+                      <span key={b.t} className="so-badge" style={{ background: b.c + "14", color: b.c }}>
                         {b.t}
                       </span>
                     ))}
                   </div>
                 </div>
                 <div className="so-gauge-spark">
-                  <Spark data={g.spark} color={g.sc} />
+                  <Spark data={g.spark} color={g.color} />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Bottom: État académique + Actualités */}
         <div className="so-bottom">
           <div className="so-card">
             <div className="so-card-header">
-              <span className="so-dot" style={{ background: TEAL }} />
-              <span className="so-dot" style={{ background: AMBER }} />
-              <span className="so-dot" style={{ background: RED }} />
+              <span className="so-rule" />
               <span className="so-card-title">État académique</span>
             </div>
-            <div style={{ padding: "20px 20px 0" }}>
+            <div style={{ padding: "20px 22px 0" }}>
               {HEALTH.map((h) => (
                 <div key={h.label} style={{ marginBottom: 20 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                    <span style={{ fontSize: 13, color: "#4a5568", fontWeight: 500 }}>{h.label}</span>
-                    <span style={{ fontSize: 14, fontWeight: 800, color: h.color }}>{h.value}%</span>
+                    <span style={{ fontSize: 13, color: "#3f4657", fontWeight: 500 }}>{h.label}</span>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: h.color, fontFamily: SERIF }}>{h.value}%</span>
                   </div>
                   <div className="so-health-track">
                     <div className="so-health-fill" style={{ width: `${h.value}%`, background: h.color }} />
@@ -1001,10 +941,9 @@ function TabContent({ tab }: { tab: DashboardTab }) {
 
           <div className="so-card">
             <div className="so-card-header">
-              <span className="so-dot" style={{ background: BLUE }} />
-              <span className="so-dot" style={{ background: TEAL }} />
+              <span className="so-rule" />
               <span className="so-card-title">Actualités</span>
-              <span style={{ fontSize: 10, color: MUTED }}>Cette semaine</span>
+              <span style={{ fontSize: 10.5, color: MUTED_SOFT }}>Cette semaine</span>
             </div>
             {ACTIVITY.map((item, i) => {
               const meta = statusMeta[item.status];
@@ -1019,7 +958,7 @@ function TabContent({ tab }: { tab: DashboardTab }) {
                     <div className="so-act-time">{item.time}</div>
                     <span
                       className="so-act-badge"
-                      style={{ color: meta.color, borderColor: meta.color + "55", background: meta.color + "10" }}
+                      style={{ color: meta.color, borderColor: meta.color + "40", background: meta.color + "0d" }}
                     >
                       {meta.label}
                     </span>
@@ -1035,14 +974,14 @@ function TabContent({ tab }: { tab: DashboardTab }) {
 
   if (tab === "cours") {
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         <div>
-          <h2 style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>Mes cours</h2>
+          <h2 style={{ fontSize: 20, fontWeight: 600, color: INK, margin: 0, fontFamily: SERIF }}>Mes cours</h2>
           <p style={{ fontSize: 13, color: MUTED, margin: "4px 0 0" }}>
             {COURSES.length} unités d'enseignement · {STUDENT.semester}
           </p>
         </div>
-        <div className="so-card" style={{ padding: 8 }}>
+        <div className="so-card" style={{ padding: "0 8px" }}>
           {COURSES.map((c) => (
             <CourseRow key={c.code} course={c} />
           ))}
@@ -1053,12 +992,12 @@ function TabContent({ tab }: { tab: DashboardTab }) {
 
   if (tab === "emploi") {
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         <div>
-          <h2 style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>Emploi du temps</h2>
+          <h2 style={{ fontSize: 20, fontWeight: 600, color: INK, margin: 0, fontFamily: SERIF }}>Emploi du temps</h2>
           <p style={{ fontSize: 13, color: MUTED, margin: "4px 0 0" }}>Semaine du 9 au 15 septembre 2024</p>
         </div>
-        <div className="so-card" style={{ padding: 8 }}>
+        <div className="so-card" style={{ padding: "0 8px" }}>
           {SCHEDULE.map((s, i) => (
             <ScheduleRow key={i} s={s} />
           ))}
@@ -1078,30 +1017,32 @@ function TabContent({ tab }: { tab: DashboardTab }) {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         <div>
-          <h2 style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>Notes & résultats</h2>
+          <h2 style={{ fontSize: 20, fontWeight: 600, color: INK, margin: 0, fontFamily: SERIF }}>Notes & résultats</h2>
           <p style={{ fontSize: 13, color: MUTED, margin: "4px 0 0" }}>Relevé provisoire — {STUDENT.semester}</p>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 14 }}>
-          <MetricCard label="Moyenne générale" value="13,42" suffix="/ 20" color={PURPLE} icon={Award} />
-          <MetricCard label="Crédits validés" value="96" suffix="/ 120" color={TEAL} icon={CheckCircle2} />
-          <MetricCard label="Rang" value="12" suffix="/ 45" color={PINK} icon={TrendingUp} />
+          <MetricCard label="Moyenne générale" value="13,42" suffix="/ 20" color={GOLD} icon={Award} />
+          <MetricCard label="Crédits validés" value="96" suffix="/ 120" color={SUCCESS} icon={CheckCircle2} />
+          <MetricCard label="Rang" value="12" suffix="/ 45" color={PLUM} icon={TrendingUp} />
         </div>
 
         <div className="so-card">
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", fontSize: 13, borderCollapse: "collapse" }}>
-              <thead style={{ background: BORDER_LIGHT }}>
+              <thead style={{ background: "#f7f7f9" }}>
                 <tr>
                   {["UE", "Intitulé", "Crédits", "CC", "Examen", "Note finale", "Décision"].map((h, i) => (
                     <th
                       key={h}
                       style={{
                         textAlign: i === 3 || i === 4 || i === 5 || i === 6 ? "center" : "left",
-                        padding: "12px 18px",
-                        fontWeight: 700,
-                        color: INK,
-                        fontSize: 11.5,
+                        padding: "13px 18px",
+                        fontWeight: 600,
+                        color: MUTED,
+                        fontSize: 11,
+                        letterSpacing: "0.02em",
+                        borderBottom: `1px solid ${BORDER}`,
                       }}
                     >
                       {h}
@@ -1112,27 +1053,28 @@ function TabContent({ tab }: { tab: DashboardTab }) {
               <tbody>
                 {rows.map((row, i) => (
                   <tr key={i} style={{ borderTop: `1px solid ${BORDER_LIGHT}` }}>
-                    <td style={{ padding: "12px 18px", fontFamily: "monospace", fontSize: 12, color: MUTED }}>{row.code}</td>
-                    <td style={{ padding: "12px 18px", fontWeight: 600, color: INK }}>{row.name}</td>
-                    <td style={{ padding: "12px 18px", color: "#475569" }}>{row.credits}</td>
-                    <td style={{ padding: "12px 18px", textAlign: "center", fontFamily: "monospace" }}>{row.cc}</td>
-                    <td style={{ padding: "12px 18px", textAlign: "center", fontFamily: "monospace" }}>{row.ex}</td>
+                    <td style={{ padding: "13px 18px", fontFamily: "monospace", fontSize: 12, color: MUTED_SOFT }}>{row.code}</td>
+                    <td style={{ padding: "13px 18px", fontWeight: 500, color: INK, fontFamily: SERIF }}>{row.name}</td>
+                    <td style={{ padding: "13px 18px", color: "#475569" }}>{row.credits}</td>
+                    <td style={{ padding: "13px 18px", textAlign: "center", fontFamily: "monospace" }}>{row.cc}</td>
+                    <td style={{ padding: "13px 18px", textAlign: "center", fontFamily: "monospace" }}>{row.ex}</td>
                     <td
                       style={{
-                        padding: "12px 18px",
+                        padding: "13px 18px",
                         textAlign: "center",
-                        fontWeight: 800,
-                        color: row.note === "—" ? MUTED : INK,
+                        fontWeight: 600,
+                        fontFamily: SERIF,
+                        color: row.note === "—" ? MUTED_SOFT : INK,
                       }}
                     >
                       {row.note}
                     </td>
-                    <td style={{ padding: "12px 18px", textAlign: "center" }}>
+                    <td style={{ padding: "13px 18px", textAlign: "center" }}>
                       <span
                         className="so-badge"
                         style={{
-                          background: row.decision === "ACQ" ? TEAL + "14" : row.decision === "—" ? BORDER_LIGHT : RED + "14",
-                          color: row.decision === "ACQ" ? TEAL : row.decision === "—" ? MUTED : RED,
+                          background: row.decision === "ACQ" ? "#eef4f0" : row.decision === "—" ? BORDER_LIGHT : "#f7ecea",
+                          color: row.decision === "ACQ" ? SUCCESS : row.decision === "—" ? MUTED_SOFT : DANGER,
                         }}
                       >
                         {row.decision}
@@ -1153,35 +1095,20 @@ function TabContent({ tab }: { tab: DashboardTab }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
           <div>
-            <h2 style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>Paiements & factures</h2>
+            <h2 style={{ fontSize: 20, fontWeight: 600, color: INK, margin: 0, fontFamily: SERIF }}>Paiements & factures</h2>
             <p style={{ fontSize: 13, color: MUTED, margin: "4px 0 0" }}>Année académique {STUDENT.year}</p>
           </div>
-          <button
-            style={{
-              padding: "10px 18px",
-              borderRadius: 8,
-              fontWeight: 700,
-              fontSize: 13,
-              color: "#fff",
-              background: PURPLE,
-              border: "none",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              cursor: "pointer",
-              fontFamily: "inherit",
-            }}
-          >
-            Payer en ligne <ChevronRight style={{ width: 15, height: 15 }} />
+          <button className="so-primary-btn">
+            Payer en ligne <ChevronRight style={{ width: 14, height: 14 }} />
           </button>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14 }}>
-          <MetricCard label="Total payé" value="75 000" suffix="FCFA" color={TEAL} icon={CheckCircle2} />
-          <MetricCard label="Restant dû" value="72 500" suffix="FCFA" color={AMBER} icon={AlertCircle} />
+          <MetricCard label="Total payé" value="75 000" suffix="FCFA" color={SUCCESS} icon={CheckCircle2} />
+          <MetricCard label="Restant dû" value="72 500" suffix="FCFA" color={WARNING} icon={AlertCircle} />
         </div>
 
-        <div className="so-card" style={{ padding: 8 }}>
+        <div className="so-card" style={{ padding: "0 8px" }}>
           {PAYMENTS.map((p, i) => (
             <PaymentRow key={i} p={p} />
           ))}
@@ -1210,68 +1137,27 @@ function TabContent({ tab }: { tab: DashboardTab }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: 19, fontWeight: 800, color: INK, margin: 0, letterSpacing: "-0.01em" }}>Mon profil</h2>
+          <h2 style={{ fontSize: 20, fontWeight: 600, color: INK, margin: 0, fontFamily: SERIF }}>Mon profil</h2>
           <p style={{ fontSize: 13, color: MUTED, margin: "4px 0 0" }}>Informations personnelles & parcours académique</p>
         </div>
         {saved && (
-          <span
-            className="so-badge"
-            style={{ background: TEAL + "14", color: TEAL, display: "flex", alignItems: "center", gap: 6, fontSize: 12, padding: "6px 12px" }}
-          >
+          <span className="so-badge" style={{ background: "#eef4f0", color: SUCCESS, display: "flex", alignItems: "center", gap: 6, fontSize: 12, padding: "7px 12px" }}>
             <CheckCircle2 style={{ width: 14, height: 14 }} />
             Modifications enregistrées
           </span>
         )}
       </div>
 
-      {/* Academic info (read-only) */}
       <div className="so-card">
-        <div
-          style={{
-            height: 128,
-            position: "relative",
-            background: `linear-gradient(135deg, ${INK} 0%, ${PURPLE} 100%)`,
-          }}
-        >
-          <div style={{ position: "absolute", bottom: -40, left: 24 }}>
-            <div
-              style={{
-                width: 80,
-                height: 80,
-                borderRadius: 18,
-                border: "4px solid #fff",
-                background: PINK,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 800,
-                fontSize: 26,
-                color: "#fff",
-              }}
-            >
-              {STUDENT.avatar}
-            </div>
-          </div>
-          <span
-            className="so-badge"
-            style={{
-              position: "absolute",
-              top: 16,
-              right: 16,
-              background: "rgba(255,255,255,0.14)",
-              color: "#fff",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "7px 12px",
-            }}
-          >
-            <Lock style={{ width: 13, height: 13 }} />
+        <div className="so-profile-banner">
+          <div className="so-profile-avatar">{STUDENT.avatar}</div>
+          <span className="so-badge so-profile-lock">
+            <Lock style={{ width: 12, height: 12 }} />
             Informations académiques — Lecture seule
           </span>
         </div>
 
-        <div style={{ padding: "48px 24px 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20 }}>
+        <div style={{ padding: "48px 24px 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 22 }}>
           {[
             { k: "Nom complet", v: `${STUDENT.firstName} ${STUDENT.lastName}` },
             { k: "N° étudiant", v: STUDENT.studentId },
@@ -1282,66 +1168,37 @@ function TabContent({ tab }: { tab: DashboardTab }) {
             { k: "Campus principal", v: "Campus de Toukra, N'Djamena" },
           ].map(({ k, v }) => (
             <div key={k}>
-              <p style={{ fontSize: 10, color: MUTED, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 4px" }}>
+              <p style={{ fontSize: 10.5, color: MUTED_SOFT, fontWeight: 600, letterSpacing: "0.02em", margin: "0 0 5px" }}>
                 {k}
               </p>
-              <p style={{ fontSize: 14.5, color: INK, margin: 0 }}>{v}</p>
+              <p style={{ fontSize: 14.5, color: INK, margin: 0, fontFamily: SERIF }}>{v}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Editable credentials */}
       <div className="so-card">
-        <div className="so-card-header" style={{ background: "#fafafd" }}>
-          <div
-            style={{
-              width: 34,
-              height: 34,
-              borderRadius: 8,
-              background: BORDER_LIGHT,
-              color: INK,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            <Key style={{ width: 16, height: 16 }} />
+        <div className="so-card-header" style={{ background: "#fafafb" }}>
+          <div className="so-key-icon">
+            <Key style={{ width: 15, height: 15 }} />
           </div>
           <div style={{ flex: 1 }}>
-            <h3 style={{ fontSize: 14, fontWeight: 800, color: INK, margin: 0 }}>Identifiants de connexion</h3>
+            <h3 style={{ fontSize: 14.5, fontWeight: 600, color: INK, margin: 0, fontFamily: SERIF }}>Identifiants de connexion</h3>
             <p style={{ fontSize: 11.5, color: MUTED, margin: "2px 0 0" }}>
               Les seules informations modifiables : email et mot de passe
             </p>
           </div>
           {!editing && (
-            <button
-              onClick={() => setEditing(true)}
-              style={{
-                fontSize: 12.5,
-                fontWeight: 700,
-                padding: "9px 16px",
-                borderRadius: 8,
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                color: "#fff",
-                background: PURPLE,
-                border: "none",
-                cursor: "pointer",
-                fontFamily: "inherit",
-              }}
-            >
-              <User style={{ width: 14, height: 14 }} />
-              Modifier identifiants
+            <button onClick={() => setEditing(true)} className="so-primary-btn">
+              <User style={{ width: 13, height: 13 }} />
+              Modifier
             </button>
           )}
         </div>
 
         <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 20 }}>
           <div>
-            <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: INK, marginBottom: 6 }}>
+            <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: INK, marginBottom: 7 }}>
               Adresse email universitaire
             </label>
             {editing ? (
@@ -1358,7 +1215,7 @@ function TabContent({ tab }: { tab: DashboardTab }) {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div>
-              <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: INK, marginBottom: 6 }}>
+              <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: INK, marginBottom: 7 }}>
                 {editing ? "Nouveau mot de passe" : "Mot de passe"}
               </label>
               {editing ? (
@@ -1403,7 +1260,7 @@ function TabContent({ tab }: { tab: DashboardTab }) {
 
             {editing && (
               <div>
-                <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: INK, marginBottom: 6 }}>
+                <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: INK, marginBottom: 7 }}>
                   Confirmer le nouveau mot de passe
                 </label>
                 <input
@@ -1414,7 +1271,7 @@ function TabContent({ tab }: { tab: DashboardTab }) {
                   className="so-input"
                 />
                 {pwd && pwdConfirm && pwd !== pwdConfirm && (
-                  <p style={{ marginTop: 6, fontSize: 12, fontWeight: 600, color: RED, display: "flex", alignItems: "center", gap: 4 }}>
+                  <p style={{ marginTop: 6, fontSize: 12, fontWeight: 600, color: DANGER, display: "flex", alignItems: "center", gap: 4 }}>
                     <AlertCircle style={{ width: 14, height: 14 }} />
                     Les mots de passe ne correspondent pas
                   </p>
@@ -1428,40 +1285,11 @@ function TabContent({ tab }: { tab: DashboardTab }) {
 
           {editing && (
             <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, paddingTop: 8, borderTop: `1px solid ${BORDER_LIGHT}` }}>
-              <button
-                onClick={handleCancel}
-                style={{
-                  padding: "10px 18px",
-                  borderRadius: 8,
-                  fontWeight: 700,
-                  fontSize: 13,
-                  border: `1px solid ${BORDER}`,
-                  color: "#475569",
-                  background: "#fff",
-                  cursor: "pointer",
-                  fontFamily: "inherit",
-                }}
-              >
+              <button onClick={handleCancel} className="so-secondary-btn">
                 Annuler
               </button>
-              <button
-                onClick={handleSave}
-                style={{
-                  padding: "10px 20px",
-                  borderRadius: 8,
-                  fontWeight: 700,
-                  fontSize: 13,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                  color: "#fff",
-                  background: PURPLE,
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: "inherit",
-                }}
-              >
-                <CheckCircle2 style={{ width: 15, height: 15 }} />
+              <button onClick={handleSave} className="so-primary-btn">
+                <CheckCircle2 style={{ width: 14, height: 14 }} />
                 Enregistrer les modifications
               </button>
             </div>
@@ -1476,137 +1304,212 @@ function StudentDashboard({ onLogout }: { onLogout: () => void }) {
   const [active, setActive] = useState<DashboardTab>("accueil");
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", background: BG, fontFamily: "'Nunito Sans', 'DM Sans', -apple-system, sans-serif" }}>
+    <div style={{ minHeight: "100vh", display: "flex", background: BG, fontFamily: SANS }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+        * { box-sizing: border-box; }
 
         .so-sidebar {
           display: none;
           flex-direction: column;
-          width: 256px;
+          width: 252px;
           flex-shrink: 0;
-          border-right: 1px solid ${BORDER_LIGHT};
-          background: #fafafd;
+          background: ${NAVY};
         }
         .so-sidebar-header {
-          padding: 20px; border-bottom: 1px solid ${BORDER_LIGHT}; background: #fff;
+          padding: 20px 18px 16px;
+        }
+        .so-seal {
+          width: 34px; height: 34px; border-radius: 6px;
+          background: ${NAVY_SOFT}; border: 1px solid rgba(255,255,255,0.08);
+          display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .so-sidebar-id {
+          display: flex; align-items: center; gap: 11px;
+          padding: 14px 18px; margin: 0 10px 6px;
+          border-top: 1px solid rgba(255,255,255,0.08);
+          border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .so-sidebar-avatar {
+          width: 36px; height: 36px; border-radius: 6px;
+          background: ${NAVY_SOFT}; border: 1px solid rgba(201,165,90,0.4);
+          display: flex; align-items: center; justify-content: center;
+          font-weight: 600; color: ${GOLD_SOFT}; font-size: 12.5px; font-family: ${SERIF};
+          flex-shrink: 0;
         }
         .so-nav-btn {
-          width: 100%; display: flex; align-items: center; gap: 12px;
-          padding: 10px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600;
-          border: none; cursor: pointer; text-align: left; font-family: inherit;
-          transition: background 0.15s;
+          width: 100%; display: flex; align-items: center; gap: 11px;
+          padding: 10px 12px; border-radius: 6px; font-size: 13.5px; font-weight: 500;
+          border: none; cursor: pointer; text-align: left; font-family: ${SANS};
+          transition: background 0.15s, color 0.15s;
+          color: #a9b0bd; background: transparent;
+          border-left: 2px solid transparent;
         }
-        .so-nav-btn:hover { background: ${BORDER_LIGHT}; }
-        .so-logout-btn { color: #c0392b; }
-        .so-logout-btn:hover { background: #fdecea; }
+        .so-nav-btn:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .so-nav-btn-active {
+          background: rgba(201,165,90,0.1); color: #fff;
+          border-left: 2px solid ${GOLD_SOFT};
+        }
+        .so-nav-btn-active:hover { background: rgba(201,165,90,0.14); }
+        .so-logout-btn { color: #c4867e; }
+        .so-logout-btn:hover { background: rgba(165,56,44,0.14); color: #e8a49c; }
 
         .so-mobile-nav {
           position: fixed; bottom: 0; left: 0; right: 0; z-index: 40;
           border-top: 1px solid ${BORDER_LIGHT}; background: #fff;
         }
 
-        .so-topbar { position: sticky; top: 0; z-index: 30; border-bottom: 1px solid ${BORDER_LIGHT}; background: #fff; }
+        .so-topbar { position: sticky; top: 0; z-index: 30; border-bottom: 1px solid ${BORDER}; background: ${SURFACE}; }
         .so-icon-btn {
-          position: relative; width: 38px; height: 38px; border-radius: 8px;
+          position: relative; width: 36px; height: 36px; border-radius: 6px;
           display: flex; align-items: center; justify-content: center;
           background: none; border: none; cursor: pointer;
         }
         .so-icon-btn:hover { background: ${BORDER_LIGHT}; }
         .so-topbar-profile {
-          display: none; align-items: center; gap: 10px; padding-left: 10px; margin-left: 4px;
-          border-left: 1px solid ${BORDER_LIGHT};
+          display: none; align-items: center; gap: 10px; padding-left: 12px; margin-left: 4px;
+          border-left: 1px solid ${BORDER};
+        }
+        .so-topbar-avatar {
+          width: 32px; height: 32px; border-radius: 6px;
+          background: ${NAVY}; display: flex; align-items: center; justify-content: center;
+          font-weight: 600; color: ${GOLD_SOFT}; font-size: 12px; font-family: ${SERIF};
         }
 
         .so-card {
-          background: #fff; border: 1px solid ${BORDER}; border-radius: 12px; overflow: hidden;
+          background: ${SURFACE}; border: 1px solid ${BORDER}; border-radius: 8px; overflow: hidden;
         }
         .so-card-header {
-          padding: 14px 20px 12px; border-bottom: 1px solid ${BORDER_LIGHT};
-          display: flex; align-items: center; gap: 10px;
+          padding: 15px 22px 13px; border-bottom: 1px solid ${BORDER_LIGHT};
+          display: flex; align-items: center; gap: 11px;
         }
-        .so-card-title { font-size: 14px; font-weight: 700; color: ${INK}; letter-spacing: -0.01em; flex: 1; }
-        .so-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+        .so-card-title { font-size: 14.5px; font-weight: 600; color: ${INK}; font-family: ${SERIF}; flex: 1; }
+        .so-rule { width: 3px; height: 15px; background: ${GOLD}; border-radius: 1px; flex-shrink: 0; }
+
+        .so-tab-btn {
+          font-size: 12px; font-weight: 500; padding: 5px 14px; cursor: pointer;
+          color: ${MUTED}; border-bottom: 2px solid transparent;
+          background: none; border-top: none; border-left: none; border-right: none;
+          font-family: ${SANS};
+        }
+        .so-tab-btn-active { color: ${GOLD}; border-bottom: 2px solid ${GOLD}; font-weight: 600; }
 
         .so-item-row {
-          display: flex; align-items: center; gap: 14px; padding: 14px 12px;
+          display: flex; align-items: center; gap: 14px; padding: 15px 14px;
           border-bottom: 1px solid ${BORDER_LIGHT};
         }
         .so-item-row:last-child { border-bottom: none; }
         .so-item-icon {
-          width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+          width: 40px; height: 40px; border-radius: 6px; flex-shrink: 0;
           display: flex; align-items: center; justify-content: center;
+          background: ${NAVY};
         }
         .so-badge {
-          font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 5px;
+          font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 4px;
           white-space: nowrap; display: inline-block;
         }
         .so-action-btn {
-          font-size: 11.5px; font-weight: 700; color: #555570;
-          background: #f4f4f9; border: 1px solid #e8e8f4; border-radius: 7px;
-          padding: 8px 12px; text-align: center; cursor: pointer; font-family: inherit;
+          font-size: 11.5px; font-weight: 600; color: #4a5163;
+          background: #f6f6f8; border: 1px solid ${BORDER}; border-radius: 6px;
+          padding: 8px 12px; text-align: center; cursor: pointer; font-family: ${SANS};
         }
-        .so-action-btn:hover { background: #ededf8; }
+        .so-action-btn:hover { background: #eeeef1; }
         .so-action-btn-row { display: flex; gap: 8px; margin-top: 4px; }
+
+        .so-primary-btn {
+          font-size: 12.5px; font-weight: 600; padding: 9px 16px; border-radius: 6px;
+          display: inline-flex; align-items: center; gap: 6px;
+          color: #fff; background: ${NAVY}; border: none; cursor: pointer; font-family: ${SANS};
+        }
+        .so-primary-btn:hover { background: ${NAVY_SOFT}; }
+        .so-secondary-btn {
+          font-size: 12.5px; font-weight: 600; padding: 9px 16px; border-radius: 6px;
+          border: 1px solid ${BORDER}; color: #475569; background: #fff; cursor: pointer; font-family: ${SANS};
+        }
+        .so-secondary-btn:hover { background: ${BORDER_LIGHT}; }
 
         .so-livefeed-body { display: flex; }
         .so-livefeed-left { flex: 1; min-width: 0; }
         .so-livefeed-right {
           width: 210px; border-left: 1px solid ${BORDER_LIGHT};
-          padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between;
+          padding: 18px 22px; display: flex; flex-direction: column; justify-content: space-between;
         }
         .so-prog-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
-        .so-prog-name { color: #555570; font-weight: 500; }
-        .so-prog-track { height: 5px; background: #f0f0f8; border-radius: 3px; overflow: hidden; margin-bottom: 14px; }
-        .so-prog-fill { height: 5px; border-radius: 3px; }
+        .so-prog-name { color: #4a5163; font-weight: 500; }
+        .so-prog-track { height: 4px; background: ${BORDER_LIGHT}; border-radius: 2px; overflow: hidden; margin-bottom: 14px; }
+        .so-prog-fill { height: 4px; border-radius: 2px; background: ${GOLD}; }
 
         .so-gauge-cell {
-          display: flex; align-items: center; gap: 10px; padding: 14px 12px;
+          display: flex; align-items: center; gap: 10px; padding: 15px 14px;
           border-right: 1px solid ${BORDER_LIGHT}; min-width: 0; overflow: hidden;
         }
         .so-gauge-cell:last-child { border-right: none; }
-        .so-gauge-wrap { position: relative; width: 60px; height: 60px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-        .so-gauge-num { position: absolute; font-size: 13px; font-weight: 800; color: ${INK}; letter-spacing: -0.02em; }
+        .so-gauge-wrap { position: relative; width: 58px; height: 58px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .so-gauge-num { position: absolute; font-size: 12.5px; font-weight: 600; font-family: ${SERIF}; }
         .so-gauge-info { flex: 1; min-width: 0; }
         .so-gauge-label {
-          font-size: 9px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
-          color: ${MUTED}; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+          font-size: 11px; font-weight: 600; color: ${INK};
+          margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        .so-gauge-sublabel { font-size: 10.5px; color: ${MUTED}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .so-gauge-sublabel { font-size: 10.5px; color: ${MUTED_SOFT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .so-gauge-badges { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
-        .so-gauge-spark { flex-shrink: 0; width: 68px; height: 36px; }
+        .so-gauge-spark { flex-shrink: 0; width: 66px; height: 32px; }
 
-        .so-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .so-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 
-        .so-health-track { height: 6px; background: ${BORDER_LIGHT}; border-radius: 3px; margin-top: 6px; overflow: hidden; }
-        .so-health-fill { height: 6px; border-radius: 3px; }
+        .so-health-track { height: 5px; background: ${BORDER_LIGHT}; border-radius: 3px; margin-top: 6px; overflow: hidden; }
+        .so-health-fill { height: 5px; border-radius: 3px; }
 
         .so-stat-grid { display: flex; border-top: 1px solid ${BORDER_LIGHT}; }
         .so-stat-cell { flex: 1; padding: 14px 16px; border-right: 1px solid ${BORDER_LIGHT}; }
         .so-stat-cell:last-child { border-right: none; }
-        .so-stat-label { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: ${MUTED}; margin-bottom: 4px; }
-        .so-stat-val { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+        .so-stat-label { font-size: 10px; font-weight: 600; color: ${MUTED_SOFT}; margin-bottom: 4px; }
+        .so-stat-val { font-size: 19px; font-weight: 600; font-family: ${SERIF}; }
 
-        .so-act-row { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #f8f9fa; }
+        .so-act-row { display: flex; align-items: center; gap: 12px; padding: 13px 22px; border-bottom: 1px solid #f8f8f9; }
         .so-act-row:last-child { border-bottom: none; }
-        .so-act-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-        .so-act-action { font-size: 13px; font-weight: 600; color: ${INK}; }
+        .so-act-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .so-act-action { font-size: 13px; font-weight: 500; color: ${INK}; }
         .so-act-actor { font-size: 11px; color: ${MUTED}; margin-top: 2px; }
         .so-act-right { margin-left: auto; text-align: right; flex-shrink: 0; }
-        .so-act-time { font-size: 11px; color: #b0b5bc; }
+        .so-act-time { font-size: 11px; color: ${MUTED_SOFT}; }
         .so-act-badge {
-          font-size: 9px; font-weight: 700; letter-spacing: 0.06em; padding: 3px 8px;
-          display: inline-block; margin-top: 4px; text-transform: uppercase; border-radius: 4px; border: 1px solid currentColor;
+          font-size: 9.5px; font-weight: 600; padding: 3px 8px;
+          display: inline-block; margin-top: 4px; border-radius: 4px; border: 1px solid currentColor;
+        }
+
+        .so-profile-banner {
+          height: 118px; position: relative;
+          background: linear-gradient(135deg, ${NAVY} 0%, ${NAVY_SOFT} 100%);
+        }
+        .so-profile-avatar {
+          position: absolute; bottom: -36px; left: 24px;
+          width: 72px; height: 72px; border-radius: 10px;
+          border: 4px solid #fff; background: ${NAVY};
+          display: flex; align-items: center; justify-content: center;
+          font-weight: 600; font-size: 22px; color: ${GOLD_SOFT}; font-family: ${SERIF};
+        }
+        .so-profile-lock {
+          position: absolute; top: 16px; right: 16px;
+          background: rgba(255,255,255,0.1); color: #fff;
+          display: flex; align-items: center; gap: 6px; padding: 7px 12px;
+        }
+
+        .so-key-icon {
+          width: 32px; height: 32px; border-radius: 6px;
+          background: ${BORDER_LIGHT}; color: ${INK};
+          display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
 
         .so-input {
-          width: 100%; padding: 11px 14px; border-radius: 8px; border: 1px solid ${BORDER};
-          font-size: 14px; font-family: inherit; outline: none; color: ${INK};
+          width: 100%; padding: 11px 14px; border-radius: 6px; border: 1px solid ${BORDER};
+          font-size: 14px; font-family: ${SANS}; outline: none; color: ${INK};
         }
-        .so-input:focus { border-color: ${PURPLE}; box-shadow: 0 0 0 3px ${PURPLE}1a; }
+        .so-input:focus { border-color: ${GOLD}; box-shadow: 0 0 0 3px rgba(156,122,46,0.12); }
         .so-input-static {
-          padding: 11px 14px; border-radius: 8px; border: 1px solid ${BORDER_LIGHT};
-          background: #fafafd; font-size: 14px; color: ${INK};
+          padding: 11px 14px; border-radius: 6px; border: 1px solid ${BORDER_LIGHT};
+          background: #fafafb; font-size: 14px; color: ${INK};
         }
 
         @media (min-width: 1024px) {
@@ -1629,7 +1532,7 @@ function StudentDashboard({ onLogout }: { onLogout: () => void }) {
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, paddingBottom: 80 }}>
         <DashboardHeader onLogout={onLogout} />
-        <main style={{ flex: 1, padding: "24px 20px", maxWidth: 1280, width: "100%", margin: "0 auto" }}>
+        <main style={{ flex: 1, padding: "26px 22px", maxWidth: 1280, width: "100%", margin: "0 auto" }}>
           <TabContent tab={active} />
         </main>
       </div>
@@ -1653,7 +1556,7 @@ export default function Portail_Etudiant() {
           Démonstration : cliquez sur{" "}
           <button
             onClick={() => setView("dashboard")}
-            style={{ textDecoration: "underline", fontWeight: 700, color: PURPLE, background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}
+            style={{ textDecoration: "underline", fontWeight: 600, color: GOLD, background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}
           >
             accéder au tableau de bord
           </button>{" "}
