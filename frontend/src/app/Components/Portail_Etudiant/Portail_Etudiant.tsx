@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
 import StudentLogin from "../Student/StudentLogin";
+import { BRAND } from "../Utils/brand";
 import {
   Home,
   FileText,
@@ -21,15 +22,14 @@ import {
 
 /* ─────────────────────────────────────────────────────────────────────────
    DESIGN SYSTEM — tabbed administrative portal.
-   Navy identity + a single brass accent; status colors reserved strictly
-   for real status. One visual metaphor (a thin bar) carries every metric,
-   instead of mixing gauges, sparklines and badges for the same number.
+   Palette now matches the main site's BRAND tokens (see Utils/brand.ts):
+   Navy navbar = topBarBg, accent = gold. Status colors reserved for status.
    ───────────────────────────────────────────────────────────────────────── */
 const INK = "#1b2130";
-const NAVY = "#101a2e";
-const NAVY_SOFT = "#1c2b45";
-const GOLD = "#9c7a2e";
-const GOLD_SOFT = "#c9a55a";
+const NAVY = BRAND.nav.topBarBg;
+const NAVY_SOFT = BRAND.navy;
+const GOLD = BRAND.gold;
+const GOLD_SOFT = BRAND.goldLight;
 const MUTED = "#6b7280";
 const MUTED_SOFT = "#9aa1ac";
 const BORDER = "#dbdfe6";
@@ -40,7 +40,7 @@ const SURFACE = "#ffffff";
 const SUCCESS = "#2f6b46";
 const WARNING = "#a3701f";
 const DANGER = "#a5382c";
-const INFO = "#3c5c85";
+const INFO = BRAND.navy;
 const PLUM = "#6a4356";
 
 const SERIF = "'Source Serif 4', Georgia, serif";
@@ -667,35 +667,35 @@ function StudentDashboard({ onLogout }: { onLogout: () => void }) {
         * { box-sizing: border-box; }
         html, body { margin: 0; padding: 0; }
 
-        .so-masthead { background: ${NAVY}; position: sticky; top: 0; z-index: 30; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .so-masthead { background: ${NAVY}; position: sticky; top: 0; z-index: 30; border-bottom: 1px solid ${BRAND.nav.topBarBorder}; }
         .so-masthead-nav {
           display: flex; align-items: center; gap: 4px;
           padding: 8px 28px; max-width: 1180px; margin: 0 auto;
           overflow-x: auto; min-height: 44px;
         }
         .so-tab-btn {
-          font-size: 12.5px; font-weight: 500; color: #a9b0bd; text-decoration: none;
+          font-size: 12.5px; font-weight: 500; color: ${BRAND.nav.topBarLink}; text-decoration: none;
           padding: 5px 12px; border-radius: 5px; white-space: nowrap;
           background: none; border: none; cursor: pointer; font-family: ${SANS};
         }
-        .so-tab-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
-        .so-tab-btn-active { background: ${NAVY_SOFT}; color: #fff; }
+        .so-tab-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .so-tab-btn-active { background: ${NAVY_SOFT}; color: ${BRAND.nav.topBarLinkActive}; }
 
         .so-icon-btn {
           position: relative; width: 28px; height: 28px; border-radius: 5px;
           display: flex; align-items: center; justify-content: center; flex-shrink: 0;
           background: none; border: none; cursor: pointer;
         }
-        .so-icon-btn:hover { background: rgba(255,255,255,0.06); }
+        .so-icon-btn:hover { background: rgba(255,255,255,0.08); }
         .so-avatar-mini {
           width: 26px; height: 26px; border-radius: 5px; background: ${NAVY_SOFT};
-          border: 1px solid rgba(201,165,90,0.35); flex-shrink: 0;
+          border: 1px solid rgba(255, 212, 59, 0.35); flex-shrink: 0;
           display: flex; align-items: center; justify-content: center;
           font-weight: 600; color: ${GOLD_SOFT}; font-size: 10.5px; font-family: ${SERIF};
         }
         .so-logout-btn {
           width: 28px; height: 28px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-          background: none; border: 1px solid rgba(255,255,255,0.12); color: #c7ccd6; cursor: pointer;
+          background: none; border: 1px solid rgba(255,255,255,0.14); color: ${BRAND.nav.topBarLink}; cursor: pointer;
         }
         .so-logout-btn:hover { background: rgba(165,56,44,0.16); border-color: rgba(165,56,44,0.3); color: #e8a49c; }
 
