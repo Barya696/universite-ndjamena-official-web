@@ -854,105 +854,107 @@ export default function Mainlayout({ children }: MainLayoutProps) {
         <main className="relative">{children}</main>
       </div>
 
-      <footer
-        style={{ background: BRAND.navyDeep }}
-        className="text-white/60"
-      >
-        <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {[
-            {
-              heading: "L'Université",
-              links: [
-                { label: "Histoire & Mission", href: "/universite/a-propos/histoire-mission" },
-                { label: "Gouvernance", href: "/universite/a-propos/gouvernance" },
-                { label: "Plan Stratégique", href: "/universite/a-propos/nos-politiques" },
-                { label: "Accréditations", href: "/universite/a-propos/chiffres-cles" },
-                { label: "Partenariats", href: "/universite/international" },
-              ],
-            },
-            {
-              heading: "Formations",
-              links: [
-                { label: "Droit & Sciences Politiques", href: "/universite/formations" },
-                { label: "Lettres & Sciences Humaines", href: "/universite/formations" },
-                { label: "Sciences Exactes", href: "/universite/formations" },
-                { label: "Sciences de la Santé", href: "/universite/formations" },
-                { label: "Sciences Économiques", href: "/universite/formations" },
-                { label: "Candidature 2024–2025", href: "/candidature" },
-              ],
-            },
-            {
-              heading: "Services",
-              links: [
-                { label: "Bibliothèques", href: "/bibliotheque" },
-                { label: "Résidences", href: "#" },
-                { label: "Service de santé", href: "#" },
-                { label: "Orientation & Emploi", href: "#" },
-                { label: "Alumni", href: "#" },
-                { label: "Portail étudiant", href: "/portail-etudiant" },
-              ],
-            },
-            {
-              heading: "Contact & Médias",
-              links: [
-                { label: "Campus Toukra", href: "/universite/a-propos" },
-                { label: "Campus Farcha", href: "/universite/a-propos" },
-                { label: "Campus Ardep-Djoumal", href: "/universite/a-propos" },
-                { label: "Presse & Médias", href: "/media" },
-                { label: "Actualités", href: "/universite/nouvelles-evenements" },
-                { label: "Inscription en ligne", href: "/inscription" },
-              ],
-            },
-          ].map((col) => (
-            <div key={col.heading}>
-              <div
-                className="font-bold mb-4"
-                style={{ color: BRAND.gold, fontSize: "16px", fontWeight: "400", lineHeight: "26px" }}
-              >
-                {col.heading}
-              </div>
-              <ul className="space-y-2">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      to={link.href}
-                      className="hover:text-white/90 transition-colors"
-                      style={{ fontSize: "16px", fontWeight: "400", lineHeight: "26px" }}
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        <div
-          className="border-t py-5"
-          style={{ borderColor: "rgba(255, 212, 59, 0.3)" }}
+      {!isStudentPortal && (
+        <footer
+          style={{ background: BRAND.navyDeep }}
+          className="text-white/60"
         >
-          <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-3 text-white/40" style={{ fontSize: "16px", fontWeight: "400", lineHeight: "26px" }}>
-            <div className="flex items-center gap-3">
-              <UDNCrest size={28} />
-              <span>
-                © 1971–2024 Université de N'Djamena · Tous droits réservés
-              </span>
-            </div>
-            <div className="flex items-center gap-4">
-              <a href="#" className="hover:text-white/70 transition-colors">
-                Mentions légales
-              </a>
-              <a href="#" className="hover:text-white/70 transition-colors">
-                Politique de confidentialité
-              </a>
-              <a href="#" className="hover:text-white/70 transition-colors">
-                Accessibilité
-              </a>
+          <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              {
+                heading: "L'Université",
+                links: [
+                  { label: "Histoire & Mission", href: "/universite/a-propos/histoire-mission" },
+                  { label: "Gouvernance", href: "/universite/a-propos/gouvernance" },
+                  { label: "Plan Stratégique", href: "/universite/a-propos/nos-politiques" },
+                  { label: "Accréditations", href: "/universite/a-propos/chiffres-cles" },
+                  { label: "Partenariats", href: "/universite/international" },
+                ],
+              },
+              {
+                heading: "Formations",
+                links: [
+                  { label: "Droit & Sciences Politiques", href: "/universite/formations" },
+                  { label: "Lettres & Sciences Humaines", href: "/universite/formations" },
+                  { label: "Sciences Exactes", href: "/universite/formations" },
+                  { label: "Sciences de la Santé", href: "/universite/formations" },
+                  { label: "Sciences Économiques", href: "/universite/formations" },
+                  { label: "Candidature 2024–2025", href: "/candidature" },
+                ],
+              },
+              {
+                heading: "Services",
+                links: [
+                  { label: "Bibliothèques", href: "/bibliotheque" },
+                  { label: "Résidences", href: "#" },
+                  { label: "Service de santé", href: "#" },
+                  { label: "Orientation & Emploi", href: "#" },
+                  { label: "Alumni", href: "#" },
+                  { label: "Portail étudiant", href: "/portail-etudiant" },
+                ],
+              },
+              {
+                heading: "Contact & Médias",
+                links: [
+                  { label: "Campus Toukra", href: "/universite/a-propos" },
+                  { label: "Campus Farcha", href: "/universite/a-propos" },
+                  { label: "Campus Ardep-Djoumal", href: "/universite/a-propos" },
+                  { label: "Presse & Médias", href: "/media" },
+                  { label: "Actualités", href: "/universite/nouvelles-evenements" },
+                  { label: "Inscription en ligne", href: "/inscription" },
+                ],
+              },
+            ].map((col) => (
+              <div key={col.heading}>
+                <div
+                  className="font-bold mb-4"
+                  style={{ color: BRAND.gold, fontSize: "16px", fontWeight: "400", lineHeight: "26px" }}
+                >
+                  {col.heading}
+                </div>
+                <ul className="space-y-2">
+                  {col.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        to={link.href}
+                        className="hover:text-white/90 transition-colors"
+                        style={{ fontSize: "16px", fontWeight: "400", lineHeight: "26px" }}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div
+            className="border-t py-5"
+            style={{ borderColor: "rgba(255, 212, 59, 0.3)" }}
+          >
+            <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-3 text-white/40" style={{ fontSize: "16px", fontWeight: "400", lineHeight: "26px" }}>
+              <div className="flex items-center gap-3">
+                <UDNCrest size={28} />
+                <span>
+                  © 1971–2024 Université de N'Djamena · Tous droits réservés
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <a href="#" className="hover:text-white/70 transition-colors">
+                  Mentions légales
+                </a>
+                <a href="#" className="hover:text-white/70 transition-colors">
+                  Politique de confidentialité
+                </a>
+                <a href="#" className="hover:text-white/70 transition-colors">
+                  Accessibilité
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 }
