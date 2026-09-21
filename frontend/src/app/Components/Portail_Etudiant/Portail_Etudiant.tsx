@@ -17,7 +17,6 @@ import {
   Key,
   Eye,
   EyeOff,
-  ShieldCheck,
 } from "lucide-react";
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -335,39 +334,6 @@ function Masthead({
 }) {
   return (
     <header className="so-masthead">
-      <div className="so-masthead-top">
-        <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-          <div className="so-seal">
-            <ShieldCheck style={{ width: 17, height: 17, color: GOLD_SOFT }} />
-          </div>
-          <div>
-            <p style={{ fontSize: 13, fontWeight: 600, color: "#fff", margin: 0, fontFamily: SERIF }}>
-              Université de N'Djamena
-            </p>
-            <p style={{ fontSize: 10.5, color: "#8b93a3", margin: 0 }}>Portail étudiant</p>
-          </div>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <button className="so-icon-btn" aria-label="Notifications">
-            <Bell style={{ width: 16, height: 16, color: "#c7ccd6" }} />
-            <span style={{ position: "absolute", top: 6, right: 7, width: 6, height: 6, borderRadius: "50%", background: DANGER }} />
-          </button>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div className="so-avatar">{STUDENT.avatar}</div>
-            <div>
-              <p style={{ fontSize: 12.5, fontWeight: 600, color: "#fff", margin: 0, lineHeight: 1.2 }}>
-                {STUDENT.firstName} {STUDENT.lastName}
-              </p>
-              <p style={{ fontSize: 10.5, color: "#8b93a3", margin: 0 }}>{STUDENT.studentId}</p>
-            </div>
-          </div>
-          <button onClick={onLogout} className="so-logout-btn" aria-label="Se déconnecter">
-            <LogOut style={{ width: 15, height: 15 }} />
-          </button>
-        </div>
-      </div>
-
       <nav className="so-masthead-nav">
         {TABS.map((t) => (
           <button
@@ -378,6 +344,15 @@ function Masthead({
             {t.label}
           </button>
         ))}
+        <div style={{ flex: 1 }} />
+        <button className="so-icon-btn" aria-label="Notifications">
+          <Bell style={{ width: 15, height: 15, color: "#c7ccd6" }} />
+          <span style={{ position: "absolute", top: 5, right: 6, width: 5, height: 5, borderRadius: "50%", background: DANGER }} />
+        </button>
+        <div className="so-avatar-mini">{STUDENT.avatar}</div>
+        <button onClick={onLogout} className="so-logout-btn" aria-label="Se déconnecter">
+          <LogOut style={{ width: 14, height: 14 }} />
+        </button>
       </nav>
     </header>
   );
@@ -691,45 +666,37 @@ function StudentDashboard({ onLogout }: { onLogout: () => void }) {
         @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
         * { box-sizing: border-box; }
 
-        .so-masthead { background: ${NAVY}; position: sticky; top: var(--header-stack, 2.25rem); z-index: 30; }
-        .so-masthead-top {
-          display: flex; align-items: center; justify-content: space-between;
-          padding: 14px 28px; max-width: 1180px; margin: 0 auto;
-        }
-        .so-seal {
-          width: 34px; height: 34px; border-radius: 6px; background: ${NAVY_SOFT};
-          border: 1px solid rgba(255,255,255,0.08);
-          display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-        }
-        .so-avatar {
-          width: 32px; height: 32px; border-radius: 6px; background: ${NAVY_SOFT};
-          border: 1px solid rgba(201,165,90,0.35);
-          display: flex; align-items: center; justify-content: center;
-          font-weight: 600; color: ${GOLD_SOFT}; font-size: 12px; font-family: ${SERIF};
-        }
-        .so-icon-btn {
-          position: relative; width: 32px; height: 32px; border-radius: 6px;
-          display: flex; align-items: center; justify-content: center;
-          background: none; border: none; cursor: pointer;
-        }
-        .so-icon-btn:hover { background: rgba(255,255,255,0.06); }
-        .so-logout-btn {
-          width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
-          background: none; border: 1px solid rgba(255,255,255,0.12); color: #c7ccd6; cursor: pointer;
-        }
-        .so-logout-btn:hover { background: rgba(165,56,44,0.16); border-color: rgba(165,56,44,0.3); color: #e8a49c; }
-
+        .so-masthead { background: ${NAVY}; position: sticky; top: var(--header-stack, 2.25rem); z-index: 30; border-bottom: 1px solid rgba(255,255,255,0.06); }
         .so-masthead-nav {
-          display: flex; gap: 4px; padding: 0 28px 10px; max-width: 1180px; margin: 0 auto;
-          overflow-x: auto;
+          display: flex; align-items: center; gap: 4px;
+          padding: 8px 28px; max-width: 1180px; margin: 0 auto;
+          overflow-x: auto; min-height: 44px;
         }
         .so-tab-btn {
           font-size: 12.5px; font-weight: 500; color: #a9b0bd; text-decoration: none;
-          padding: 6px 12px; border-radius: 5px; white-space: nowrap;
+          padding: 5px 12px; border-radius: 5px; white-space: nowrap;
           background: none; border: none; cursor: pointer; font-family: ${SANS};
         }
         .so-tab-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
         .so-tab-btn-active { background: ${NAVY_SOFT}; color: #fff; }
+
+        .so-icon-btn {
+          position: relative; width: 28px; height: 28px; border-radius: 5px;
+          display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+          background: none; border: none; cursor: pointer;
+        }
+        .so-icon-btn:hover { background: rgba(255,255,255,0.06); }
+        .so-avatar-mini {
+          width: 26px; height: 26px; border-radius: 5px; background: ${NAVY_SOFT};
+          border: 1px solid rgba(201,165,90,0.35); flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          font-weight: 600; color: ${GOLD_SOFT}; font-size: 10.5px; font-family: ${SERIF};
+        }
+        .so-logout-btn {
+          width: 28px; height: 28px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+          background: none; border: 1px solid rgba(255,255,255,0.12); color: #c7ccd6; cursor: pointer;
+        }
+        .so-logout-btn:hover { background: rgba(165,56,44,0.16); border-color: rgba(165,56,44,0.3); color: #e8a49c; }
 
         .so-main { max-width: 1180px; margin: 0 auto; padding: 30px 28px 60px; }
 
