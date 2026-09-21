@@ -170,10 +170,11 @@ export default function StudentLogin() {
 
   return (
     <div
-      className="min-h-screen flex flex-col"
+      className="flex flex-col"
       style={{
         background: "#ffffff",
         fontFamily: "'Source Sans Pro', Arial, sans-serif",
+        minHeight: "calc(100vh - var(--header-stack, 2.25rem))",
       }}
     >
       {/* Centered card */}

@@ -680,12 +680,18 @@ function StudentDashboard({ onLogout }: { onLogout: () => void }) {
   const ActivePanel = TAB_PANELS[activeTab];
 
   return (
-    <div style={{ minHeight: "100vh", background: BG, fontFamily: SANS }}>
+    <div
+      style={{
+        minHeight: "calc(100vh - var(--header-stack, 2.25rem))",
+        background: BG,
+        fontFamily: SANS,
+      }}
+    >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
         * { box-sizing: border-box; }
 
-        .so-masthead { background: ${NAVY}; position: sticky; top: 0; z-index: 30; }
+        .so-masthead { background: ${NAVY}; position: sticky; top: var(--header-stack, 2.25rem); z-index: 30; }
         .so-masthead-top {
           display: flex; align-items: center; justify-content: space-between;
           padding: 14px 28px; max-width: 1180px; margin: 0 auto;
@@ -725,7 +731,7 @@ function StudentDashboard({ onLogout }: { onLogout: () => void }) {
         .so-tab-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
         .so-tab-btn-active { background: ${NAVY_SOFT}; color: #fff; }
 
-        main { max-width: 1180px; margin: 0 auto; padding: 30px 28px 60px; }
+        .so-main { max-width: 1180px; margin: 0 auto; padding: 30px 28px 60px; }
 
         .so-section-icon {
           width: 32px; height: 32px; border-radius: 6px; background: ${NAVY}; color: ${GOLD_SOFT};
@@ -783,9 +789,9 @@ function StudentDashboard({ onLogout }: { onLogout: () => void }) {
 
       <Masthead onLogout={onLogout} activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <main>
+      <div className="so-main">
         <ActivePanel />
-      </main>
+      </div>
     </div>
   );
 }
