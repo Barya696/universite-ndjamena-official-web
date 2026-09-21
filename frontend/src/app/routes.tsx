@@ -279,11 +279,7 @@ export default function AppRoutes() {
       />
       <Route
         path="/portail-etudiant"
-        element={
-          <Mainlayout>
-            <Portail_Etudiant />
-          </Mainlayout>
-        }
+        element={<Portail_Etudiant />}
       />
       <Route
         path="/bibliotheque"

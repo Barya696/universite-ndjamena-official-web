@@ -174,7 +174,7 @@ export default function StudentLogin() {
       style={{
         background: "#ffffff",
         fontFamily: "'Source Sans Pro', Arial, sans-serif",
-        minHeight: "calc(100vh - var(--header-stack, 2.25rem))",
+        minHeight: "100vh",
       }}
     >
       {/* Centered card */}

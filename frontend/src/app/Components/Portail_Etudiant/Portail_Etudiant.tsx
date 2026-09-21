@@ -657,7 +657,7 @@ function StudentDashboard({ onLogout }: { onLogout: () => void }) {
   return (
     <div
       style={{
-        minHeight: "calc(100vh - var(--header-stack, 2.25rem))",
+        minHeight: "100vh",
         background: BG,
         fontFamily: SANS,
       }}
@@ -665,8 +665,9 @@ function StudentDashboard({ onLogout }: { onLogout: () => void }) {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
         * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
 
-        .so-masthead { background: ${NAVY}; position: sticky; top: var(--header-stack, 2.25rem); z-index: 30; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .so-masthead { background: ${NAVY}; position: sticky; top: 0; z-index: 30; border-bottom: 1px solid rgba(255,255,255,0.06); }
         .so-masthead-nav {
           display: flex; align-items: center; gap: 4px;
           padding: 8px 28px; max-width: 1180px; margin: 0 auto;
